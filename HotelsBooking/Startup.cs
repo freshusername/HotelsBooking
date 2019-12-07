@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
+using ApplicationCore.Interfaces;
+using ApplicationCore.Services;
 using HotelsBooking.Mapping;
 using Infrastructure.EF;
+using Infrastructure.Entities;
+using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -37,13 +41,27 @@ namespace HotelsBooking
 
             var config = new AutoMapper.MapperConfiguration(c =>
             {
-              c.AddProfile(new ApplicationMappingProfile());
+                c.AddProfile(new ApplicationMappingProfile());
             });
+
 
             var mapper = config.CreateMapper();
             services.AddSingleton(mapper);
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-      services.AddDbContext<ApplicationDbContext>();
+            //add application services
+            services.AddTransient<IBaseRepository<Hotel>, BaseRepository<Hotel>>();
+
+            //Add Interfaces and bind with their realization
+            services.AddScoped<IHotelService, HotelService>();
+
+
+
+
+
+            services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseMySql(
+                Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

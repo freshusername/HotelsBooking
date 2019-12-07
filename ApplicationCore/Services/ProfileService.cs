@@ -4,8 +4,8 @@ using System.Text;
 
 namespace ApplicationCore.Services
 {
-    class ProfileService : IProfileService
+    public class ProfileService //: IProfileService
     {
-       
+
     }
 }

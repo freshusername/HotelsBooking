@@ -10,10 +10,10 @@ namespace Infrastructure.EF
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-          optionsBuilder.UseMySql(@"server=localhost;database=hotelsdb;uid=root;password=root;");
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseMySql(@"server=localhost;database=hotelsdb;uid=root;password=admin;");
+        //}
 
         public DbSet<Hotel> Hotels { get; set; }
         public DbSet<Room> Rooms { get; set; }

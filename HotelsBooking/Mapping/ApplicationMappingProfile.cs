@@ -7,11 +7,13 @@ using ApplicationCore.DTOs;
 
 namespace HotelsBooking.Mapping
 {
-  public class ApplicationMappingProfile: AutoMapper.Profile
-  {
-    public ApplicationMappingProfile()
+    public class ApplicationMappingProfile : AutoMapper.Profile
     {
-      CreateMap<ApplicationUser, ApplicationUserDto>().ReverseMap();
+        public ApplicationMappingProfile()
+        {
+            CreateMap<ApplicationUser, ApplicationUserDto>().ReverseMap();
+
+            CreateMap<Hotel, HotelDto>().ReverseMap();
+        }
     }
-  }
 }
