@@ -4,8 +4,10 @@ using System.Text;
 
 namespace Infrastructure
 {
-  class Enums
-  {
-    //Add all enums we have here
-  }
+    public class Enums
+    {
+        //Add all enums we have here
+        public enum Season { Hot, Cold, Demiseason }
+
+    }
 }
