@@ -1,4 +1,4 @@
-﻿using ApplicationCore.DTOs;
+using ApplicationCore.DTOs;
 using AutoMapper;
 using HotelsBooking.Models;
 using Infrastructure.Entities;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace HotelsBooking.Mapping
 {
 
-    namespace CoffeStoreWeb.AutoMapper
+    namespace CoffeStoreWeb.AutoMapper // :D
 
     {
 

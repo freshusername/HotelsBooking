@@ -1,8 +1,8 @@
-﻿@model HotelsBooking.Models.LoginViewModel
+@model HotelsBooking.Models.LoginViewModel
 @using System.Collections.Generic
 @using System.Linq
 @using Microsoft.AspNetCore.Identity
-@using Infrastructure.Entities
+@using Infrastructure.Entities @*Presentation Layer має доступ до Data Access Layer ?*@
 @using Microsoft.AspNetCore.Http
 @using Microsoft.AspNetCore.Http.Authentication
 @inject SignInManager<AppUser> SignInManager
