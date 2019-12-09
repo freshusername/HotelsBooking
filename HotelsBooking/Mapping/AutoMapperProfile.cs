@@ -18,6 +18,7 @@ namespace HotelsBooking.Mapping
             CreateMap<EditUserViewModel, UserDTO>().ForMember(au => au.UserName, map => map.MapFrom(vm => vm.Email)); ;
             CreateMap<ChangePasswordViewModel, UserDTO>().ForMember(au => au.UserName, map => map.MapFrom(vm => vm.Email)); ;
 
+            CreateMap<CreateHotelViewModel, HotelDTO>();
             CreateMap<HotelDTO, Hotel>();
 
             CreateMap<RegisterViewModel, UserDTO>().ForMember(au => au.UserName, map => map.MapFrom(vm => vm.Email));
