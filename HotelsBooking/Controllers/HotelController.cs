@@ -26,6 +26,11 @@ namespace HotelsBooking.Controllers
             var hotels = _hotelService.GetHotels();
             return View(hotels);
         }
+        public IActionResult template()
+        {
+            var hotels = _hotelService.GetHotels();
+            return View(hotels);
+        }
 
         [HttpPost]
         public IActionResult AddHotel(HotelDto hotel)
@@ -39,7 +44,7 @@ namespace HotelsBooking.Controllers
             return View();
         }
 
-        public int GetHotelsCount(string searchValue)
+        public int GetHotelCount(string searchValue)
         {
             if (searchValue == null)
             {

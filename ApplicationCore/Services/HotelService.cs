@@ -37,8 +37,8 @@ namespace ApplicationCore.Services
 
         public IEnumerable<HotelDto> GetHotels(int page, int countOnPage, string searchValue)
         {
-            IEnumerable<Hotel> hotels = unitOfWork.Hotels.Get(hc =>
-            hc.Name.Contains(searchValue) || hc.Location.Contains(searchValue))
+            IEnumerable<Hotel> hotels = unitOfWork.Hotels.Get(h =>
+            h.Name.Contains(searchValue) || h.Location.Contains(searchValue))
                 .Skip((page - 1) * countOnPage)
                 .Take(countOnPage);
 

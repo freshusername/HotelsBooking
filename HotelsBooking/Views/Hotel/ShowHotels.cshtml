@@ -10,39 +10,167 @@
     </head>
     <body>
         <h1>All hotels</h1>
-        <div class="features">
+        <div class="container">
             <a asp-controller="Hotel" asp-action="AddHotel" class="btn btn-success">Add new hotel</a>
 
-            <ul class="features__list">
+            <label>Hotels on page:</label>
+            <select v-model.lazy="CountOnPage" v-on:change="getData">
+                <option>1</option>
+                <option>5</option>
+                <option>10</option>
+                <option>20</option>
+            </select>
 
-                @foreach (var item in Model)
-                {
-                    <li class="features__item">
-                        <div class="content">
+            <label>Search</label>
+            <input v-model="searchValue">
+            <button value="Search" v-on:click="getData" class="btn btn-primary">Search</button>
 
-                            <h4>
-                                @Html.DisplayNameFor(model => model.Name) : @Html.DisplayFor(modelItem => item.Name)
-                            </h4>
-                            <h4>
-                                @Html.DisplayNameFor(model => model.Location) : @Html.DisplayFor(modelItem => item.Location)
-                            </h4>
-                            <h4>
-                                @Html.DisplayNameFor(model => model.Season) : @Html.DisplayFor(modelItem => item.Season)
-                            </h4>
+            <div class="row">
+                <div id="hotel_list">
+
+                    @*@foreach (var item in Model)
+                        {
+                            <li class="features__item">
+                                <div class="content">
+
+                                    <h4>
+                                        @Html.DisplayNameFor(model => model.Name) : @Html.DisplayFor(modelItem => item.Name)
+                                    </h4>
+                                    <h4>
+                                        @Html.DisplayNameFor(model => model.Location) : @Html.DisplayFor(modelItem => item.Location)
+                                    </h4>
+                                    <h4>
+                                        @Html.DisplayNameFor(model => model.Season) : @Html.DisplayFor(modelItem => item.Season)
+                                    </h4>
 
 
-                            <div scope="col" class="">
+                                    <div scope="col" class="">
+                                        @if (!User.IsInRole("BlockedUser"))
+                                        {
+                                            <a class="btn btn-danger" asp-controller="Hotel" asp-action="HotelMain" asp-route-hotelId="@item.Id"><em>Details</em></a>
+                                        }
+                                    </div>
+                                </div>
+                            </li>
+                        }*@
+
+                    <div class="col-lg-4 col-sm-6">
+                        <div v-for="item in Hotels" class="single_product_item">
+                            <img src="img/product/product_7.png" alt="">
+                            <div class="single_product_text">
+                                <h4>{{item.name}}</h4>
+                                <h3>{{item.location}}</h3>
+                                <h3>{{item.season}}</h3>
                                 @if (!User.IsInRole("BlockedUser"))
                                 {
-                                    <a class="btn btn-danger" asp-controller="Hotel" asp-action="HotelMain" asp-route-Id="@item.Id"><em>Details</em></a>
+                                    <a class="btn btn-warning" v-bind:href="'/Hotel/HotelMain?Id='+item.Id">Details</a>
                                 }
                             </div>
                         </div>
-                    </li>
-                }
+                    </div>
 
-            </ul>
+
+                    <div style="padding:inherit" class="btn-group">
+                        <button class="btn btn-default" v-on:click="previousPage"><span class='glyphicon glyphicon-triangle-left' /></button>
+                        <button class="btn btn-default" v-for="pageNumber in pages" v-on:click="getPageByNumber(pageNumber)">{{pageNumber}}</button>
+                        <button class="btn btn-default" v-on:click="nextPage"><span class='glyphicon glyphicon-triangle-right' /></button>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
     </body>
 </html>
 }
+
+
+<script src="~/js/vue.js"></script>
+<script src="~/js/axios.js"></script>
+<script src="//unpkg.com/vue-plain-pagination@0.2.1"></script>
+<script>
+
+
+    var Vue1 = new Vue({
+
+        el: "#hotel_list",
+        data: {
+            Hotels: [],
+            page: 1,
+            CountOnPage: 10,
+            PageCount: 1,
+            pages: [],
+            searchValue: ""
+        },
+        methods: {
+            getHotels() {
+                axios({
+                    method: 'post',
+                    url: '/Hotel/Get',
+                    params: {
+                        page: this.page,
+                        countOnPage: this.CountOnPage,
+                        searchValue: this.searchValue,
+                    }
+                })
+                    .then(response => {
+                        this.Hotels = response.data;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    })
+                    .finally();
+            },
+            getHotelCount() {
+                axios({
+                    method: 'post',
+                    url: '/Hotel/GetHotelCount',
+                    params: {
+                        searchValue: this.searchValue,
+
+                    }
+                })
+                    .then(response => {
+                        if (response.data % this.CountOnPage == 0)
+                            this.PageCount = response.data / this.CountOnPage;
+                        else
+                            this.PageCount = (response.data / this.CountOnPage) + 1;
+                        this.pages = [];
+                        for (let i = 1; i <= this.PageCount; i++) {
+                            this.pages.push(i);
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    })
+                    .finally();
+            },
+            getData() {
+                this.getHotels();
+                this.getHotelCount();
+            },
+            nextPage() {
+                if (this.page < parseInt(this.PageCount)) {
+                    this.page++;
+                    this.getData();
+                }
+            },
+            previousPage() {
+                if (this.page > 1) {
+                    this.page--;
+                    this.getData();
+                }
+            },
+            getPageByNumber(pageNum) {
+                this.page = pageNum;
+                this.getData();
+            }
+        },
+        mounted() {
+            this.getData();
+        }
+
+    });
+
+
+</script>
