@@ -8,7 +8,6 @@ using ApplicationCore.Services;
 using HotelsBooking.Mapping;
 using Infrastructure.EF;
 using Infrastructure.Entities;
-using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -47,15 +46,9 @@ namespace HotelsBooking
 
             var mapper = config.CreateMapper();
             services.AddSingleton(mapper);
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-            //add application services
-            services.AddTransient<IBaseRepository<Hotel>, BaseRepository<Hotel>>();
 
             //Add Interfaces and bind with their realization
-            services.AddScoped<IHotelService, HotelService>();
-
-
+            services.AddScoped<IHotelManager, HotelManager>();
 
 
 

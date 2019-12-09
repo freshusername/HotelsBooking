@@ -14,8 +14,8 @@ namespace HotelsBooking.Controllers
     [Route("[controller]/[action]")]
     public class HotelController : Controller
     {
-        private readonly IHotelService _hotelService;
-        public HotelController(IHotelService hotelService)
+        private readonly IHotelManager _hotelService;
+        public HotelController(IHotelManager hotelService)
         {
             this._hotelService = hotelService;
         }

@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <Folder Include="DTOs\Validation\" />
-    <Folder Include="Managers\" />
   </ItemGroup>
 
   <ItemGroup>

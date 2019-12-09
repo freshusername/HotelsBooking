@@ -19,5 +19,8 @@ namespace ApplicationCore.DTOs
 
         [Display(Name = "Season")]
         public Season Season { get; set; } //add reference to Infrastructure? or map Season from model to dto as a string?
+
+        public Photo PhotoBytes { get; set; }
+
     }
 }

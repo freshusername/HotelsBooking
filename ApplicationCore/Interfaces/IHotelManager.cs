@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ApplicationCore.Interfaces
 {
-    public interface IHotelService
+    public interface IHotelManager
     {
         HotelDto Get(int id);
         IEnumerable<HotelDto> GetHotels();
