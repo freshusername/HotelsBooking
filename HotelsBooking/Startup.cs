@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
 using HotelsBooking.Mapping;
-using HotelsBooking.Mapping.CoffeStoreWeb.AutoMapper;
 using Infrastructure.EF;
 using Infrastructure.Entities;
 using ApplicationCore.Interfaces;
@@ -92,8 +91,8 @@ namespace HotelsBooking
             services.AddAutoMapper(typeof(AutoMapperProfile).GetTypeInfo().Assembly);
             services.AddMvc();
             services.AddTransient<IAuthenticationManager, AuthenticationManager>();
-
-
+            services.AddTransient<IAdminManager, AdminManager>();
+            services.AddTransient<IHotelManager, HotelManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

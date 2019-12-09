@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - ForGoodTime</title>
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="~/css/bootstrap.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" asp-append-version="true">
     <!-- animate CSS -->
     <link rel="stylesheet" href="~/css/animate.css" asp-append-version="true">
     <!-- owl carousel CSS -->
@@ -28,11 +28,12 @@
     <link href="~/css/rating.css" rel="stylesheet" asp-append-version="true" />
 </head>
 <body>
-   
 
-    @RenderBody()
     <partial name="_CookieConsentPartial" />
 
+    <div class="container body-content">
+        @RenderBody()
+    </div>
     <!-- jquery plugins here-->
     <script src="~/js/jquery-1.12.1.min.js" asp-append-version="true"></script>
     <!-- popper js -->
