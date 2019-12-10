@@ -24,6 +24,7 @@ namespace HotelsBooking.Controllers
             _userManager = userManager;
             _mapper = mapper;
         }
+
         #region Users
         public IActionResult Users()
         {
@@ -128,6 +129,29 @@ namespace HotelsBooking.Controllers
             await _adminManager.DeleteHotel(Id);
             return RedirectToAction("Hotels");
         }
+        #endregion
+        #region Order
+        public IActionResult Orders()
+        {
+            return View(_adminManager.Orders());
+        }
+
+        public IActionResult CreateOrder()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> DeleteOrder(int Id)
+        {
+            await _adminManager.DeleteOrder(Id);
+            return RedirectToAction("Orders");
+        }
+
+        public IActionResult OrderDetails(int id)
+        {
+            return View();
+        }
+
         #endregion
     }
 }
