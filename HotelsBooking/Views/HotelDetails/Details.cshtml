@@ -27,7 +27,7 @@
         @foreach (var hotelRoom in Model.HotelRooms)
         {
             <tr>
-                <td>@hotelRoom.Room.RoomType.Description</td>
+                <td>@hotelRoom.Room.RoomType</td>
                 <td>@hotelRoom.Price</td>
                 <td>
                     @foreach (var room_conv in hotelRoom.RoomConvs)

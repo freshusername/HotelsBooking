@@ -14,7 +14,6 @@ namespace Infrastructure.EF
         public DbSet<Hotel> Hotels { get; set; }
         public DbSet<Room> Rooms { get; set; }
         public DbSet<HotelRoom> HotelRooms { get; set; }
-        public DbSet<RoomType> RoomTypes { get; set; }
         public DbSet<AdditionalConv> AdditionalConvs { get; set; }
         public DbSet<RoomConv> RoomConvs { get; set; }
         public DbSet<HotelConv> HotelConvs { get; set; }

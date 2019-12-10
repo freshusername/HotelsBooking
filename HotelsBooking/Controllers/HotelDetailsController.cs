@@ -26,12 +26,17 @@ namespace HotelsBooking.Controllers
         // GET: HotelDetails/Details/5
         public ActionResult Details(int id)
         {
-            Hotel hotel = db.Hotels.Include(h => h.HotelRooms)
+            /*Hotel hotel = db.Hotels.Include(h => h.HotelRooms)
                                         .ThenInclude(hr => hr.Room)
                                         .ThenInclude(room => room.RoomType)
                                    .Include(h => h.HotelRooms)
                                         .ThenInclude(hr => hr.RoomConvs)
-                                   .FirstOrDefault(x => x.Id == id);
+                                   .FirstOrDefault(x => x.Id == id);*/
+            Hotel hotel = db.Hotels.Include(h => h.HotelRooms)
+                                         .ThenInclude(hr => hr.Room)
+                                    .Include(h => h.HotelRooms)
+                                         .ThenInclude(hr => hr.RoomConvs)
+                                    .FirstOrDefault(x => x.Id == id);
             return View(hotel);
         }
     }
