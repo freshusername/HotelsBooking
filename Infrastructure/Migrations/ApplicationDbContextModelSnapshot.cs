@@ -14,7 +14,7 @@ namespace Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
+                .HasAnnotation("ProductVersion", "2.1.14-servicing-32113")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Infrastructure.Entities.AdditionalConv", b =>
@@ -164,7 +164,7 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("AppUserId");
 
-                    b.Property<bool>("IsEctive");
+                    b.Property<bool>("IsActive");
 
                     b.HasKey("Id");
 

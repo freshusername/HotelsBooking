@@ -11,8 +11,6 @@ using HotelsBooking.Mapping;
 using HotelsBooking.Mapping.CoffeStoreWeb.AutoMapper;
 using Infrastructure.EF;
 using Infrastructure.Entities;
-using ApplicationCore.Interfaces;
-using ApplicationCore.Managers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

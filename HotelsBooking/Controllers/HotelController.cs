@@ -29,7 +29,8 @@ namespace HotelsBooking.Controllers
         public IActionResult template()
         {
             var hotels = _hotelService.GetHotels();
-            return View(hotels);
+
+            return View("ShowHotels2", hotels);
         }
 
         [HttpPost]
@@ -44,37 +45,9 @@ namespace HotelsBooking.Controllers
             return View();
         }
 
-        public int GetHotelCount(string searchValue)
-        {
-            if (searchValue == null)
-            {
-                searchValue = "";
-            }
-            //if (!User.Identity.IsAuthenticated)   // when we will have users with role claims
-            //{
-            //    return 0;
-            //}
-            return _hotelService.GetHotelCount(searchValue);
-        }
 
-        public IEnumerable<HotelDto> Get(int page, int countOnPage, string searchValue)
-        {
-            if (searchValue == null)
-            {
-                searchValue = "";
-            }
 
-            //if (User.Identity.IsAuthenticated && User.IsInRole("Moderator"))    //again, when we will have users with role claims
-            //{
-            //    var moderatorId = moderatorManager.GetThisModerator(this.User.FindFirstValue(ClaimTypes.NameIdentifier)).Id;
-            //    return _hotelService.GetHotels(page, countOnPage, searchValue);
-            //}
-            else
-            {
-                return _hotelService.GetHotels(page, countOnPage, searchValue);
-            }
-            return _hotelService.GetHotels(page, countOnPage, searchValue);
-        }
+
 
         public IActionResult HotelMain(int hotelId)
         {

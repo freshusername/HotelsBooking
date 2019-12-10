@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastructure.Migrations
 {
-    public partial class MigratonDb : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -70,6 +70,7 @@ namespace Infrastructure.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
                     Location = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
                     Season = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -78,16 +79,16 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RoomTypes",
+                name: "Rooms",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(nullable: true)
+                    RoomType = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RoomTypes", x => x.Id);
+                    table.PrimaryKey("PK_Rooms", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -202,7 +203,7 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    IsEctive = table.Column<bool>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
                     AppUserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -244,20 +245,21 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Rooms",
+                name: "HotelPhotos",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    RoomTypeId = table.Column<int>(nullable: false)
+                    image = table.Column<byte[]>(nullable: true),
+                    HotelId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Rooms", x => x.Id);
+                    table.PrimaryKey("PK_HotelPhotos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Rooms_RoomTypes_RoomTypeId",
-                        column: x => x.RoomTypeId,
-                        principalTable: "RoomTypes",
+                        name: "FK_HotelPhotos_Hotels_HotelId",
+                        column: x => x.HotelId,
+                        principalTable: "Hotels",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -395,6 +397,11 @@ namespace Infrastructure.Migrations
                 column: "HotelId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_HotelPhotos_HotelId",
+                table: "HotelPhotos",
+                column: "HotelId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_HotelRooms_HotelId",
                 table: "HotelRooms",
                 column: "HotelId");
@@ -428,11 +435,6 @@ namespace Infrastructure.Migrations
                 name: "IX_RoomConvs_HotelRoomId",
                 table: "RoomConvs",
                 column: "HotelRoomId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Rooms_RoomTypeId",
-                table: "Rooms",
-                column: "RoomTypeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -454,6 +456,9 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "HotelConvs");
+
+            migrationBuilder.DropTable(
+                name: "HotelPhotos");
 
             migrationBuilder.DropTable(
                 name: "OrderDetails");
@@ -481,9 +486,6 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Rooms");
-
-            migrationBuilder.DropTable(
-                name: "RoomTypes");
         }
     }
 }

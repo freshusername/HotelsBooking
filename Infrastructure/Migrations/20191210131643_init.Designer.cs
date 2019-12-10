@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191207175801_Initial")]
-    partial class Initial
+    [Migration("20191210131643_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,7 +31,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("AdditionalConvs");
                 });
 
-            modelBuilder.Entity("Infrastructure.Entities.ApplicationUser", b =>
+            modelBuilder.Entity("Infrastructure.Entities.AppUser", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -46,11 +46,13 @@ namespace Infrastructure.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("LastName");
+
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
-
-                    b.Property<string>("Name");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256);
@@ -65,8 +67,6 @@ namespace Infrastructure.Migrations
                     b.Property<bool>("PhoneNumberConfirmed");
 
                     b.Property<string>("SecurityStamp");
-
-                    b.Property<string>("Surname");
 
                     b.Property<bool>("TwoFactorEnabled");
 
@@ -90,6 +90,8 @@ namespace Infrastructure.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Description");
+
                     b.Property<string>("Location");
 
                     b.Property<string>("Name");
@@ -106,9 +108,9 @@ namespace Infrastructure.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("AdditionalConvId");
+                    b.Property<int>("AdditionalConvId");
 
-                    b.Property<int?>("HotelId");
+                    b.Property<int>("HotelId");
 
                     b.Property<decimal>("Price");
 
@@ -119,6 +121,22 @@ namespace Infrastructure.Migrations
                     b.HasIndex("HotelId");
 
                     b.ToTable("HotelConvs");
+                });
+
+            modelBuilder.Entity("Infrastructure.Entities.HotelPhoto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("HotelId");
+
+                    b.Property<byte[]>("image");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HotelId");
+
+                    b.ToTable("HotelPhotos");
                 });
 
             modelBuilder.Entity("Infrastructure.Entities.HotelRoom", b =>
@@ -146,33 +164,15 @@ namespace Infrastructure.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<bool>("Status");
+                    b.Property<string>("AppUserId");
 
-                    b.Property<string>("UserId");
+                    b.Property<bool>("IsActive");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("AppUserId");
 
                     b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("Infrastructure.Entities.OrderConv", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int?>("HotelConvId");
-
-                    b.Property<int?>("OrderDetailId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HotelConvId");
-
-                    b.HasIndex("OrderDetailId");
-
-                    b.ToTable("OrderConvs");
                 });
 
             modelBuilder.Entity("Infrastructure.Entities.OrderDetail", b =>
@@ -180,15 +180,15 @@ namespace Infrastructure.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("CheckInDate");
+                    b.Property<DateTimeOffset>("CheckInDate");
 
-                    b.Property<DateTime>("CheckOutDate");
+                    b.Property<DateTimeOffset>("CheckOutDate");
 
-                    b.Property<int?>("HotelRoomId");
+                    b.Property<int>("HotelRoomId");
 
-                    b.Property<DateTime>("OrderDate");
+                    b.Property<DateTimeOffset>("OrderDate");
 
-                    b.Property<int?>("OrderId");
+                    b.Property<int>("OrderId");
 
                     b.Property<decimal>("TotalPrice");
 
@@ -206,11 +206,9 @@ namespace Infrastructure.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("RoomTypeId");
+                    b.Property<int>("RoomType");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RoomTypeId");
 
                     b.ToTable("Rooms");
                 });
@@ -222,7 +220,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<int?>("AdditionalConvId");
 
-                    b.Property<int?>("HotelRoomId");
+                    b.Property<int>("AditionalConvId");
+
+                    b.Property<int>("HotelRoomId");
 
                     b.Property<decimal>("Price");
 
@@ -233,18 +233,6 @@ namespace Infrastructure.Migrations
                     b.HasIndex("HotelRoomId");
 
                     b.ToTable("RoomConvs");
-                });
-
-            modelBuilder.Entity("Infrastructure.Entities.RoomType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Description");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("RoomTypes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -358,11 +346,21 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Infrastructure.Entities.AdditionalConv", "AdditionalConv")
                         .WithMany("HotelConvs")
-                        .HasForeignKey("AdditionalConvId");
+                        .HasForeignKey("AdditionalConvId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Infrastructure.Entities.Hotel", "Hotel")
                         .WithMany()
-                        .HasForeignKey("HotelId");
+                        .HasForeignKey("HotelId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Infrastructure.Entities.HotelPhoto", b =>
+                {
+                    b.HasOne("Infrastructure.Entities.Hotel", "Hotel")
+                        .WithMany("HotelPhotos")
+                        .HasForeignKey("HotelId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Infrastructure.Entities.HotelRoom", b =>
@@ -380,38 +378,22 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Entities.Order", b =>
                 {
-                    b.HasOne("Infrastructure.Entities.ApplicationUser", "User")
+                    b.HasOne("Infrastructure.Entities.AppUser", "User")
                         .WithMany("Orders")
-                        .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("Infrastructure.Entities.OrderConv", b =>
-                {
-                    b.HasOne("Infrastructure.Entities.HotelConv", "HotelConv")
-                        .WithMany()
-                        .HasForeignKey("HotelConvId");
-
-                    b.HasOne("Infrastructure.Entities.OrderDetail", "OrderDetail")
-                        .WithMany("OrderConvs")
-                        .HasForeignKey("OrderDetailId");
+                        .HasForeignKey("AppUserId");
                 });
 
             modelBuilder.Entity("Infrastructure.Entities.OrderDetail", b =>
                 {
                     b.HasOne("Infrastructure.Entities.HotelRoom", "HotelRoom")
                         .WithMany()
-                        .HasForeignKey("HotelRoomId");
+                        .HasForeignKey("HotelRoomId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Infrastructure.Entities.Order", "Order")
                         .WithMany("OrderDetails")
-                        .HasForeignKey("OrderId");
-                });
-
-            modelBuilder.Entity("Infrastructure.Entities.Room", b =>
-                {
-                    b.HasOne("Infrastructure.Entities.RoomType", "RoomType")
-                        .WithMany("Rooms")
-                        .HasForeignKey("RoomTypeId");
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Infrastructure.Entities.RoomConv", b =>
@@ -422,7 +404,8 @@ namespace Infrastructure.Migrations
 
                     b.HasOne("Infrastructure.Entities.HotelRoom", "HotelRoom")
                         .WithMany("RoomConvs")
-                        .HasForeignKey("HotelRoomId");
+                        .HasForeignKey("HotelRoomId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -435,7 +418,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Infrastructure.Entities.ApplicationUser")
+                    b.HasOne("Infrastructure.Entities.AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -443,7 +426,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Infrastructure.Entities.ApplicationUser")
+                    b.HasOne("Infrastructure.Entities.AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -456,7 +439,7 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Infrastructure.Entities.ApplicationUser")
+                    b.HasOne("Infrastructure.Entities.AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -464,7 +447,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Infrastructure.Entities.ApplicationUser")
+                    b.HasOne("Infrastructure.Entities.AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
