@@ -11,6 +11,7 @@ namespace ApplicationCore.Interfaces
     {
         Task<OperationDetails> Register(UserDTO userDTO);
         Task<OperationDetails> Login(UserDTO userDTO);
+        Task<ConfirmDTO> GetConfirmationCode(string userName);
         Task Logout();
     }
 }

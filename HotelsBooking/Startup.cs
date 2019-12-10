@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ApplicationCore.Services;
 
 namespace HotelsBooking
 {
@@ -92,6 +93,7 @@ namespace HotelsBooking
             services.AddAutoMapper(typeof(AutoMapperProfile).GetTypeInfo().Assembly);
             services.AddMvc();
             services.AddTransient<IAuthenticationManager, AuthenticationManager>();
+            services.AddTransient<IEmailSender, EmailSender>();
 
 
         }

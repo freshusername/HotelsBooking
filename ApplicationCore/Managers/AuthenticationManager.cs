@@ -1,6 +1,7 @@
 ﻿using ApplicationCore.DTOs;
 using ApplicationCore.Infrastructure;
 using ApplicationCore.Interfaces;
+using ApplicationCore.Services;
 using AutoMapper;
 using Infrastructure.EF;
 using Infrastructure.Entities;
@@ -22,7 +23,7 @@ namespace ApplicationCore.Managers
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
 
-        public AuthenticationManager(ApplicationDbContext contex, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ApplicationDbContext context, IMapper mapper)
+        public AuthenticationManager(ApplicationDbContext context, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IMapper mapper)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -47,6 +48,7 @@ namespace ApplicationCore.Managers
                 await UserManager.AddToRoleAsync(userIdentity, "User");
                 await _context.SaveChangesAsync();
 
+                  
                 return new OperationDetails(true, "Congratulations! Your account has been created.", "");
             }
             else
@@ -63,26 +65,39 @@ namespace ApplicationCore.Managers
                 return new OperationDetails(false, "Invalid username or password.", "");
             }
 
-            var auth = await SignInManager.PasswordSignInAsync(userDTO.UserName, userDTO.Password, false, lockoutOnFailure: false);
+            var auth = await SignInManager.PasswordSignInAsync(userDTO.UserName, userDTO.Password, userDTO.RememberMe, lockoutOnFailure: false);
 
             return new OperationDetails(auth.Succeeded , " " , " ");
         }
 
+        public async Task<ConfirmDTO> GetConfirmationCode(string userName)
+        {
+         var user = await UserManager.FindByNameAsync(userName);
+            if (user == null)
+                return (null);
+                    
+              var code =  await UserManager.GenerateEmailConfirmationTokenAsync(user);
+            return new ConfirmDTO { Code = code,UserId = user.Id };
+        }
+
+        private async Task<ClaimsIdentity> GetClaimsIdentity(string userName, string password)
+        {
+          if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
+             return await Task.FromResult<ClaimsIdentity>(null);
+          
+          var userToVerify = await UserManager.FindByNameAsync(userName);
+            if (userToVerify == null) return await Task.FromResult<ClaimsIdentity>(null);
+           
+          if(await UserManager.CheckPasswordAsync(userToVerify,password))
+             return await Task.FromResult(new ClaimsIdentity());
+
+             return await Task.FromResult<ClaimsIdentity>(null);
+        }
         public async Task Logout()
         {
             await SignInManager.SignOutAsync();
         }
 
-        private async Task<ClaimsIdentity> GetClaimsIdentity(string userName, string password)
-        {
-            if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
-                return await Task.FromResult<ClaimsIdentity>(null);
-          
-            var userToVerify = await UserManager.FindByNameAsync(userName);
-               if (userToVerify == null) return await Task.FromResult<ClaimsIdentity>(null);
-                                     
-            return await Task.FromResult<ClaimsIdentity>(null);
-        }
 
     }
 }

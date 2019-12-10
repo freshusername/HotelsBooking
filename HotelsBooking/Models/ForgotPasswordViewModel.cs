@@ -6,19 +6,10 @@ using System.Threading.Tasks;
 
 namespace HotelsBooking.Models
 {
-    public class LoginViewModel
-
+    public class ForgotPasswordViewModel
     {
-
         [Required]
+        [EmailAddress]
         public string Email { get; set; }
-
-        [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
-
-        [Display(Name = "Remember?")]
-        public bool RememberMe { get; set; }
-
     }
 }
