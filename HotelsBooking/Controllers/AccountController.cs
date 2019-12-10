@@ -50,7 +50,7 @@ namespace HotelsBooking.Controllers
             var result = await _authenticationManager.Register(user);
             if (result.Succedeed)
             {
-                var confrirmaParam = await _authenticationManager.GetConfirmationCode(user.Email);
+                var confrirmaParam = await _authenticationManager.GetEmailConfirmationToken(user.Email);
                 var callbackUrl = Url.Action("ConfirmEmail","Account",  new { userId = confrirmaParam.UserId, code = confrirmaParam.Code }, protocol: HttpContext.Request.Scheme);
 
                     EmailSender emailSender = new EmailSender();
@@ -112,7 +112,7 @@ namespace HotelsBooking.Controllers
         {
             if (ModelState.IsValid)
             {
-                var confirmParam = await _authenticationManager.GetConfirmationCode(model.Email);
+                var confirmParam = await _authenticationManager.GetPasswordConfirmationToken(model.Email);
                  if (confirmParam == null)            
                     ModelState.AddModelError("", "User with this email is not exist");
                  else

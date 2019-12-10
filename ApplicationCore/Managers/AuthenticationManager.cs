@@ -70,14 +70,24 @@ namespace ApplicationCore.Managers
             return new OperationDetails(auth.Succeeded , " " , " ");
         }
 
-        public async Task<ConfirmDTO> GetConfirmationCode(string userName)
+        public async Task<ConfirmDTO> GetEmailConfirmationToken(string userName)
         {
          var user = await UserManager.FindByNameAsync(userName);
-            if (user == null)
+            if (user == null || (await UserManager.IsEmailConfirmedAsync(user)))
                 return (null);
                     
               var code =  await UserManager.GenerateEmailConfirmationTokenAsync(user);
             return new ConfirmDTO { Code = code,UserId = user.Id };
+        }
+
+        public async Task<ConfirmDTO> GetPasswordConfirmationToken(string userName)
+        {
+            var user = await UserManager.FindByNameAsync(userName);
+            if (user == null || !(await UserManager.IsEmailConfirmedAsync(user)))
+                return (null);
+
+            var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
+            return new ConfirmDTO { Code = code, UserId = user.Id };
         }
 
         private async Task<ClaimsIdentity> GetClaimsIdentity(string userName, string password)
