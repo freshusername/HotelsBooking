@@ -18,10 +18,14 @@ namespace ApplicationCore.Managers
         private readonly ApplicationDbContext _context;
         private IMapper _mapper;
         private readonly DbSet<Hotel> _hotels;
+        private readonly DbSet<HotelConv> _hotelConvs;
+        private readonly DbSet<AdditionalConv> _additionalConvs;
         public HotelManager(ApplicationDbContext context,IMapper mapper)
         {
             _context = context;
             _hotels = _context.Hotels;
+            _hotelConvs = _context.HotelConvs;
+            _additionalConvs = _context.AdditionalConvs;
             _mapper = mapper;
         }
         public async Task<Hotel> GetHotelById(int Id) => await _hotels.FindAsync(Id);
@@ -59,6 +63,30 @@ namespace ApplicationCore.Managers
             _hotels.Remove(hotel);
             await _context.SaveChangesAsync();
         }
+        #region HotelConvs
+        public List<HotelConv> GetHotelConvs() => _hotelConvs.ToList();
+        public async Task<OperationDetails> CreateHotelConv(HotelConvDTO hotelConvDTO)
+        {
+            
+            HotelConv check = _hotelConvs.FirstOrDefault(x => x.AdditionalConv.Name == hotelConvDTO.Name && x.HotelId==hotelConvDTO.HotelId);
+            if (check == null)
+            {
+                HotelConv hotelConv = new HotelConv 
+                {
+                    Price = hotelConvDTO.Price,
+                    HotelId = hotelConvDTO.HotelId,
+                    Hotel = await _hotels.FirstAsync(x=>x.Id==hotelConvDTO.HotelId),
+                    AdditionalConv = await _additionalConvs.FirstAsync(x=>x.Name==hotelConvDTO.Name),
+                    AdditionalConvId =  _additionalConvs.First(x=>x.Name==hotelConvDTO.Name).Id
+                };
+                
+                await _hotelConvs.AddAsync(hotelConv);
+                await _context.SaveChangesAsync();
+                return new OperationDetails(true, "Hotel convenience added", "Name");
+            }
+            return new OperationDetails(false, "Hotel convenience with the same name already exists", "Name");
+        }
+        #endregion
         public void Dispose()
         {
             

@@ -177,6 +177,11 @@ namespace HotelsBooking.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> HotelConvs(int Id)
+        {
+           return View(_adminManager.HotelConvs().Where(hc => hc.HotelId == Id));
+        }
+
         [HttpPost]
         public async Task<IActionResult> DeleteHotel(int Id)
         {

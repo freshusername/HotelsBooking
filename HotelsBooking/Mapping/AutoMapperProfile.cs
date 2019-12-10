@@ -21,6 +21,9 @@ namespace HotelsBooking.Mapping
             CreateMap<AppUser, AdminUserDTO>();
             CreateMap<AdminUserDTO, UsersViewModel>();
 
+            CreateMap<AdditionalConvDTO, AdditionalConv>();
+            CreateMap<AdditionalConv,AdditionalConvDTO>();
+
             CreateMap<CreateOrEditHotelViewModel, HotelDTO>();
             CreateMap<HotelDTO ,CreateOrEditHotelViewModel>();
             CreateMap<HotelDTO, Hotel>();

@@ -21,7 +21,9 @@ namespace ApplicationCore.Managers
         private IAuthenticationManager _authenticationManager;
         private IHotelManager _hotelManager;
         private IOrderManager _orderManager;
-        public AdminManager(ApplicationDbContext applicationDbContext, UserManager<AppUser> userManager,IMapper mapper, IAuthenticationManager authenticationManager, IHotelManager hotelManager, IOrderManager orderManager)
+        private IAdditionalConvManager _additionalConvManager;
+        public AdminManager(ApplicationDbContext applicationDbContext, UserManager<AppUser> userManager,IMapper mapper, 
+            IAuthenticationManager authenticationManager, IHotelManager hotelManager, IOrderManager orderManager, IAdditionalConvManager additionalConvManager)
         {
             _applicationDbContext = applicationDbContext;
             _userManager = userManager;
@@ -29,6 +31,7 @@ namespace ApplicationCore.Managers
             _authenticationManager = authenticationManager;
             _hotelManager = hotelManager;
             _orderManager = orderManager;
+            _additionalConvManager = additionalConvManager;
         }
         #region Users
         public List<AdminUserDTO> Users()
@@ -113,8 +116,13 @@ namespace ApplicationCore.Managers
         {
             await _hotelManager.Delete(Id);
         }
+        public List<HotelConv> HotelConvs() => _hotelManager.GetHotelConvs();
+
+        public Task<OperationDetails> CreateHotelConv(HotelConvDTO hotelConvDTO) => _hotelManager.CreateHotelConv(hotelConvDTO);
         #endregion
-       
+        #region AddConvs
+        public Task<OperationDetails> CreateAdditionalConv(AdditionalConvDTO additionalConvDTO) => _additionalConvManager.Create(additionalConvDTO);
+        #endregion
         public void Dispose()
         {
 

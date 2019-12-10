@@ -13,6 +13,7 @@ namespace Infrastructure.Entities
         public string Location { get; set; }
         public Season Season { get; set; }
         public ICollection<HotelRoom> HotelRooms { get; set; }
+        public IEnumerable<HotelConv> HotelConvs { get; set; }
     }
 
    
