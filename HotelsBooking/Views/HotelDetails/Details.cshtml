@@ -1,0 +1,43 @@
+﻿@using Microsoft.EntityFrameworkCore;
+@model Infrastructure.Entities.Hotel
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Деталі про готель</title>
+</head>
+<body>
+    <h3>@Model.Name</h3>
+    <h3>Сезонність: @Model.Season</h3>
+    <h3>Країна: @Model.Location</h3>
+    <h4>Кімнати:</h4>
+    <table>
+        <tr>
+            <td>Тип кімнати</td>
+            <td>Ціна</td>
+            <td>Список додаткових зручностей</td>
+            <td></td>
+        </tr>
+        @foreach (var hotelRoom in Model.HotelRooms)
+        {
+            <tr>
+                <td>@hotelRoom.Room.RoomType</td>
+                <td>@hotelRoom.Price</td>
+                <td>
+                    @foreach (var room_conv in hotelRoom.RoomConvs)
+                    {
+                        <p>@room_conv.AdditionalConv.Name</p>
+                    }
+                </td>
+                <td><a href="~/HotelDetails">Забронювати</a></td>
+            </tr>
+        }
+    </table>
+</body>
+</html>
