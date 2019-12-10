@@ -8,7 +8,7 @@ namespace Infrastructure.Entities
     public class Order
     {
         public int Id { get; set; }
-        public ApplicationUser User { get; set; }
+        public AppUser User { get; set; }
         public bool Status { get; set; }
         public ICollection<OrderDetail> OrderDetails { get; set; }
     }

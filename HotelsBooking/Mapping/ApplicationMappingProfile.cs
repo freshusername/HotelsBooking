@@ -11,7 +11,7 @@ namespace HotelsBooking.Mapping
     {
         public ApplicationMappingProfile()
         {
-            CreateMap<ApplicationUser, ApplicationUserDto>().ReverseMap();
+            CreateMap<AppUser, ApplicationUserDto>().ReverseMap();
 
             CreateMap<Hotel, HotelDto>().ReverseMap();
         }
