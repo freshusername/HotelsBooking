@@ -52,8 +52,9 @@ namespace HotelsBooking.Controllers
             {
                 var confrirmaParam = await _authenticationManager.GetConfirmationCode(user.Email);
                 var callbackUrl = Url.Action("ConfirmEmail","Account",  new { userId = confrirmaParam.UserId, code = confrirmaParam.Code }, protocol: HttpContext.Request.Scheme);
-                EmailSender emailSender = new EmailSender();
-                await emailSender.SendEmailAsync(model.Email, "Confirm your account",
+
+                    EmailSender emailSender = new EmailSender();
+                      await emailSender.SendEmailAsync(model.Email, "Confirm your account",
                           $"Your information has been sent successfully. In order to complete your registration, please click the confirmation link in the email that we have sent to you.: <a href='{callbackUrl}'>link</a>");
                 return View("EmailConfirmation");
             }              
@@ -114,17 +115,16 @@ namespace HotelsBooking.Controllers
                 var confirmParam = await _authenticationManager.GetConfirmationCode(model.Email);
                  if (confirmParam == null)            
                     ModelState.AddModelError("", "User with this email is not exist");
-                   else
-                   {
-                      var user = UserManager.FindByNameAsync(model.Email);
-                        var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = confirmParam.UserId, code = confirmParam.Code }, protocol: HttpContext.Request.Scheme);
+                 else
+                 {
+                     var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = confirmParam.UserId, code = confirmParam.Code }, protocol: HttpContext.Request.Scheme);
 
-                    EmailSender emailSender = new EmailSender();
-                    await emailSender.SendEmailAsync(model.Email, "Reset your password",
-                              $"Please reset your password by clicking here.: <a href='{callbackUrl}'>link</a>");
+                     EmailSender emailSender = new EmailSender();
+                       await emailSender.SendEmailAsync(model.Email, "Reset your password",
+                          $"Please reset your password by clicking here.: <a href='{callbackUrl}'>link</a>");
 
                     return View("ForgotPasswordConfirmation");
-                   }                                                                                                                     
+                 }                                                                                                                     
             }
             return View(model);
         }
