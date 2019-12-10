@@ -24,6 +24,7 @@ namespace ApplicationCore.Managers
             _hotels = _context.Hotels;
             _mapper = mapper;
         }
+        public async Task<Hotel> GetHotelById(int Id) => await _hotels.FindAsync(Id);
         public List<Hotel> GetHotels() => _hotels.ToList();
         public async Task<OperationDetails> Create(HotelDTO hotelDTO)
         {
@@ -34,6 +35,21 @@ namespace ApplicationCore.Managers
                 await _hotels.AddAsync(hotel);
                 await _context.SaveChangesAsync();
                 return new OperationDetails(true, "Hotel added", "Name");
+            }
+            return new OperationDetails(false, "Hotel with the same name already exists", "Name");
+        }
+        public async Task<OperationDetails> Update(HotelDTO hotelDTO)
+        {
+            Hotel hotelCheck = _hotels.FirstOrDefault(x => x.Name == hotelDTO.Name && x.Id != hotelDTO.Id);
+            if (hotelCheck == null)
+            {
+                Hotel hotel = await _hotels.FindAsync(hotelDTO.Id);
+                hotel.Name = hotelDTO.Name;
+                hotel.Location = hotelDTO.Location;
+                hotel.Season = hotelDTO.Season;
+                _hotels.Update(hotel);
+                await _context.SaveChangesAsync();
+                return new OperationDetails(true, "Hotel update", "Name");
             }
             return new OperationDetails(false, "Hotel with the same name already exists", "Name");
         }
