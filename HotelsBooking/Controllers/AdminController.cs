@@ -123,6 +123,27 @@ namespace HotelsBooking.Controllers
         {
             return View(_adminManager.Hotels());
         }
+        public IActionResult CreateHotel()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateHotel(CreateHotelViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var hotel = _mapper.Map<CreateHotelViewModel, HotelDTO>(model);
+            var res = await _adminManager.CreateHotel(hotel);
+            if (res.Succedeed)
+                return RedirectToAction("Hotels");
+            else
+                ModelState.AddModelError(res.Property, res.Message);
+
+            return View(model);
+        }
         [HttpPost]
         public async Task<IActionResult> DeleteHotel(int Id)
         {
