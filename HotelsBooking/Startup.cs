@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
 using HotelsBooking.Mapping;
-using HotelsBooking.Mapping.CoffeStoreWeb.AutoMapper;
 using Infrastructure.EF;
 using Infrastructure.Entities;
 using ApplicationCore.Interfaces;
@@ -22,6 +21,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ApplicationCore.Services;
+using HotelsBooking.Mapping.HotelsBooking.Mapping;
 
 namespace HotelsBooking
 {
@@ -93,6 +93,8 @@ namespace HotelsBooking
             services.AddAutoMapper(typeof(AutoMapperProfile).GetTypeInfo().Assembly);
             services.AddMvc();
             services.AddTransient<IAuthenticationManager, AuthenticationManager>();
+            services.AddTransient<IOrderManager, OrderManager>();
+
             services.AddTransient<IEmailSender, EmailSender>();
 
 

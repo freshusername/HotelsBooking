@@ -57,7 +57,7 @@ namespace HotelsBooking.Controllers
                       await emailSender.SendEmailAsync(model.Email, "Confirm your account",
                           $"Your information has been sent successfully. In order to complete your registration, please click the confirmation link in the email that we have sent to you.: <a href='{callbackUrl}'>link</a>");
                 return View("EmailConfirmation");
-            }              
+            }               
             else
                 ModelState.AddModelError(result.Property, result.Message);
 

@@ -40,7 +40,7 @@ namespace ApplicationCore.Managers
 
             {
                 var userIdentity = _mapper.Map<UserDTO, AppUser>(userDTO);
-               var result = await UserManager.CreateAsync(userIdentity, userDTO.Password);
+                 var result = await UserManager.CreateAsync(userIdentity, userDTO.Password);
 
                 if (result.Errors.Count() > 0)
                     return new OperationDetails(false, result.Errors.FirstOrDefault().ToString(), "");
@@ -72,7 +72,7 @@ namespace ApplicationCore.Managers
 
         public async Task<ConfirmDTO> GetEmailConfirmationToken(string userName)
         {
-         var user = await UserManager.FindByNameAsync(userName);
+            var user = await UserManager.FindByNameAsync(userName);
             if (user == null || (await UserManager.IsEmailConfirmedAsync(user)))
                 return (null);
                     

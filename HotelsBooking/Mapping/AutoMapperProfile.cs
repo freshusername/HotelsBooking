@@ -10,16 +10,13 @@ using System.Threading.Tasks;
 namespace HotelsBooking.Mapping
 {
 
-    namespace CoffeStoreWeb.AutoMapper // :D
-
+    namespace HotelsBooking.Mapping
     {
 
         public class AutoMapperProfile : Profile
-
         {
 
             public AutoMapperProfile()
-
             {
 
                 CreateMap<RegisterViewModel, UserDTO>().ForMember(au => au.UserName, map => map.MapFrom(vm => vm.Email));
@@ -28,7 +25,8 @@ namespace HotelsBooking.Mapping
                 CreateMap<LoginViewModel, UserDTO>().ForMember(au => au.UserName, map => map.MapFrom(vm => vm.Email));
                 CreateMap<UserDTO, AppUser>().ForMember(au => au.UserName, map => map.MapFrom(vm => vm.Email));
 
-
+                CreateMap<OrderViewModel, OrderDTO>();
+                CreateMap<OrderDTO, Order>();
 
             }
 

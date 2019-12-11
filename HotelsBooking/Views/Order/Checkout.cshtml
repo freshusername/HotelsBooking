@@ -1,0 +1,55 @@
+﻿@using HotelsBooking.Models
+@model OrderViewModel
+
+
+<section class="checkout_area padding_top">
+    <div class="container">
+        <div class="billing_details">
+            <div class="row">
+                <form asp-action="Checkout" asp-controller="Order" class="row contact_form" method="post">
+                    <div class="col-lg-8">
+                            <div class="col-md-6 ">
+                                 <div class="creat_account">
+                                    <h3>Confirmation details</h3>
+                                 </div>
+                            </div>
+                            <div class="col-md-6 form-group p_star ">
+
+                                <input asp-for="FirstName" class="form-control" />
+                                <span asp-validation-for="FirstName"></span>
+                            </div>
+                            <div class="col-md-6 form-group p_star float-right">
+                                <input asp-for="LastName" class="form-control" />
+                                <span asp-validation-for="LastName"></span>
+                            </div>
+                            <div class="col-md-6 form-group p_star">
+                                <input asp-for="PhoneNumber" type="text" class="form-control" />
+                                <span asp-validation-for="PhoneNumber"></span>
+                            </div>
+                            <div class="col-md-6 form-group p_star float-right">
+                                <input asp-for="Email" type="email" class="form-control" />
+                                <span asp-validation-for="Email"></span>
+                            </div>
+                            <div class="col-md-12 form-group p_star">
+                                <div class="creat_account">
+                                    <h3>Message</h3>
+                                </div>
+                                <textarea class="form-control" name="message" id="message" rows="1"
+                                          placeholder="Текст"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 float-right">
+                            <div class="order_box">
+                                @*@await Component.InvokeAsync("OrderSummary")*@
+                                <button type="submit" class="btn_3">Confirm</button>
+                            </div>
+                        </div>
+</form>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
