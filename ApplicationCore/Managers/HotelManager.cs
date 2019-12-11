@@ -1,71 +1,116 @@
 ﻿using ApplicationCore.DTOs;
+using ApplicationCore.Infrastructure;
 using ApplicationCore.Interfaces;
 using AutoMapper;
 using Infrastructure.EF;
 using Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace ApplicationCore.Services
+namespace ApplicationCore.Managers
 {
     public class HotelManager : IHotelManager
     {
-        protected readonly ApplicationDbContext _context;
-        private readonly IMapper _mapper;
-        public HotelManager(ApplicationDbContext context, IMapper mapper)
+        private readonly ApplicationDbContext _context;
+        private IMapper _mapper;
+       
+        public HotelManager(ApplicationDbContext context,IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
-
-        //load data from relative tables(available hotel convs, etc.)
-        public HotelDto Get(int hotelId)
+        public async Task<HotelDTO> GetHotelById(int Id)
         {
-            var hotel = _context.Hotels.FirstOrDefault(h => h.Id == hotelId);
-            return _mapper.Map<Hotel, HotelDto>(hotel);
+            HotelDTO hotel = _mapper.Map<Hotel, HotelDTO>(await _context.Hotels.FindAsync(Id));
+            return hotel;
         }
-
-       
-        public IEnumerable<HotelDto> GetHotels()
+        public IEnumerable<HotelDTO> GetHotels()
         {
-            IEnumerable<Hotel> hotels = _context.Hotels.ToList();
-            return _mapper.Map<IEnumerable<Hotel>, IEnumerable<HotelDto>>(hotels);
+            IEnumerable<HotelDTO> hotels = _mapper.Map<IEnumerable<Hotel>, IEnumerable<HotelDTO>>(_context.Hotels.ToList());
+            return hotels;
         }
-        
-        public void Insert(HotelDto hotel)
+        public async Task<OperationDetails> Create(HotelDTO hotelDTO)
         {
-            Hotel hotel_to_add = _mapper.Map<HotelDto, Hotel>(hotel);
-            _context.Hotels.Add(hotel_to_add);
-            _context.SaveChanges();
-        }
-
-        public void Update(HotelDto hotel)
-        {
-            Hotel hotel_to_update = _mapper.Map<HotelDto, Hotel>(hotel);
-            try
+            Hotel hotelCheck = _context.Hotels.FirstOrDefault(x => x.Name == hotelDTO.Name);
+            if (hotelCheck == null)
             {
-                _context.Hotels.Attach(hotel_to_update);
+                Hotel hotel = _mapper.Map<HotelDTO, Hotel>(hotelDTO);
+                await _context.Hotels.AddAsync(hotel);
+                await _context.SaveChangesAsync();
+                return new OperationDetails(true, "Hotel added", "Name");
             }
-            catch { }
-            finally
-            {
-                _context.Hotels.Update(hotel_to_update);
-            }
-            _context.SaveChanges();
+            return new OperationDetails(false, "Hotel with the same name already exists", "Name");
         }
-        public void Delete(int id)
+        public async Task<OperationDetails> Update(HotelDTO hotelDTO)
         {
-            Hotel hotel_to_delete = _context.Hotels.Find(id);
-            if (_context.Entry(hotel_to_delete).State == EntityState.Detached)
+            Hotel hotelCheck = _context.Hotels.FirstOrDefault(x => x.Name == hotelDTO.Name && x.Id != hotelDTO.Id);
+            if (hotelCheck == null)
             {
-                _context.Hotels.Attach(hotel_to_delete);
+                Hotel hotel = await _context.Hotels.FindAsync(hotelDTO.Id);
+                hotel.Name = hotelDTO.Name;
+                hotel.Location = hotelDTO.Location;
+                hotel.Season = hotelDTO.Season;
+                _context.Hotels.Update(hotel);
+                await _context.SaveChangesAsync();
+                return new OperationDetails(true, "Hotel update", "Name");
             }
-            _context.Hotels.Remove(hotel_to_delete);
+            return new OperationDetails(false, "Hotel with the same name already exists", "Name");
+        }
+        public async Task Delete(int Id)
+        {
+            Hotel hotel = _context.Hotels.Find(Id);
+            _context.Hotels.Remove(hotel);
+            await _context.SaveChangesAsync();
+        }
+        #region HotelConvs
+
+        public IEnumerable<HotelConvDTO> GetHotelConvs()
+        {
+            List<HotelConv> hotelConvs = _context.HotelConvs.ToList();
+            List<AdditionalConv> addConvs = _context.AdditionalConvs.ToList();
+            var query = hotelConvs.Join(addConvs,
+                hc => hc.AdditionalConvId,
+                ac => ac.Id,
+                (hc, ac) => new HotelConvDTO { Id = hc.Id, Name = ac.Name, HotelId = hc.HotelId, Price = hc.Price }
+                );
+            return query;
+        }
+
+        public async Task<OperationDetails> CreateHotelConv(HotelConvDTO hotelConvDTO)
+        {
+            
+            HotelConv check = _context.HotelConvs.FirstOrDefault(x => x.AdditionalConv.Name == hotelConvDTO.Name && x.HotelId==hotelConvDTO.HotelId);
+            if (check == null)
+            {
+                HotelConv hotelConv = new HotelConv 
+                {
+                    Price = hotelConvDTO.Price,
+                    HotelId = hotelConvDTO.HotelId,
+                    Hotel = await _context.Hotels.FirstAsync(x=>x.Id==hotelConvDTO.HotelId),
+                    AdditionalConv = await _context.AdditionalConvs.FirstAsync(x=>x.Name==hotelConvDTO.Name),
+                    AdditionalConvId =  _context.AdditionalConvs.First(x=>x.Name==hotelConvDTO.Name).Id
+                };
+                await _context.HotelConvs.AddAsync(hotelConv);
+                await _context.SaveChangesAsync();
+                return new OperationDetails(true, "Hotel convenience added", "Name");
+            }
+            return new OperationDetails(false, "Hotel convenience with the same name already exists", "Name");
+        }
+
+        public async Task DeleteHotelConv(int Id)
+        {
+            HotelConv hotelConv = _context.HotelConvs.Find(Id);
+            _context.HotelConvs.Remove(hotelConv);
+            await _context.SaveChangesAsync();
+        }
+        #endregion
+        public void Dispose()
+        {
+            
         }
     }
 }
