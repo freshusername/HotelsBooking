@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
 using HotelsBooking.Mapping;
-using HotelsBooking.Mapping.CoffeStoreWeb.AutoMapper;
 using Infrastructure.EF;
 using Infrastructure.Entities;
 using ApplicationCore.Interfaces;
