@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace ApplicationCore.DTOs
+namespace HotelsBooking.Models
 {
-    public class HotelConvDTO
+    public class HotelConvsViewModel
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
         public int HotelId { get; set; }
-        public int AdditionalId { get; set; }
     }
 }

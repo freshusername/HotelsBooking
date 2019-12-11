@@ -179,7 +179,8 @@ namespace HotelsBooking.Controllers
 
         public async Task<IActionResult> HotelConvs(int Id)
         {
-           return View(_adminManager.HotelConvs().Where(hc => hc.HotelId == Id));
+            IEnumerable<HotelConvsViewModel> hotelConvs = _mapper.Map<IEnumerable<HotelConvDTO>, IEnumerable<HotelConvsViewModel>>(_adminManager.HotelConvs().Where(hc => hc.HotelId == Id));
+            return View(hotelConvs);
         }
 
         [HttpPost]

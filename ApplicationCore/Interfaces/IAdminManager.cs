@@ -24,7 +24,7 @@ namespace ApplicationCore.Interfaces
         Task<OperationDetails> CreateHotel(HotelDTO hotelDTO);
         Task<OperationDetails> EditHotel(HotelDTO hotelDTO);
         Task DeleteHotel(int Id);
-        List<HotelConv> HotelConvs();
+        IEnumerable<HotelConvDTO> HotelConvs();
         Task<OperationDetails> CreateHotelConv(HotelConvDTO hotelConvDTO);
         #endregion
         #region AddConv

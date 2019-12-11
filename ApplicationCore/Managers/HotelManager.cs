@@ -64,7 +64,17 @@ namespace ApplicationCore.Managers
             await _context.SaveChangesAsync();
         }
         #region HotelConvs
-        public List<HotelConv> GetHotelConvs() => _hotelConvs.ToList();
+        public IEnumerable<HotelConvDTO> GetHotelConvs()
+        {
+            List<HotelConv> hotelConvs = _hotelConvs.ToList();
+            List<AdditionalConv> addConvs = _additionalConvs.ToList();
+            var query = hotelConvs.Join(addConvs,
+                hc => hc.AdditionalConvId,
+                ac => ac.Id,
+                (hc, ac) => new HotelConvDTO { Id = hc.Id, Name = ac.Name, HotelId = hc.HotelId, Price = hc.Price }
+                );
+            return query;
+        }
         public async Task<OperationDetails> CreateHotelConv(HotelConvDTO hotelConvDTO)
         {
             
@@ -79,7 +89,6 @@ namespace ApplicationCore.Managers
                     AdditionalConv = await _additionalConvs.FirstAsync(x=>x.Name==hotelConvDTO.Name),
                     AdditionalConvId =  _additionalConvs.First(x=>x.Name==hotelConvDTO.Name).Id
                 };
-                
                 await _hotelConvs.AddAsync(hotelConv);
                 await _context.SaveChangesAsync();
                 return new OperationDetails(true, "Hotel convenience added", "Name");

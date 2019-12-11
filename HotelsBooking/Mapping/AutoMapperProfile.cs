@@ -24,6 +24,8 @@ namespace HotelsBooking.Mapping
             CreateMap<AdditionalConvDTO, AdditionalConv>();
             CreateMap<AdditionalConv,AdditionalConvDTO>();
 
+            CreateMap<HotelConvDTO,HotelConvsViewModel>();
+
             CreateMap<CreateOrEditHotelViewModel, HotelDTO>();
             CreateMap<HotelDTO ,CreateOrEditHotelViewModel>();
             CreateMap<HotelDTO, Hotel>();

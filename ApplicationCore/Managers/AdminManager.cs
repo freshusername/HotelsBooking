@@ -116,7 +116,7 @@ namespace ApplicationCore.Managers
         {
             await _hotelManager.Delete(Id);
         }
-        public List<HotelConv> HotelConvs() => _hotelManager.GetHotelConvs();
+        public IEnumerable<HotelConvDTO> HotelConvs() => _hotelManager.GetHotelConvs();
 
         public Task<OperationDetails> CreateHotelConv(HotelConvDTO hotelConvDTO) => _hotelManager.CreateHotelConv(hotelConvDTO);
         #endregion
