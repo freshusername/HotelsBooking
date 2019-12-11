@@ -8,6 +8,7 @@ using ApplicationCore.Services;
 using AutoMapper;
 using HotelsBooking.Models;
 using Infrastructure.Entities;
+using HotelsBooking.Models.AppProfile;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

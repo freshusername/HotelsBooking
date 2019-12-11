@@ -94,11 +94,11 @@
                                 <a class="nav-link" href="contact.html">Contact</a>
                             </li>*@
                             <li class="nav-item">
-                                <a asp-controller="Home" asp-action="Index" class="nav-link">Home</a>
+                                <a asp-controller="Profile" asp-action="Index" class="nav-link">Profile</a>
                             </li>
-                            <li class="nav-item">
+                            @*<li class="nav-item">
                                 <a asp-controller="Home" asp-action="Contact" class="nav-link">Contact</a>
-                            </li>
+                            </li>*@
                             <li class="nav-item">
                                 <a asp-controller="Hotel" asp-action="ShowHotels" class="nav-link">Hotels</a>
                             </li>
@@ -117,7 +117,6 @@
                 </nav>
             </div>
         </div>
-        </div>
         <div class="search_input" id="search_input_box">
             <div class="container ">
                 <form class="d-flex justify-content-between search-inner">
@@ -128,34 +127,7 @@
             </div>
         </div>
     </header>
-
-
-                                </div>
-
-                                <div class="dropdown cart">
-                                    <!-- <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <div class="single_product">
-                                        </div>
-                                    </div> -->
-                                </div>
-                            </div>
-                        </nav>
-                    </div>
-                </div>
-            </div>
-            <div class="search_input" id="search_input_box">
-                <div class="container ">
-                    <form class="d-flex justify-content-between search-inner">
-                        <input type="text" class="form-control" id="search_input" placeholder="Search Here">
-                        <button type="submit" class="btn"></button>
-                        <span class="ti-close" id="close_search" title="Close Search"></span>
-                    </form>
-                </div>
-            </div>
-        </header>
-     
-
-    <div class="container body-content">
+<div class="container body-content">
         @RenderBody()
     </div>
     <partial name="_CookieConsentPartial" />

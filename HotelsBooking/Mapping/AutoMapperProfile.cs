@@ -1,11 +1,8 @@
 ﻿using ApplicationCore.DTOs;
-using AutoMapper;
 using HotelsBooking.Models;
+using HotelsBooking.Models.AppProfile;
 using Infrastructure.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using AutoMapper;
 
 namespace HotelsBooking.Mapping
 {
