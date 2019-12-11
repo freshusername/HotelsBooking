@@ -10,8 +10,15 @@ namespace ApplicationCore.Interfaces
 {
     public interface IOrderManager : IDisposable
     {
+        Order FindOrder(string FirstName, string LastName);
         List<Order> GetOrders();
         Task<OperationDetails> CreateOrder(OrderDTO orderDTO);
+        Task EditOrder(OrderDTO orderDTO);
         Task DeleteOrder(int id);
+
+        List<OrderDetail> GetOrderDetails(int id);
+        Task<OperationDetails> CreateOrderDetails(OrderDetailDTO orderDTO);
+        Task EditOrderDetails(OrderDetailDTO orderDTO);
+        Task DeleteOrderDetails(int id);
     }
 }

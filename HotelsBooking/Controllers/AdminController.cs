@@ -9,7 +9,6 @@ using HotelsBooking.Models;
 using Infrastructure.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using static Infrastructure.Enums;
 
 namespace HotelsBooking.Controllers
 {
@@ -151,6 +150,7 @@ namespace HotelsBooking.Controllers
             return RedirectToAction("Hotels");
         }
         #endregion
+
         #region Order
         public IActionResult Orders()
         {
@@ -162,6 +162,32 @@ namespace HotelsBooking.Controllers
             return View();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateOrder(CreateOrderViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            
+            OrderDTO orderDTO = _mapper.Map<CreateOrderViewModel, OrderDTO>(model);
+            var res = await _adminManager.CreateOrder(orderDTO);
+            if (res.Succedeed)
+                return RedirectToAction("Orders");
+            else
+                ModelState.AddModelError(res.Property, res.Message);
+
+            return View(model);
+        }
+
+        public IActionResult EditOrder(EditOrderViewModel model)
+        { 
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            return View();
+        }
         public async Task<IActionResult> DeleteOrder(int Id)
         {
             await _adminManager.DeleteOrder(Id);
@@ -170,9 +196,33 @@ namespace HotelsBooking.Controllers
 
         public IActionResult OrderDetails(int id)
         {
-            return View();
+            return View(_adminManager.OrderDetails(id));
         }
 
+        public async Task<IActionResult> DeleteOrderDetails(int Id)
+        {
+            await _adminManager.DeleteOrderDetails(Id);
+            return RedirectToAction("OrderDetails");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateOrderDetails(CreateOrderViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            OrderDTO orderDTO = _mapper.Map<CreateOrderViewModel, OrderDTO>(model);
+            var res = await _adminManager.CreateOrder(orderDTO);
+            if (res.Succedeed)
+                return RedirectToAction("Orders");
+            else
+                ModelState.AddModelError(res.Property, res.Message);
+
+            return View(model);
+        }
+        
         #endregion
     }
 }

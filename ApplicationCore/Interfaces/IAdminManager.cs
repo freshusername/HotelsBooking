@@ -27,7 +27,13 @@ namespace ApplicationCore.Interfaces
         #region Orders
         List<Order> Orders();
         Task<OperationDetails> CreateOrder(OrderDTO orderDTO);
+        Task<OperationDetails> EditOrder(OrderDTO orderDTO);
         Task DeleteOrder(int id);
+
+        List<OrderDetail> OrderDetails(int id);
+        Task<OperationDetails> CreateOrderDetails(OrderDetailDTO orderDTO);
+        Task<OperationDetails> EditOrderDetails(OrderDetailDTO orderDTO);
+        Task DeleteOrderDetails(int id);
         #endregion
 
     }

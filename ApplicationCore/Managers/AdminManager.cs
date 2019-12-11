@@ -95,12 +95,14 @@ namespace ApplicationCore.Managers
         {
             return await _hotelManager.Create(hotelDTO);
         }
-        public async Task DeleteHotel(int Id)
+
+        public Task DeleteHotel(int Id)
         {
-            await _hotelManager.Delete(Id);
+            throw new NotImplementedException();
         }
+
         #endregion
-       
+
         public void Dispose()
         {
 
@@ -117,10 +119,40 @@ namespace ApplicationCore.Managers
             return await _orderManager.CreateOrder(orderDTO);
         }
 
+        public Task<OperationDetails> EditOrder(OrderDTO orderDTO)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task DeleteOrder(int id)
         {
             await _orderManager.DeleteOrder(id);
         }
+        #endregion
+
+        #region OrderDetails
+        public List<OrderDetail> OrderDetails(int id)
+        {
+            return _orderManager.GetOrderDetails(id);
+        }
+
+        
+
+        public Task<OperationDetails> CreateOrderDetails(OrderDetailDTO orderDTO)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<OperationDetails> EditOrderDetails(OrderDetailDTO orderDTO)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task DeleteOrderDetails(int id)
+        {
+            await _orderManager.DeleteOrderDetails(id);
+        }
+
         #endregion
     }
 }
