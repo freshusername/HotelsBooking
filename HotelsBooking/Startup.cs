@@ -95,15 +95,17 @@ namespace HotelsBooking
             services.AddTransient<IAdditionalConvManager, AdditionalConvManager>();
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<IHotelManager, HotelManager>();
+            services.AddTransient<IProfileManager, ProfileManager>();
+            services.AddTransient<IProfileService, ProfileService>();
 
-            //var mapper = config.CreateMapper();
+      //var mapper = config.CreateMapper();
 
 
-            services.AddDbContext<ApplicationDbContext>(options =>
+      services.AddDbContext<ApplicationDbContext>(options =>
             options.UseMySql(
                 Configuration.GetConnectionString("DefaultConnection")));
 
-        }
+    }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

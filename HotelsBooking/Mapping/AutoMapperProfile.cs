@@ -41,7 +41,11 @@ namespace HotelsBooking.Mapping
 
             CreateMap<OrderDetail, OrderDetailDTO>().ReverseMap();
             CreateMap<Order, OrderDTO>().ReverseMap();
-        }
+
+            CreateMap<AppUser, ProfileDTO>().ReverseMap();
+            CreateMap<ProfileDTO, AllProfilesViewModel>().ReverseMap();
+            CreateMap<ProfileDTO, ProfileViewModel>().ReverseMap();
+    }
     }
 }
 
