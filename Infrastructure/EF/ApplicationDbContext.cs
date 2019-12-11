@@ -10,7 +10,7 @@ namespace Infrastructure.EF
 {
     public class ApplicationDbContext : IdentityDbContext<AppUser>
     {
-      
+
         public DbSet<Hotel> Hotels { get; set; }
         public DbSet<Room> Rooms { get; set; }
         public DbSet<HotelRoom> HotelRooms { get; set; }
@@ -18,11 +18,13 @@ namespace Infrastructure.EF
         public DbSet<AdditionalConv> AdditionalConvs { get; set; }
         public DbSet<RoomConv> RoomConvs { get; set; }
         public DbSet<HotelConv> HotelConvs { get; set; }
-        public DbSet<Order> Orders { get; set; }      
+        public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-        { Database.Migrate(); }
+        {
+
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

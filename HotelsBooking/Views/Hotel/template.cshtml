@@ -264,6 +264,15 @@
                                         </div>
                                     </div>
 
+                                    <div>
+                                        <h5>hotels on page :</h5>
+                                        <select v-model.lazy="CountOnPage" v-on:change="getData">
+                                            <option>1</option>
+                                            <option>5</option>
+                                            <option>10</option>
+                                            <option>20</option>
+                                        </select>
+                                    </div>
 
                                     <div class="single_product_menu d-flex">
                                         <div class="input-group">
@@ -271,7 +280,6 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" id="inputGroupPrepend"><i class="ti-search"></i></span>
                                             </div>
-                                            @*<button value="Search" v-on:click="getData" class="btn btn-primary">Search</button>*@
                                         </div>
                                     </div>
                                 </div>
@@ -280,44 +288,32 @@
                         </div>
 
                         <div v-for="item in Hotels" class="row align-items-center latest_product_inner">
-                            <div>
-                                <h5>hotels on page :</h5>
-                                <select v-model.lazy="CountOnPage" v-on:change="getData">
-                                    <option>1</option>
-                                    <option>5</option>
-                                    <option>10</option>
-                                    <option>20</option>
-                                </select>
-                            </div>
-                            <div class="col-lg-4 col-sm-6">
-                                <div class="single_product_item">
-                                    <img src="~/img/hotel_sample.jpg" alt="">
-                                    <div class="single_product_text">
-                                        <h4>{{item.name}}</h4>
-                                        <h3>{{item.location}}</h3>
-                                        <h3>{{item.season}}</h3>
-                                        @if (!User.IsInRole("BlockedUser"))
-                                        {
-                                            <a class="btn btn-dark" v-bind:href="'/Hotel/HotelMain?Id='+item.Id">Details</a>
-                                        }
+                            @foreach (var item in Model)
+                            {
+                                <div class="col-lg-4 col-sm-6">
+                                    <div class="single_product_item">
+                                        <img src="~/img/hotel_sample.jpg" alt="">
+                                        <div class="single_product_text">
+                                            <h4>
+                                                @Html.DisplayFor(modelItem => item.Id)
+                                            </h4>
+                                            <h3>
+                                                @Html.DisplayFor(modelItem => item.Name)
+                                            </h3>
+                                            <h3>
+                                                @Html.DisplayFor(modelItem => item.Location)
+                                            </h3>
+                                            <h3>
+                                                @Html.DisplayFor(modelItem => item.Season)
+                                            </h3>
+                                            @if (!User.IsInRole("BlockedUser"))
+                                            {
+                                                @Html.ActionLink("Details", "HotelMain", item.Id)
+                                            }
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="align-self-end flex-row">
-                        <div class="pageination">
-                            <a class="page-link page-item" aria-label="Previous">
-                                <i class="ti-angle-double-left" v-on:click="previousPage"></i>
-                            </a>
-                            <ul class="pagination justify-content-center" v-for="pageNumber in pages">
-                                <li class="page-item"><a class="page-item page-link" v-on:click="getPageByNumber(pageNumber)">{{pageNumber}}</a></li>
-                            </ul>
-
-                            <a class="page-link page-item" aria-label="Next">
-                                <i class="ti-angle-double-right" v-on:click="nextPage"></i>
-                            </a>
+                            }
                         </div>
                     </div>
                 </div>
@@ -454,93 +450,3 @@
     </body>
 </html>
 }
-
-<script src="~/js/vue.js"></script>
-<script src="~/js/axios.js"></script>
-<script src="/unpkg.com/vue-plain-pagination@0.2.1"></script>
-<script>
-
-
-    var Vue1 = new Vue({
-
-        el: "#hotel_list",
-        data: {
-            Hotels: [],
-            page: 1,
-            CountOnPage: 10,
-            PageCount: 1,
-            pages: [],
-            searchValue: ""
-        },
-        methods: {
-            getHotels() {
-                axios({
-                    method: 'post',
-                    url: '/Hotel/Get',
-                    params: {
-                        page: this.page,
-                        countOnPage: this.CountOnPage,
-                        searchValue: this.searchValue,
-                    }
-                })
-                    .then(response => {
-                        this.Hotels = response.data;
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    })
-                    .finally();
-            },
-            getHotelCount() {
-                axios({
-                    method: 'post',
-                    url: '/Hotel/GetHotelCount',
-                    params: {
-                        searchValue: this.searchValue,
-
-                    }
-                })
-                    .then(response => {
-                        if (response.data % this.CountOnPage == 0)
-                            this.PageCount = response.data / this.CountOnPage;
-                        else
-                            this.PageCount = (response.data / this.CountOnPage) + 1;
-                        this.pages = [];
-                        for (let i = 1; i <= this.PageCount; i++) {
-                            this.pages.push(i);
-                        }
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    })
-                    .finally();
-            },
-            getData() {
-                this.getHotels();
-                this.getHotelCount();
-            },
-            nextPage() {
-                if (this.page < parseInt(this.PageCount)) {
-                    this.page++;
-                    this.getData();
-                }
-            },
-            previousPage() {
-                if (this.page > 1) {
-                    this.page--;
-                    this.getData();
-                }
-            },
-            getPageByNumber(pageNum) {
-                this.page = pageNum;
-                this.getData();
-            }
-        },
-        mounted() {
-            this.getData();
-        }
-
-    });
-
-
-</script>

@@ -14,29 +14,29 @@ namespace HotelsBooking.Controllers
     [Route("[controller]/[action]")]
     public class HotelController : Controller
     {
-        private readonly IHotelManager _hotelService;
-        public HotelController(IHotelManager hotelService)
+        private readonly IHotelManager _hotelManager;
+        public HotelController(IHotelManager hotelManager)
         {
-            this._hotelService = hotelService;
+            this._hotelManager = hotelManager;
         }
 
         [HttpGet]
         public IActionResult ShowHotels()
         {
-            var hotels = _hotelService.GetHotels();
+            var hotels = _hotelManager.GetHotels();
             return View(hotels);
         }
         public IActionResult template()
         {
-            var hotels = _hotelService.GetHotels();
+            var hotels = _hotelManager.GetHotels();
 
-            return View("ShowHotels2", hotels);
+            return View(hotels);
         }
 
         [HttpPost]
         public IActionResult AddHotel(HotelDto hotel)
         {
-            _hotelService.Insert(hotel);
+            _hotelManager.Insert(hotel);
             return RedirectToAction("ShowHotels", "Hotel");
         }
 
@@ -51,7 +51,7 @@ namespace HotelsBooking.Controllers
 
         public IActionResult HotelMain(int hotelId)
         {
-            var hotel = _hotelService.Get(hotelId);
+            HotelDto hotel = _hotelManager.Get(hotelId);
             return View(hotel);
         }
 
