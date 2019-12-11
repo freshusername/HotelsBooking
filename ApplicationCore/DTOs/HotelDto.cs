@@ -18,9 +18,9 @@ namespace ApplicationCore.DTOs
         public string Location { get; set; }
 
         [Display(Name = "Season")]
-        public Season Season { get; set; } //add reference to Infrastructure? or map Season from model to dto as a string?
+        public Season Season { get; set; } 
 
-        public Photo PhotoBytes { get; set; }
+        public ICollection<HotelPhoto> HotelPhotos { get; set; }
 
     }
 }
