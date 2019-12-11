@@ -95,12 +95,12 @@ namespace ApplicationCore.Managers
         #region Hotels
         public async Task<HotelDTO> GetHotelById(int Id)
         {
-            HotelDTO hotel = _mapper.Map<Hotel, HotelDTO>(await _hotelManager.GetHotelById(Id));
+            HotelDTO hotel = await _hotelManager.GetHotelById(Id);
             return hotel;
         }
-        public List<HotelDTO> Hotels()
+        public IEnumerable<HotelDTO> Hotels()
         {
-            List<HotelDTO> hotels =_mapper.Map<List<Hotel>,List<HotelDTO>>(_hotelManager.GetHotels());
+            IEnumerable<HotelDTO> hotels =_hotelManager.GetHotels();
             return hotels;
         }
 

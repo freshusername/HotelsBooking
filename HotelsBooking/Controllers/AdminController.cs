@@ -122,7 +122,7 @@ namespace HotelsBooking.Controllers
         #region Hotels
         public IActionResult Hotels()
         {
-            List<CreateOrEditHotelViewModel> hotels = _mapper.Map< List < HotelDTO > ,List <CreateOrEditHotelViewModel>>(_adminManager.Hotels());
+            IEnumerable<CreateOrEditHotelViewModel> hotels = _mapper.Map< IEnumerable < HotelDTO > ,IEnumerable <CreateOrEditHotelViewModel>>(_adminManager.Hotels());
             return View(hotels);
         }
         public IActionResult CreateHotel()

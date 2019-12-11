@@ -23,8 +23,16 @@ namespace ApplicationCore.Managers
             _context = context;
             _mapper = mapper;
         }
-        public async Task<Hotel> GetHotelById(int Id) => await _context.Hotels.FindAsync(Id);
-        public List<Hotel> GetHotels() => _context.Hotels.ToList();
+        public async Task<HotelDTO> GetHotelById(int Id)
+        {
+            HotelDTO hotel = _mapper.Map<Hotel, HotelDTO>(await _context.Hotels.FindAsync(Id));
+            return hotel;
+        }
+        public IEnumerable<HotelDTO> GetHotels()
+        {
+            IEnumerable<HotelDTO> hotels = _mapper.Map<IEnumerable<Hotel>, IEnumerable<HotelDTO>>(_context.Hotels.ToList());
+            return hotels;
+        }
         public async Task<OperationDetails> Create(HotelDTO hotelDTO)
         {
             Hotel hotelCheck = _context.Hotels.FirstOrDefault(x => x.Name == hotelDTO.Name);

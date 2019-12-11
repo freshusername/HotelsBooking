@@ -10,8 +10,8 @@ namespace ApplicationCore.Interfaces
 {
     public interface IHotelManager : IDisposable
     {
-        Task<Hotel> GetHotelById(int Id);
-        List<Hotel> GetHotels();
+        Task<HotelDTO> GetHotelById(int Id);
+        IEnumerable<HotelDTO> GetHotels();
         Task<OperationDetails> Create(HotelDTO hotelDTO);
         Task<OperationDetails> Update(HotelDTO hotelDTO);
         Task Delete(int Id);

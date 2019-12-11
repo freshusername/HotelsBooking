@@ -82,10 +82,10 @@ namespace HotelsBooking
                 options.SlidingExpiration = true;
             });
 
-            var config = new AutoMapper.MapperConfiguration(c =>
-            {
-                c.AddProfile(new ApplicationMappingProfile());
-            });
+            //var config = new AutoMapper.MapperConfiguration(c =>
+            //{
+            //    c.AddProfile(new ApplicationMappingProfile());
+            //});
 
             services.AddAutoMapper(typeof(AutoMapperProfile).GetTypeInfo().Assembly);
             services.AddTransient<IAuthenticationManager, AuthenticationManager>();
@@ -96,7 +96,7 @@ namespace HotelsBooking
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<IHotelManager, HotelManager>();
 
-            var mapper = config.CreateMapper();
+            //var mapper = config.CreateMapper();
 
 
             services.AddDbContext<ApplicationDbContext>(options =>

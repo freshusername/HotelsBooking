@@ -21,33 +21,26 @@ namespace HotelsBooking.Mapping
             CreateMap<AppUser, AdminUserDTO>();
             CreateMap<AdminUserDTO, UsersViewModel>();
 
-            CreateMap<AdditionalConvDTO, AdditionalConv>();
-            CreateMap<AdditionalConv,AdditionalConvDTO>();
+            CreateMap<AdditionalConvDTO, AdditionalConv>().ReverseMap();
 
             CreateMap<HotelConvDTO,HotelConvsViewModel>();
 
-            CreateMap<CreateOrEditHotelViewModel, HotelDTO>();
-            CreateMap<HotelDTO ,CreateOrEditHotelViewModel>();
-            CreateMap<HotelDTO, Hotel>();
-            CreateMap<Hotel,HotelDTO>();
-
-            CreateMap<RegisterViewModel, UserDTO>().ForMember(au => au.UserName, map => map.MapFrom(vm => vm.Email));
+            CreateMap<CreateOrEditHotelViewModel, HotelDTO>().ReverseMap();
+            CreateMap<HotelDTO, Hotel>().ReverseMap();
+            
          
             CreateMap<RegisterViewModel, UserDTO>()
                 .ForMember(au => au.UserName, map => map.MapFrom(vm => vm.Email));
             
             CreateMap<CreateOrderViewModel, OrderDTO>();
             CreateMap<UserDTO, AppUser>()
-                .ForMember(au => au.UserName, map => map.MapFrom(vm => vm.Email));
+                .ForMember(au => au.UserName, map => map.MapFrom(vm => vm.Email)).ReverseMap();
 
             CreateMap<LoginViewModel, UserDTO>()
                 .ForMember(au => au.UserName, map => map.MapFrom(vm => vm.Email));
-            
 
-            CreateMap<OrderDetail, OrderDetailDTO>();
-            CreateMap<OrderDetailDTO, OrderDetail>();
-            CreateMap<Order, OrderDTO>();
-            CreateMap<OrderDTO, Order>();
+            CreateMap<OrderDetail, OrderDetailDTO>().ReverseMap();
+            CreateMap<Order, OrderDTO>().ReverseMap();
         }
     }
 }
