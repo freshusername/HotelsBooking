@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191211120959_MigrationDb")]
+    [Migration("20191212131747_MigrationDb")]
     partial class MigrationDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -148,7 +148,13 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("AppUserId");
 
-                    b.Property<bool>("IsEctive");
+                    b.Property<string>("Email");
+
+                    b.Property<string>("FullName");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<string>("PhoneNumber");
 
                     b.HasKey("Id");
 
@@ -181,6 +187,22 @@ namespace Infrastructure.Migrations
                     b.HasIndex("OrderId");
 
                     b.ToTable("OrderDetails");
+                });
+
+            modelBuilder.Entity("Infrastructure.Entities.OrderItem", b =>
+                {
+                    b.Property<int>("OrderItemId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("HotelRoomId");
+
+                    b.Property<string>("OrderId");
+
+                    b.HasKey("OrderItemId");
+
+                    b.HasIndex("HotelRoomId");
+
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("Infrastructure.Entities.Room", b =>
@@ -381,6 +403,14 @@ namespace Infrastructure.Migrations
                     b.HasOne("Infrastructure.Entities.Order", "Order")
                         .WithMany("OrderDetails")
                         .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Infrastructure.Entities.OrderItem", b =>
+                {
+                    b.HasOne("Infrastructure.Entities.HotelRoom", "HotelRoom")
+                        .WithMany()
+                        .HasForeignKey("HotelRoomId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

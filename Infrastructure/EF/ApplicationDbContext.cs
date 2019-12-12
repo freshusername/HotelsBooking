@@ -19,6 +19,7 @@ namespace Infrastructure.EF
         public DbSet<RoomConv> RoomConvs { get; set; }
         public DbSet<HotelConv> HotelConvs { get; set; }
         public DbSet<Order> Orders { get; set; }      
+        public DbSet<OrderItem> OrderItems { get; set; }      
         public DbSet<OrderDetail> OrderDetails { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
