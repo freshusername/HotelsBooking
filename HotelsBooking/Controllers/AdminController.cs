@@ -150,6 +150,14 @@ namespace HotelsBooking.Controllers
             await _adminManager.DeleteHotel(Id);
             return RedirectToAction("Hotels");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteHotelConv(int Id)
+        {
+            await _adminManager.DeleteHotelConv(Id);
+            int HotelId = Id;
+            return RedirectToAction("HotelConvs", new { Id = HotelId });
+        }
         #endregion
 
         #region Order
@@ -194,10 +202,11 @@ namespace HotelsBooking.Controllers
             return RedirectToAction("HotelConvs", new { Id= HotelId});
         }
 
+
         [HttpPost]
-        public async Task<IActionResult> EditOrder(int id)
+        public async Task<IActionResult> EditOrder(int Id)
         {
-            OrderDTO orderDTO = await _adminManager.GetOrderById(id);
+            OrderDTO orderDTO = await _adminManager.GetOrderById(Id);
             if (orderDTO == null)
             {
                 return NotFound();
