@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.DTOs;
+using ApplicationCore.DTOs.AppProfile;
 using HotelsBooking.Models;
 using HotelsBooking.Models.AppProfile;
 using Infrastructure.Entities;
@@ -38,11 +39,19 @@ namespace HotelsBooking.Mapping
             CreateMap<OrderDetail, OrderDetailDTO>().ReverseMap();
             CreateMap<Order, OrderDTO>().ReverseMap();
 
-            CreateMap<AppUser, ProfileDTO>().ReverseMap();
-            CreateMap<ProfileDTO, AllProfilesViewModel>().ReverseMap();
-            CreateMap<ProfileDTO, ProfileViewModel>().ReverseMap();
 
-            CreateMap<OrderDTO, OrdersViewModel>();
+#region Profile
+      CreateMap<AppUser, ProfileDto>().ReverseMap();
+
+            CreateMap<ProfileDto, AllProfilesViewModel>().ReverseMap();
+            CreateMap<ProfileDto, ProfileViewModel>().ReverseMap();
+
+            CreateMap<ProfileRoleDto, AppUser>().ReverseMap();
+
+      #endregion
+
+
+      CreateMap<OrderDTO, OrdersViewModel>();
 
             CreateMap<OrderDetailDTO, OrderDetailsViewModel>();
             CreateMap<OrderDTO, OrdersViewModel>();
