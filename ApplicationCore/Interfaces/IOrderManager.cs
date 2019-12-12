@@ -10,15 +10,18 @@ namespace ApplicationCore.Interfaces
 {
     public interface IOrderManager : IDisposable
     {
-        Order FindOrder(string FirstName, string LastName);
-        List<Order> GetOrders();
+        Task<OrderDTO> GetOrderById(int Id);
+        List<OrderDTO> GetOrders();
         Task<OperationDetails> CreateOrder(OrderDTO orderDTO);
-        Task EditOrder(OrderDTO orderDTO);
+        Task<OperationDetails> EditOrder(OrderDTO orderDTO);
         Task DeleteOrder(int id);
 
-        List<OrderDetail> GetOrderDetails(int id);
+        Task<OrderDetailDTO> GetOrderDetailById(int Id);
+        List<OrderDetailDTO> GetOrderDetails(int Id);
         Task<OperationDetails> CreateOrderDetails(OrderDetailDTO orderDTO);
-        Task EditOrderDetails(OrderDetailDTO orderDTO);
+        Task<OperationDetails> EditOrderDetails(OrderDetailDTO orderDTO);
+        bool IsHotelExists(string HotelName);
+        bool IsRoomExists(int RoomID);
         Task DeleteOrderDetails(int id);
     }
 }
