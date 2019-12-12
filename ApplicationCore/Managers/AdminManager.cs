@@ -120,6 +120,11 @@ namespace ApplicationCore.Managers
         public IEnumerable<HotelConvDTO> HotelConvs() => _hotelManager.GetHotelConvs();
 
         public Task<OperationDetails> CreateHotelConv(HotelConvDTO hotelConvDTO) => _hotelManager.CreateHotelConv(hotelConvDTO);
+
+        public async Task DeleteHotelConv(int Id)
+        {
+            await _hotelManager.DeleteHotelConv(Id);
+        }
         #endregion
         #region AddConvs
         public Task<OperationDetails> CreateAdditionalConv(AdditionalConvDTO additionalConvDTO) => _additionalConvManager.Create(additionalConvDTO);

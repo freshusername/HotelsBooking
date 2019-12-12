@@ -64,6 +64,7 @@ namespace ApplicationCore.Managers
             await _context.SaveChangesAsync();
         }
         #region HotelConvs
+
         public IEnumerable<HotelConvDTO> GetHotelConvs()
         {
             List<HotelConv> hotelConvs = _hotelConvs.ToList();
@@ -75,6 +76,7 @@ namespace ApplicationCore.Managers
                 );
             return query;
         }
+
         public async Task<OperationDetails> CreateHotelConv(HotelConvDTO hotelConvDTO)
         {
             
@@ -94,6 +96,13 @@ namespace ApplicationCore.Managers
                 return new OperationDetails(true, "Hotel convenience added", "Name");
             }
             return new OperationDetails(false, "Hotel convenience with the same name already exists", "Name");
+        }
+
+        public async Task DeleteHotelConv(int Id)
+        {
+            HotelConv hotelConv = _hotelConvs.Find(Id);
+            _hotelConvs.Remove(hotelConv);
+            await _context.SaveChangesAsync();
         }
         #endregion
         public void Dispose()

@@ -186,6 +186,15 @@ namespace HotelsBooking.Controllers
 
         }
 
+        [HttpPost]
+        public async Task<IActionResult> DeleteHotelConv(int Id)
+        {
+            await _adminManager.DeleteHotelConv(Id);
+            int HotelId = Id;
+            return RedirectToAction("HotelConvs", new { Id= HotelId});
+        }
+
+        [HttpPost]
         public async Task<IActionResult> EditOrder(int id)
         {
             OrderDTO orderDTO = await _adminManager.GetOrderById(id);
@@ -282,7 +291,6 @@ namespace HotelsBooking.Controllers
                 return RedirectToAction("OrderDetails");
             else
                 ModelState.AddModelError(res.Property, res.Message);
-
             return View(model);
         }
         public async Task<IActionResult> DeleteOrderDetails(int Id)
