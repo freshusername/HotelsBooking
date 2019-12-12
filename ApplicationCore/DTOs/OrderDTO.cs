@@ -9,9 +9,7 @@ namespace ApplicationCore.DTOs
     {
         public int Id { get; set; }
         public bool IsActive { get; set; }
-
-        public string AppUserId { get; set; }
-        public virtual AppUser User { get; set; }
-        public ICollection<OrderDetail> OrderDetails { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 }
