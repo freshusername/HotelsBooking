@@ -40,12 +40,16 @@ namespace ApplicationCore.Managers
                                         .Include(h => h.HotelRooms)
                                                 .ThenInclude(hr => hr.RoomConvs)
                                         .Include(h => h.HotelPhotos)
-                                    .Select(x => x);
+                                    .Select(h => h);
             if (!String.IsNullOrEmpty(filterHotelDto?.KeyWord))
             {
-                hotels = hotels.Where(x => x.Name.Contains(filterHotelDto.KeyWord)
-                                    || x.Description.Contains(filterHotelDto.KeyWord)
-                                    || x.Location.Contains(filterHotelDto.KeyWord));
+                hotels = hotels.Where(h => h.Name.Contains(filterHotelDto.KeyWord)
+                                    || h.Description.Contains(filterHotelDto.KeyWord)
+                                    || h.Location.Contains(filterHotelDto.KeyWord));
+            }
+            if (filterHotelDto?.MinPrice >= 0 && filterHotelDto?.MaxPrice > 0)
+            {
+                hotels = hotels.Where(h => h.HotelRooms.Where(p => p.Price >= filterHotelDto.MinPrice && p.Price <= filterHotelDto.MaxPrice).Any());
             }
 
             return _mapper.Map<IEnumerable<Hotel>, IEnumerable<HotelDTO>>(hotels.ToList());
