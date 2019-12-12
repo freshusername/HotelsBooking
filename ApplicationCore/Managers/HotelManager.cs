@@ -26,7 +26,12 @@ namespace ApplicationCore.Services
         //load data from relative tables(available hotel convs, etc.)
         public HotelDto Get(int hotelId)
         {
-            var hotel = _context.Hotels.FirstOrDefault(h => h.Id == hotelId);
+            Hotel hotel = _context.Hotels.Include(h => h.HotelRooms)
+                                            .ThenInclude(hr => hr.Room)
+                                        .Include(h => h.HotelRooms)
+                                                .ThenInclude(hr => hr.RoomConvs)
+                                        .Include(h => h.HotelPhotos)
+                                        .FirstOrDefault(h => h.Id == hotelId);
             return _mapper.Map<Hotel, HotelDto>(hotel);
         }
 
