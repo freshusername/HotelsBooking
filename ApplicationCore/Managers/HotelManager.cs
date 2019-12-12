@@ -33,10 +33,23 @@ namespace ApplicationCore.Managers
                                         .FirstOrDefault(h => h.Id == Id);
             return _mapper.Map<Hotel, HotelDTO>(hotel);
         }
-        public IEnumerable<HotelDTO> GetHotels()
+        public IEnumerable<HotelDTO> GetHotels(FilterHotelDto filterHotelDto = null)
         {
-            IEnumerable<HotelDTO> hotels = _mapper.Map<IEnumerable<Hotel>, IEnumerable<HotelDTO>>(_context.Hotels.ToList());
-            return hotels;
+            var hotels = _context.Hotels.Include(h => h.HotelRooms)
+                                            .ThenInclude(hr => hr.Room)
+                                        .Include(h => h.HotelRooms)
+                                                .ThenInclude(hr => hr.RoomConvs)
+                                        .Include(h => h.HotelPhotos)
+                                    .Select(x => x);
+            if (!String.IsNullOrEmpty(filterHotelDto?.KeyWord))
+            {
+                hotels = hotels.Where(x => x.Name.Contains(filterHotelDto.KeyWord)
+                                    || x.Description.Contains(filterHotelDto.KeyWord)
+                                    || x.Location.Contains(filterHotelDto.KeyWord));
+            }
+
+            return _mapper.Map<IEnumerable<Hotel>, IEnumerable<HotelDTO>>(hotels.ToList());
+
         }
         public async Task<OperationDetails> Create(HotelDTO hotelDTO)
         {
