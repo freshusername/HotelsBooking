@@ -1,18 +1,22 @@
 ﻿using ApplicationCore.DTOs;
+using ApplicationCore.Infrastructure;
+using Infrastructure.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ApplicationCore.Interfaces
 {
-    public interface IHotelManager
+    public interface IHotelManager : IDisposable
     {
-        HotelDto Get(int id);
-        IEnumerable<HotelDto> GetHotels();
-        
-        void Insert(HotelDto item);
-        void Update(HotelDto item);
-        void Delete(int id);
-
+        Task<HotelDTO> GetHotelById(int Id);
+        IEnumerable<HotelDTO> GetHotels();
+        Task<OperationDetails> Create(HotelDTO hotelDTO);
+        Task<OperationDetails> Update(HotelDTO hotelDTO);
+        Task Delete(int Id);
+        IEnumerable<HotelConvDTO> GetHotelConvs();
+        Task<OperationDetails> CreateHotelConv(HotelConvDTO hotelConvDTO);
+        Task DeleteHotelConv(int Id);
     }
 }
