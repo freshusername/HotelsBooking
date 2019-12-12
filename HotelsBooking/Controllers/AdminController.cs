@@ -14,7 +14,7 @@ using static Infrastructure.Enums;
 
 namespace HotelsBooking.Controllers
 {
-    [Authorize(Roles ="Admin")]
+    
     public class AdminController : Controller
     {
         private readonly IAdminManager _adminManager;
@@ -341,5 +341,4 @@ namespace HotelsBooking.Controllers
         }
         #endregion
     }
-#endregion
 }

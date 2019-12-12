@@ -4,9 +4,9 @@
 }
 
 <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
-
-<link rel="stylesheet" href="~/css/nice-select.css" asp-append-version="true">
+<link  href="~/css/nice-select.css" rel="stylesheet"/>
 <body>
+
     <div class="row">
 
         <div class="col-lg-8 col-lg-offset-2 col-md-6 col-md-offset-3 col-sm-12">
@@ -30,8 +30,8 @@
                 <div class="form-group">
                     <label class="control-label">Season:</label>
                     <div style="margin-bottom:70px">
-                        <select asp-for="Season" asp-items="Html.GetEnumSelectList<@Infrastructure.Enums.Season>()" class="nice-select col-lg-4 col-md-5 col-sm-6 col-xs-12">
-                            <option class="option" value="none" selected disabled hidden>
+                        <select asp-for="Season" asp-items="Html.GetEnumSelectList<@Infrastructure.Enums.Season>()" class="nice-select option col-lg-4 col-md-5 col-sm-6 col-xs-12">
+                            <option value="none" selected disabled hidden>
                                 Select an Option
                             </option>
                         </select>
@@ -44,6 +44,4 @@
             </form>
         </div>
     </div>
-
-    <script src="~/js/jquery.nice-select.min.js" asp-append-version="true" type="text/javascript"></script>
 </body>
