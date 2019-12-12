@@ -29,7 +29,7 @@ namespace HotelsBooking.Controllers
         // GET: HotelDetails/Details/5
         public async Task<ActionResult> Details(int id)
         {
-            HotelDTO hotel = await _hotelManager.GetHotelById(id);
+            HotelDTO hotel =  await _hotelManager.GetHotelById(id);
             return View(hotel);
         }
     }

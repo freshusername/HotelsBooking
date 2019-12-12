@@ -29,6 +29,7 @@ namespace ApplicationCore.Managers
                                             .ThenInclude(hr => hr.Room)
                                         .Include(h => h.HotelRooms)
                                                 .ThenInclude(hr => hr.RoomConvs)
+                                                .ThenInclude(rc => rc.AdditionalConv)
                                         .Include(h => h.HotelPhotos)
                                         .FirstOrDefault(h => h.Id == Id);
             return _mapper.Map<Hotel, HotelDTO>(hotel);
