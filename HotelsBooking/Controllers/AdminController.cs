@@ -7,12 +7,14 @@ using ApplicationCore.Interfaces;
 using AutoMapper;
 using HotelsBooking.Models;
 using Infrastructure.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using static Infrastructure.Enums;
 
 namespace HotelsBooking.Controllers
 {
+    [Authorize(Roles ="Admin")]
     public class AdminController : Controller
     {
         private readonly IAdminManager _adminManager;
@@ -197,7 +199,7 @@ namespace HotelsBooking.Controllers
             await _adminManager.DeleteHotel(Id);
             return RedirectToAction("Hotels");
         }
-
+        #endregion
         #region Order
         public IActionResult Orders()
         {
