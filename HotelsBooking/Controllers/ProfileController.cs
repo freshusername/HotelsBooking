@@ -41,6 +41,7 @@ namespace HotelsBooking.Controllers
         .GetAllProfilesAsync()
         .Select(pr => new ProfileViewModel
         {
+          ProfileId = pr.Id,
           Email = pr.Email,
           FirstName = pr.FirstName,
           LastName = pr.LastName
