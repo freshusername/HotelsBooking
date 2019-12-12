@@ -40,7 +40,7 @@ namespace ApplicationCore.Managers
 
             {
                 var userIdentity = _mapper.Map<UserDTO, AppUser>(userDTO);
-               var result = await UserManager.CreateAsync(userIdentity, userDTO.Password);
+                var result = await UserManager.CreateAsync(userIdentity, userDTO.Password);
 
                 if (result.Errors.Count() > 0)
                     return new OperationDetails(false, result.Errors.FirstOrDefault().ToString(), "");

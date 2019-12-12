@@ -7,7 +7,7 @@ using static Infrastructure.Enums;
 
 namespace ApplicationCore.DTOs
 {
-    public class HotelDto
+    public class HotelDTO
     {
         public int Id { get; set; }
 
