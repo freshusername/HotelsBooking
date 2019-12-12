@@ -195,15 +195,6 @@ namespace HotelsBooking.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteHotelConv(int Id)
-        {
-            await _adminManager.DeleteHotelConv(Id);
-            int HotelId = Id;
-            return RedirectToAction("HotelConvs", new { Id= HotelId});
-        }
-
-
-        [HttpPost]
         public async Task<IActionResult> EditOrder(int Id)
         {
             OrderDTO orderDTO = await _adminManager.GetOrderById(Id);
