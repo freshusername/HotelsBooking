@@ -1,4 +1,4 @@
-﻿@model HotelsBooking.Models.EditOrderViewModel;
+﻿@model HotelsBooking.Models.CreateOrEditOrderViewModel;
 @{
     ViewData["Title"] = "Edit Order";
 }
@@ -11,7 +11,7 @@
             <div class="text-center">
                 <label style="font-size:20px">Edit order : #@Model.Id</label>
             </div>
-            <form asp-action="EditUser" asp-controller="Admin" method="post">
+            <form asp-action="EditOrder" asp-controller="Admin" method="post">
                 <div class="form-group">
                     <input type="hidden" asp-for="Id" value="@Model.Id" />
                 </div>
