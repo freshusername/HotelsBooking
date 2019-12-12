@@ -59,7 +59,7 @@ namespace ApplicationCore.Managers
 
         public async Task<OperationDetails> Create(HotelDTO hotelDTO)
         {
-            Hotel hotelCheck = _context.Hotels.FirstOrDefault(x => x.Name == hotelDTO.Name);
+            Hotel hotelCheck = _context.Hotels.FirstOrDefault(x => x.Name == hotelDTO.Name && x.Location==hotelDTO.Location);
             if (hotelCheck == null)
             {
                 Hotel hotel = _mapper.Map<HotelDTO, Hotel>(hotelDTO);
@@ -67,7 +67,7 @@ namespace ApplicationCore.Managers
                 await _context.SaveChangesAsync();
                 return new OperationDetails(true, "Hotel added", "Name");
             }
-            return new OperationDetails(false, "Hotel with the same name already exists", "Name");
+            return new OperationDetails(false, "Hotel with the same name and location already exists", "Name");
         }
         public async Task<OperationDetails> Update(HotelDTO hotelDTO)
         {
@@ -112,13 +112,16 @@ namespace ApplicationCore.Managers
             HotelConv check = _context.HotelConvs.FirstOrDefault(x => x.AdditionalConv.Name == hotelConvDTO.Name && x.HotelId==hotelConvDTO.HotelId);
             if (check == null)
             {
-                HotelConv hotelConv = new HotelConv 
+                var Hotel = _context.Hotels.First(x => x.Id == hotelConvDTO.HotelId);
+                var AdditionalConv = _context.AdditionalConvs.First(x => x.Name == hotelConvDTO.Name);
+                var AdditionalConvId = AdditionalConv.Id;
+                HotelConv hotelConv = new HotelConv
                 {
                     Price = hotelConvDTO.Price,
                     HotelId = hotelConvDTO.HotelId,
-                    Hotel = await _context.Hotels.FirstAsync(x=>x.Id==hotelConvDTO.HotelId),
-                    AdditionalConv = await _context.AdditionalConvs.FirstAsync(x=>x.Name==hotelConvDTO.Name),
-                    AdditionalConvId =  _context.AdditionalConvs.First(x=>x.Name==hotelConvDTO.Name).Id
+                    Hotel = Hotel,
+                    AdditionalConv = AdditionalConv,
+                    AdditionalConvId = AdditionalConvId
                 };
                 await _context.HotelConvs.AddAsync(hotelConv);
                 await _context.SaveChangesAsync();

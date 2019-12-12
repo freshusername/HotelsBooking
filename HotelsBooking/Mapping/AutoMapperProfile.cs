@@ -50,6 +50,8 @@ namespace HotelsBooking.Mapping
             CreateMap<CreateOrEditOrderViewModel, OrderDTO>();
             CreateMap<OrderDTO, CreateOrEditOrderViewModel>();
             CreateMap<CreateOrEditOrderDetailsViewModel, OrderDetailDTO>();
+
+            CreateMap<CreateOrEditHotelConvViewModel, HotelConvDTO>().ReverseMap();
         }
     }
 }

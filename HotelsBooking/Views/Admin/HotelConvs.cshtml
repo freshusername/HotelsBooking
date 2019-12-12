@@ -23,11 +23,11 @@
                             {
                                 <tr>
                                     <td data-label="Name">@addConv.Name</td>
-                                    <td data-label="Location">@Math.Round(addConv.Price,2)</td>
+                                    <td data-label="Location">@Math.Round(addConv.Price, 2)</td>
                                     <td data-label="Actions">
                                         <form asp-action="DeleteHotelConv" asp-controller="Admin">
-                                            <a class="btn btn-sm btn-warning" asp-action="EditHotelConv">Edit</a>
-                                            <button type="submit" class="btn btn-sm btn-danger" asp-action="DeleteHotelConv" asp-route-id="@addConv.Id">Delete</button>
+                                            <a class="btn btn-sm btn-warning" asp-action="EditHotelConv" asp-route-id="@addConv.HotelId">Edit</a>
+                                            <button type="submit" class="btn btn-sm btn-danger" asp-action="DeleteHotelConv" asp-route-id="@addConv.Id" asp-route-HotelId="@addConv.HotelId">Delete</button>
                                         </form>
                                     </td>
                                 </tr>
@@ -36,7 +36,7 @@
                     </tbody>
                 </table>
                 <div class="button-center">
-                    <a asp-action="CreateHotel" class="btn btn-success">Add new hotel convenience</a>
+                    <a asp-action="CreateHotelConv" class="btn btn-success" asp-route-id="@ViewContext.RouteData.Values["Id"]">Add new hotel convenience</a>
                 </div>
             </div>
         </div>

@@ -179,6 +179,14 @@ namespace HotelsBooking.Controllers
             return View(model);
         }
 
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteHotel(int Id)
+        {
+            await _adminManager.DeleteHotel(Id);
+            return RedirectToAction("Hotels");
+        }
+        [HttpGet]
         public async Task<IActionResult> HotelConvs(int Id)
         {
             IEnumerable<HotelConvsViewModel> hotelConvs = _mapper.Map<IEnumerable<HotelConvDTO>, IEnumerable<HotelConvsViewModel>>(_adminManager.HotelConvs().Where(hc => hc.HotelId == Id));
@@ -186,18 +194,37 @@ namespace HotelsBooking.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteHotelConv(int Id)
+        public async Task<IActionResult> DeleteHotelConv(int Id,int HotelId)
         {
             await _adminManager.DeleteHotelConv(Id);
-            int HotelId = Id;
             return RedirectToAction("HotelConvs", new { Id = HotelId });
         }
 
-        [HttpPost]
-        public async Task<IActionResult> DeleteHotel(int Id)
+        public IActionResult CreateHotelConv(int Id)
         {
-            await _adminManager.DeleteHotel(Id);
-            return RedirectToAction("Hotels");
+            CreateOrEditHotelConvViewModel model = new CreateOrEditHotelConvViewModel
+            {
+                HotelId = Id
+            };
+
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateHotelConv(CreateOrEditHotelConvViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            HotelConvDTO hotelConvDTO = _mapper.Map<CreateOrEditHotelConvViewModel, HotelConvDTO>(model);
+            var res = await _adminManager.CreateHotelConv(hotelConvDTO);
+            int HotelId = model.HotelId;
+            if (res.Succedeed)
+                return RedirectToAction("HotelConvs", new { Id = HotelId });
+            else
+                ModelState.AddModelError(res.Property, res.Message);
+
+            return View(model);
         }
         #endregion
         #region Order
