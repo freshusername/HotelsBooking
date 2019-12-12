@@ -284,7 +284,7 @@
 
                                     <div>
                                         <h5>hotels on page :</h5>
-                                        <select v-model.lazy="CountOnPage" v-on:change="getData">
+                                        <select>
                                             <option>1</option>
                                             <option>5</option>
                                             <option>10</option>
@@ -317,7 +317,7 @@
                             {
                                 <div class="col-lg-4 col-sm-6">
                                     <div class="single_product_item">
-                                        <img src="~/img/hotel_sample.jpg" alt="">
+                                        <img src="@String.Format("data:image;base64,{0}", Convert.ToBase64String(item.HotelPhotos.Image))>
                                         <div class="single_product_text">
                                             <h4>
                                                 @Html.DisplayFor(modelItem => item.Name)
