@@ -22,14 +22,14 @@ namespace HotelsBooking.Controllers
         // GET: HotelDetails
         public ActionResult Index()
         {
-            IEnumerable<HotelDto> hotels = _hotelManager.GetHotels();
+            IEnumerable<HotelDTO> hotels = _hotelManager.GetHotels();
             return View(hotels);
         }
 
         // GET: HotelDetails/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
-            HotelDto hotel = _hotelManager.Get(id);
+            HotelDTO hotel = await _hotelManager.GetHotelById(id);
             return View(hotel);
         }
     }

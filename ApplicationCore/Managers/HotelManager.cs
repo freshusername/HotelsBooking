@@ -30,8 +30,8 @@ namespace ApplicationCore.Managers
                                         .Include(h => h.HotelRooms)
                                                 .ThenInclude(hr => hr.RoomConvs)
                                         .Include(h => h.HotelPhotos)
-                                        .FirstOrDefault(h => h.Id == hotelId);
-            return _mapper.Map<Hotel, HotelDto>(hotel);
+                                        .FirstOrDefault(h => h.Id == Id);
+            return _mapper.Map<Hotel, HotelDTO>(hotel);
         }
         public IEnumerable<HotelDTO> GetHotels()
         {
