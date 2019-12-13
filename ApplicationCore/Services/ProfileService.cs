@@ -12,6 +12,7 @@ using Infrastructure.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Update;
 using Microsoft.Extensions.Configuration;
 
 namespace ApplicationCore.Services
@@ -42,6 +43,7 @@ namespace ApplicationCore.Services
         return null;
 
       var profile = _mapper.Map<AppUser, ProfileDto>(user);
+      profile.Roles = await GetRoles(profile.Id);
       return profile;
     }
 
@@ -52,20 +54,35 @@ namespace ApplicationCore.Services
         return null;
 
       var profile = _mapper.Map<AppUser, ProfileDto>(user);
-      //profile.Role = await GetRole(profile.Id);
+      profile.Roles = await GetRoles(profile.Id);
       return profile;
     }
 
-    public async Task<string> GetRole(string id)
+    public async Task<List<string>> GetRoles(string id)
     {
+
+      
       var user = _context.Users.SingleOrDefaultAsync(x => x.Id == id);
       if (user == null)
         return null;
-      var roleId = _context.UserRoles.FirstOrDefault(r => r.UserId == id)?.RoleId;
+      var roles = _context.UserRoles.Where(x => x.UserId == id).ToList();
+      
 
-      var role = await _roleManager.FindByIdAsync(roleId);
+      List<IdentityRole> results = new List<IdentityRole>();
 
-      return role.ToString();
+      foreach (var role in roles)
+      {
+        results.Add(await _roleManager.FindByIdAsync(role.RoleId));
+      }
+
+      List<string> roleNames = new List<string>();
+
+      foreach (var result in results)
+      {
+        roleNames.Add(await _roleManager.GetRoleNameAsync(result));
+      }
+
+      return roleNames;
     }
     
     public async Task<OperationDetails> UpdateProfile(ProfileDto model)
@@ -93,13 +110,14 @@ namespace ApplicationCore.Services
 
       IEnumerable<ProfileDto> result = new List<ProfileDto>();
       var users_with_roles = userRoles.GroupBy(ur => ur.UserId)
-                              .Select(g => new ProfileDto()
-                              {
-                                FirstName = users.FirstOrDefault(u => u.Id == g.Key)?.FirstName,
-                                LastName = users.FirstOrDefault(u => u.Id == g.Key)?.LastName,
-                                Email = users.FirstOrDefault(u => u.Id == g.Key)?.Email,
-                                Roles = g.Select(role => _roleManager.Roles.FirstOrDefault(r => r.Id == role.RoleId)?.Name).ToList()
-                              });
+          .Select(g => new ProfileDto()
+          {
+            Id = users.FirstOrDefault(u => u.Id == g.Key)?.Id,
+            FirstName = users.FirstOrDefault(u => u.Id == g.Key)?.FirstName,
+            LastName = users.FirstOrDefault(u => u.Id == g.Key)?.LastName,
+            Email = users.FirstOrDefault(u => u.Id == g.Key)?.Email,
+            Roles = g.Select(role => _roleManager.Roles.FirstOrDefault(r => r.Id == role.RoleId)?.Name).ToList()
+          });
 
       return users_with_roles; 
     }

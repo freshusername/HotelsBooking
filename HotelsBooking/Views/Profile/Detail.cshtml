@@ -15,9 +15,10 @@
                         </div>
                     </div>
                     <div class="profile-role_wrap">
-                        <div class="profile-role_block">
-                            <span>customer</span>
-                        </div>
+                        @foreach (var role in Model.Roles)
+                        {
+                            <a class="@(role.ToLower() + " role-button btn_2")" style="margin-left: 10px;">@role</a>
+                        }
                     </div>
                 </div>
                 <div class="profile-img">

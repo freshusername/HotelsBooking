@@ -19,6 +19,6 @@ namespace ApplicationCore.Services
     Task<IEnumerable<ProfileDto>> GetAllProfilesAsync();
     Task<OperationDetails> UpdateProfile(ProfileDto model);
 
-    Task<string> GetRole(string id);
+    Task<List<string>> GetRoles(string id);
   }
 }
