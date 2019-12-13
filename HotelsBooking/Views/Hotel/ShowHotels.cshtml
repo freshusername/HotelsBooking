@@ -167,9 +167,9 @@
                                     <form asp-action="ShowHotels" method="get">
                                         <div class="form-group">
                                             <h4>min price: </h4>
-                                            @Html.EditorFor(x => Model.FilterHotelDto.MinPrice)
+                                            @Html.EditorFor(x => Model.HotelFilterDto.MinPrice)
                                             <h4>max price: </h4>
-                                            @Html.EditorFor(x => Model.FilterHotelDto.MaxPrice)
+                                            @Html.EditorFor(x => Model.HotelFilterDto.MaxPrice)
                                         </div>
 
                                         <div class="form-group">
@@ -195,49 +195,6 @@
                                     </ul>
                                 </div>
                             </aside>
-
-                            <aside class="left_widgets p_filter_widgets price_rangs_aside">
-                                <div class="l_w_title">
-                                    <h3>Price Filter</h3>
-                                </div>
-                                <div class="widgets_inner">
-                                    <div class="range_item">
-                                        <!-- <div id="slider-range"></div> -->
-                                        <span class="irs js-irs-0">
-                                            <span class="irs">
-                                                <span class="irs-line" tabindex="-1">
-                                                    <span class="irs-line-left"></span>
-                                                    <span class="irs-line-mid"></span>
-                                                    <span class="irs-line-right"></span>
-                                                </span>
-                                                <span class="irs-min" style="visibility: hidden;">tk. 0</span>
-                                                <span class="irs-max" style="visibility: visible;">tk. 1.000</span>
-                                                <span class="irs-from" style="visibility: visible; left: 0%;">tk. 0</span>
-                                                <span class="irs-to" style="visibility: visible; left: 39.4089%;">tk. 500</span>
-                                                <span class="irs-single" style="visibility: hidden; left: 9.85222%;">tk. 0 - tk. 500</span>
-                                            </span>
-                                            <span class="irs-grid"></span>
-                                            <span class="irs-bar" style="left: 3.69458%; width: 46.3054%;"></span>
-                                            <span class="irs-shadow shadow-from" style="display: none;"></span>
-                                            <span class="irs-shadow shadow-to" style="display: none;"></span>
-                                            <span class="irs-slider from" style="left: 0%;"></span>
-                                            <span class="irs-slider to type_last" style="left: 46.3054%;"></span>
-                                        </span>
-                                        <input type="text" class="js-range-slider irs-hidden-input" value="" readonly="">
-                                        <div class="d-flex">
-                                            <div class="price_text">
-                                                <p>Price :</p>
-                                            </div>
-                                            <div class="price_value d-flex justify-content-center">
-                                                <input type="text" class="js-input-from" id="amount" readonly="">
-                                                <span>to</span>
-                                                <input type="text" class="js-input-to" id="amount" readonly="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </aside>
-
                         </div>
                     </div>
 
@@ -280,7 +237,7 @@
                                             <form asp-action="ShowHotels" method="get">
                                                 <div class="form-group">
                                                     <h5>Search for hotels/locations</h5>
-                                                    @Html.EditorFor(x => Model.FilterHotelDto.KeyWord)
+                                                    @Html.EditorFor(x => Model.HotelFilterDto.KeyWord)
                                                 </div>
 
                                                 <div class="form-group">
@@ -295,7 +252,7 @@
 
                         </div>
 
-                        <div v-for="item in Hotels" class="row align-items-center latest_product_inner">
+                        <div class="row align-items-center latest_product_inner">
                             @foreach (var item in Model.Hotels)
                             {
                                 <div class="col-lg-4 col-sm-6">
@@ -320,7 +277,19 @@
                                 </div>
                             }
                         </div>
-
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
                     </div>
                 </div>
             </div>

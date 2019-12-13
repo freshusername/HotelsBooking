@@ -4,11 +4,13 @@ using System.Text;
 
 namespace ApplicationCore.DTOs
 {
-    public class FilterHotelDto
+    public class HotelFilterDto
     {
         public string KeyWord { get; set; }
 
         public decimal MinPrice { get; set; }
         public decimal MaxPrice { get; set; }
+
+        public PagingDto PagingDto { get; set; }
     }
 }

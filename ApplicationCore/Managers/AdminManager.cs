@@ -100,7 +100,7 @@ namespace ApplicationCore.Managers
         }
         public IEnumerable<HotelDTO> Hotels()
         {
-            IEnumerable<HotelDTO> hotels =_hotelManager.GetHotels(new FilterHotelDto() );
+            IEnumerable<HotelDTO> hotels =_hotelManager.GetHotels(new HotelFilterDto() );
             return hotels;
         }
 

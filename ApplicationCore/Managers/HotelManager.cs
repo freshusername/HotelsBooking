@@ -33,7 +33,7 @@ namespace ApplicationCore.Managers
                                         .FirstOrDefault(h => h.Id == Id);
             return _mapper.Map<Hotel, HotelDTO>(hotel);
         }
-        public IEnumerable<HotelDTO> GetHotels(FilterHotelDto filterHotelDto = null)
+        public IEnumerable<HotelDTO> GetHotels(HotelFilterDto HotelFilterDto = null)
         {
             var hotels = _context.Hotels.Include(h => h.HotelRooms)
                                             .ThenInclude(hr => hr.Room)
@@ -41,22 +41,28 @@ namespace ApplicationCore.Managers
                                                 .ThenInclude(hr => hr.RoomConvs)
                                         .Include(h => h.HotelPhotos)
                                     .Select(h => h);
-            if (!String.IsNullOrEmpty(filterHotelDto?.KeyWord))
+            if (!String.IsNullOrEmpty(HotelFilterDto?.KeyWord))
             {
-                hotels = hotels.Where(h => h.Name.Contains(filterHotelDto.KeyWord)
-                                    || h.Description.Contains(filterHotelDto.KeyWord)
-                                    || h.Location.Contains(filterHotelDto.KeyWord));
+                hotels = hotels.Where(h => h.Name.Contains(HotelFilterDto.KeyWord)
+                                    || h.Description.Contains(HotelFilterDto.KeyWord)
+                                    || h.Location.Contains(HotelFilterDto.KeyWord));
             }
             
-            if (filterHotelDto?.MinPrice >= 0)
+            if (HotelFilterDto?.MinPrice >= 0)
             {
-                hotels = hotels.Where(h => h.HotelRooms.Any(p => p.Price >= filterHotelDto.MinPrice));
+                hotels = hotels.Where(h => h.HotelRooms.Any(p => p.Price >= HotelFilterDto.MinPrice));
             }
 
-            if (filterHotelDto?.MaxPrice > 0)
+            if (HotelFilterDto?.MaxPrice > 0)
             {
-                hotels = hotels.Where(h => h.HotelRooms.Any(p => p.Price <= filterHotelDto.MaxPrice));
+                hotels = hotels.Where(h => h.HotelRooms.Any(p => p.Price <= HotelFilterDto.MaxPrice));
             }
+
+            if (HotelFilterDto.PagingDto != null)
+            { 
+                //TODO: Count, Skip, Take
+            }
+
 
             return _mapper.Map<IEnumerable<Hotel>, IEnumerable<HotelDTO>>(hotels.ToList());
         }
@@ -73,6 +79,7 @@ namespace ApplicationCore.Managers
             }
             return new OperationDetails(false, "Hotel with the same name already exists", "Name");
         }
+
         public async Task<OperationDetails> Update(HotelDTO hotelDTO)
         {
             Hotel hotelCheck = _context.Hotels.FirstOrDefault(x => x.Name == hotelDTO.Name && x.Id != hotelDTO.Id);
