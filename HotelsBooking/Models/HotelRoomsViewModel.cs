@@ -2,21 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static Infrastructure.Enums;
 
-namespace Infrastructure.Entities
+namespace HotelsBooking.Models
 {
-    public class HotelRoom
+    public class HotelRoomsViewModel
     {
-        public int Id { get; set; }             
+        public int Id { get; set; }
         public decimal Price { get; set; }
         public int Number { get; set; }
+        public RoomType Type { get; set; }
 
         public int RoomId { get; set; }
-        public Room Room { get; set; }
-
         public int HotelId { get; set; }
-        public Hotel Hotel { get; set; }
-
-        public ICollection<RoomConv> RoomConvs { get; set; }
     }
 }

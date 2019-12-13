@@ -161,7 +161,19 @@ namespace ApplicationCore.Managers
 
         }
         #endregion
-
+        #region HotelRooms
+        public IEnumerable<HotelRoomDTO> GetHotelRooms()
+        {
+            List<HotelRoom> hotelRooms = _context.HotelRooms.ToList();
+            List<Room> rooms = _context.Rooms.ToList();
+            var query = hotelRooms.Join(rooms,
+                hr => hr.RoomId,
+                r => r.Id,
+                (hr, r) => new HotelRoomDTO { Id = hr.Id, HotelId = hr.HotelId, Price = hr.Price, RoomId = r.Id, Type = r.RoomType, Number = hr.Number }
+                );
+            return query;
+        }
+        #endregion
         public void Dispose()
         {
 

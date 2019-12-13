@@ -134,7 +134,9 @@ namespace ApplicationCore.Managers
         public async Task<OperationDetails> EditHotelConv(HotelConvDTO hotelConvDTO)
         {
             return await _hotelManager.UpdateHotelConv(hotelConvDTO);
-        } 
+        }
+
+        public IEnumerable<HotelRoomDTO> HotelRooms() => _hotelManager.GetHotelRooms();
         #endregion
         #region AddConvs
         public IEnumerable<AdditionalConvDTO> GetAdditionalConvs() => _additionalConvManager.GetConvs();

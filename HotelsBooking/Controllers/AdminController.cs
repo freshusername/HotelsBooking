@@ -197,6 +197,9 @@ namespace HotelsBooking.Controllers
             await _adminManager.DeleteHotel(Id);
             return RedirectToAction("Hotels");
         }
+        
+        #endregion
+        #region HotelConvs
 
         [HttpGet]
         public async Task<IActionResult> HotelConvs(int Id)
@@ -288,6 +291,15 @@ namespace HotelsBooking.Controllers
                 model = model
             };
             return View(modelRes);
+        }
+
+        #endregion
+        #region HotelRooms
+        [HttpGet]
+        public IActionResult HotelRooms(int Id)
+        {
+            IEnumerable<HotelRoomsViewModel> hotelRooms = _mapper.Map<IEnumerable<HotelRoomDTO>, IEnumerable<HotelRoomsViewModel>>(_adminManager.HotelRooms().Where(hr => hr.HotelId == Id));
+            return View(hotelRooms);
         }
         #endregion
         #region Order

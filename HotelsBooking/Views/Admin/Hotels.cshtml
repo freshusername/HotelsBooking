@@ -29,7 +29,7 @@
                                             <form asp-action="DeleteHotel" asp-controller="Admin">
                                                 <a class="btn btn-sm btn-warning" asp-action="EditHotel" asp-route-id="@hotel.Id">Edit</a>
                                                 <a class="btn btn-sm btn-primary" asp-action="HotelConvs" asp-route-id="@hotel.Id">Conveniences</a>
-                                                <a class="btn btn-sm btn-primary" asp-action="Rooms">Rooms</a>
+                                                <a class="btn btn-sm btn-primary" asp-action="HotelRooms" asp-route-id="@hotel.Id">Rooms</a>
                                                 <button type="submit" class="btn btn-sm btn-danger" asp-action="DeleteHotel" asp-route-id="@hotel.Id">Delete</button>
                                             </form>
                                         </td>

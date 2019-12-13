@@ -30,6 +30,8 @@ namespace ApplicationCore.Interfaces
         Task DeleteHotelConv(int Id);
         HotelConvDTO GetHotelConvById(int Id);
         Task<OperationDetails> EditHotelConv(HotelConvDTO hotelConvDTO);
+
+        IEnumerable<HotelRoomDTO> HotelRooms();
         #endregion
         #region AddConv
         IEnumerable<AdditionalConvDTO> GetAdditionalConvs();
