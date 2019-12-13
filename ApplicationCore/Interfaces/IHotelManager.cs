@@ -15,8 +15,11 @@ namespace ApplicationCore.Interfaces
         Task<OperationDetails> Create(HotelDTO hotelDTO);
         Task<OperationDetails> Update(HotelDTO hotelDTO);
         Task Delete(int Id);
+
         IEnumerable<HotelConvDTO> GetHotelConvs();
         Task<OperationDetails> CreateHotelConv(HotelConvDTO hotelConvDTO);
         Task DeleteHotelConv(int Id);
+        HotelConvDTO GetHotelConvById(int Id);
+        Task<OperationDetails> UpdateHotelConv(HotelConvDTO hotelConvDTO);
     }
 }

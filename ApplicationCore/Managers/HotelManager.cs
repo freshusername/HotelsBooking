@@ -17,12 +17,14 @@ namespace ApplicationCore.Managers
     {
         private readonly ApplicationDbContext _context;
         private IMapper _mapper;
-       
-        public HotelManager(ApplicationDbContext context,IMapper mapper)
+
+        public HotelManager(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
+        #region Hotels
+
         public async Task<HotelDTO> GetHotelById(int Id)
         {
             Hotel hotel = _context.Hotels.Include(h => h.HotelRooms)
@@ -48,7 +50,7 @@ namespace ApplicationCore.Managers
                                     || h.Description.Contains(filterHotelDto.KeyWord)
                                     || h.Location.Contains(filterHotelDto.KeyWord));
             }
-            
+
             if (filterHotelDto?.MinPrice >= 0 && filterHotelDto?.MaxPrice > 0)
             {
                 hotels = hotels.Where(h => h.HotelRooms.Where(p => p.Price >= filterHotelDto.MinPrice && p.Price <= filterHotelDto.MaxPrice).Any());
@@ -59,7 +61,7 @@ namespace ApplicationCore.Managers
 
         public async Task<OperationDetails> Create(HotelDTO hotelDTO)
         {
-            Hotel hotelCheck = _context.Hotels.FirstOrDefault(x => x.Name == hotelDTO.Name && x.Location==hotelDTO.Location);
+            Hotel hotelCheck = _context.Hotels.FirstOrDefault(x => x.Name == hotelDTO.Name && x.Location == hotelDTO.Location);
             if (hotelCheck == null)
             {
                 Hotel hotel = _mapper.Map<HotelDTO, Hotel>(hotelDTO);
@@ -91,8 +93,14 @@ namespace ApplicationCore.Managers
             _context.Hotels.Remove(hotel);
             await _context.SaveChangesAsync();
         }
-
+        #endregion
         #region HotelConvs
+
+        public HotelConvDTO GetHotelConvById(int Id)
+        {
+            var hotelConv = _mapper.Map<HotelConv, HotelConvDTO>(_context.HotelConvs.Find(Id));
+            return hotelConv;
+        }
 
         public IEnumerable<HotelConvDTO> GetHotelConvs()
         {
@@ -108,26 +116,23 @@ namespace ApplicationCore.Managers
 
         public async Task<OperationDetails> CreateHotelConv(HotelConvDTO hotelConvDTO)
         {
-            
-            HotelConv check = _context.HotelConvs.FirstOrDefault(x => x.AdditionalConv.Name == hotelConvDTO.Name && x.HotelId==hotelConvDTO.HotelId);
+
+            HotelConv check = _context.HotelConvs.FirstOrDefault(x => x.AdditionalConv.Name == hotelConvDTO.Name && x.HotelId == hotelConvDTO.HotelId);
             if (check == null)
             {
-                var Hotel = _context.Hotels.First(x => x.Id == hotelConvDTO.HotelId);
-                var AdditionalConv = _context.AdditionalConvs.First(x => x.Name == hotelConvDTO.Name);
-                var AdditionalConvId = AdditionalConv.Id;
                 HotelConv hotelConv = new HotelConv
                 {
                     Price = hotelConvDTO.Price,
                     HotelId = hotelConvDTO.HotelId,
-                    Hotel = Hotel,
-                    AdditionalConv = AdditionalConv,
-                    AdditionalConvId = AdditionalConvId
+                    Hotel = _context.Hotels.First(x => x.Id == hotelConvDTO.HotelId),
+                    AdditionalConv = _context.AdditionalConvs.First(x => x.Name == hotelConvDTO.Name),
+                    AdditionalConvId = _context.AdditionalConvs.First(x => x.Name == hotelConvDTO.Name).Id
                 };
                 await _context.HotelConvs.AddAsync(hotelConv);
                 await _context.SaveChangesAsync();
                 return new OperationDetails(true, "Hotel convenience added", "Name");
             }
-            return new OperationDetails(false, "Hotel convenience with the same name already exists", "Name");
+            return new OperationDetails(false, "Hotel convenience with the same name in that hotel is already exists", "Name");
         }
 
         public async Task DeleteHotelConv(int Id)
@@ -136,11 +141,30 @@ namespace ApplicationCore.Managers
             _context.HotelConvs.Remove(hotelConv);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<OperationDetails> UpdateHotelConv(HotelConvDTO hotelConvDTO)
+        {
+            HotelConv check = _context.HotelConvs.FirstOrDefault(x => x.AdditionalConv.Name == hotelConvDTO.Name && x.HotelId == hotelConvDTO.HotelId);
+            if (check == null || check.Id == hotelConvDTO.Id)
+            {
+
+                HotelConv hotelConv = _context.HotelConvs.Find(hotelConvDTO.Id);
+                hotelConv.Price = hotelConvDTO.Price;
+                hotelConv.AdditionalConv = _context.AdditionalConvs.First(x => x.Name == hotelConvDTO.Name);
+                hotelConv.AdditionalConvId = _context.AdditionalConvs.First(x => x.Name == hotelConvDTO.Name).Id;
+
+                _context.HotelConvs.Update(hotelConv);
+                await _context.SaveChangesAsync();
+                return new OperationDetails(true, "Hotel convenience updated", "Name");
+            }
+            return new OperationDetails(false, "Hotel convenience with the same name in that hotel is already exists", "Name");
+
+        }
         #endregion
 
         public void Dispose()
         {
-            
+
         }
     }
 }

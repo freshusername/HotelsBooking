@@ -14,7 +14,7 @@ using static Infrastructure.Enums;
 
 namespace HotelsBooking.Controllers
 {
-    
+
     public class AdminController : Controller
     {
         private readonly IAdminManager _adminManager;
@@ -27,13 +27,17 @@ namespace HotelsBooking.Controllers
             _mapper = mapper;
         }
 
+
         #region Users
+
+        [HttpGet]
         public IActionResult Users()
         {
             List<UsersViewModel> users = _mapper.Map<List<AdminUserDTO>, List<UsersViewModel>>(_adminManager.Users());
             return View(users);
         }
 
+        [HttpGet]
         public async Task<IActionResult> EditUser(string Id)
         {
             AppUser user = await _userManager.FindByIdAsync(Id);
@@ -58,10 +62,11 @@ namespace HotelsBooking.Controllers
                 return RedirectToAction("Users");
             else
                 ModelState.AddModelError(res.Property, res.Message);
-            
+
             return View(model);
         }
 
+        [HttpGet]
         public ActionResult CreateUser()
         {
             return View();
@@ -85,6 +90,7 @@ namespace HotelsBooking.Controllers
             return View(model);
         }
 
+        [HttpGet]
         public async Task<IActionResult> ChangePassword(string Id)
         {
             AppUser user = await _userManager.FindByIdAsync(Id);
@@ -92,7 +98,7 @@ namespace HotelsBooking.Controllers
             {
                 return NotFound();
             }
-            ChangePasswordViewModel model = _mapper.Map<AppUser,ChangePasswordViewModel>(user);
+            ChangePasswordViewModel model = _mapper.Map<AppUser, ChangePasswordViewModel>(user);
             return View(model);
         }
 
@@ -109,7 +115,7 @@ namespace HotelsBooking.Controllers
                 return RedirectToAction("Users");
             else
                 ModelState.AddModelError(res.Property, res.Message);
-            
+
             return View(model);
         }
 
@@ -118,15 +124,20 @@ namespace HotelsBooking.Controllers
         {
             await _adminManager.DeleteUser(Id);
             return RedirectToAction("Users");
-  
+
         }
+
         #endregion
         #region Hotels
+
+        [HttpGet]
         public IActionResult Hotels()
         {
             IEnumerable<CreateOrEditHotelViewModel> hotels = _mapper.Map<IEnumerable<HotelDTO>, IEnumerable<CreateOrEditHotelViewModel>>(_adminManager.Hotels());
             return View(hotels);
         }
+
+        [HttpGet]
         public IActionResult CreateHotel()
         {
             return View();
@@ -149,6 +160,7 @@ namespace HotelsBooking.Controllers
             return View(model);
         }
 
+        [HttpGet]
         public async Task<IActionResult> EditHotel(int Id)
         {
             CreateOrEditHotelViewModel hotel = _mapper.Map<HotelDTO, CreateOrEditHotelViewModel>(await _adminManager.GetHotelById(Id));
@@ -179,13 +191,13 @@ namespace HotelsBooking.Controllers
             return View(model);
         }
 
-
         [HttpPost]
         public async Task<IActionResult> DeleteHotel(int Id)
         {
             await _adminManager.DeleteHotel(Id);
             return RedirectToAction("Hotels");
         }
+
         [HttpGet]
         public async Task<IActionResult> HotelConvs(int Id)
         {
@@ -194,21 +206,30 @@ namespace HotelsBooking.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteHotelConv(int Id,int HotelId)
+        public async Task<IActionResult> DeleteHotelConv(int Id, int HotelId)
         {
             await _adminManager.DeleteHotelConv(Id);
             return RedirectToAction("HotelConvs", new { Id = HotelId });
         }
 
+        [HttpGet]
         public IActionResult CreateHotelConv(int Id)
         {
-            CreateOrEditHotelConvViewModel model = new CreateOrEditHotelConvViewModel
+            CreateOrEditHotelConvViewModel hotelConv = new CreateOrEditHotelConvViewModel
             {
-                HotelId = Id
+                HotelId = Id,
+                Price = 0,
+                Name=""
             };
-
+            IEnumerable<AdditionalConvDTO> additionalConvs = _adminManager.GetAdditionalConvs();
+            CreateHotelConvViewModel model = new CreateHotelConvViewModel
+            {
+                additionalConvs = additionalConvs,
+                model = hotelConv
+            };
             return View(model);
         }
+
         [HttpPost]
         public async Task<IActionResult> CreateHotelConv(CreateOrEditHotelConvViewModel model)
         {
@@ -223,8 +244,50 @@ namespace HotelsBooking.Controllers
                 return RedirectToAction("HotelConvs", new { Id = HotelId });
             else
                 ModelState.AddModelError(res.Property, res.Message);
+            IEnumerable<AdditionalConvDTO> additionalConvs = _adminManager.GetAdditionalConvs();
+            CreateHotelConvViewModel modelRes = new CreateHotelConvViewModel
+            {
+                additionalConvs = additionalConvs,
+                model = model
+            };
+            return View(modelRes);
+        }
 
+
+        [HttpGet]
+        public IActionResult EditHotelConv(int Id)
+        {
+            var hotelConv = _mapper.Map<HotelConvDTO, CreateOrEditHotelConvViewModel>(_adminManager.GetHotelConvById(Id));
+            IEnumerable<AdditionalConvDTO> additionalConvs = _adminManager.GetAdditionalConvs();
+            CreateHotelConvViewModel model = new CreateHotelConvViewModel
+            {
+                additionalConvs = additionalConvs,
+                model = hotelConv
+            };
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditHotelConv(CreateOrEditHotelConvViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            HotelConvDTO hotelConvDTO = _mapper.Map<CreateOrEditHotelConvViewModel, HotelConvDTO>(model);
+            var res = await _adminManager.EditHotelConv(hotelConvDTO);
+            int HotelId = model.HotelId;
+            if (res.Succedeed)
+                return RedirectToAction("HotelConvs", new { Id = HotelId });
+            else
+                ModelState.AddModelError(res.Property, res.Message);
+            IEnumerable<AdditionalConvDTO> additionalConvs = _adminManager.GetAdditionalConvs();
+            CreateHotelConvViewModel modelRes = new CreateHotelConvViewModel
+            {
+                additionalConvs = additionalConvs,
+                model = model
+            };
+            return View(modelRes);
         }
         #endregion
         #region Order

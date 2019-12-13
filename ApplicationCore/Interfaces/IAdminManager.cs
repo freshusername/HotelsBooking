@@ -24,12 +24,17 @@ namespace ApplicationCore.Interfaces
         Task<OperationDetails> CreateHotel(HotelDTO hotelDTO);
         Task<OperationDetails> EditHotel(HotelDTO hotelDTO);
         Task DeleteHotel(int Id);
+
         IEnumerable<HotelConvDTO> HotelConvs();
         Task<OperationDetails> CreateHotelConv(HotelConvDTO hotelConvDTO);
         Task DeleteHotelConv(int Id);
+        HotelConvDTO GetHotelConvById(int Id);
+        Task<OperationDetails> EditHotelConv(HotelConvDTO hotelConvDTO);
         #endregion
         #region AddConv
+        IEnumerable<AdditionalConvDTO> GetAdditionalConvs();
         Task<OperationDetails> CreateAdditionalConv(AdditionalConvDTO additionalConvDTO);
+
         #endregion
 
         #region Orders

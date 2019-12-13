@@ -125,8 +125,19 @@ namespace ApplicationCore.Managers
         {
             await _hotelManager.DeleteHotelConv(Id);
         }
+
+        public HotelConvDTO GetHotelConvById(int Id)
+        {
+            return _hotelManager.GetHotelConvById(Id);
+        }
+
+        public async Task<OperationDetails> EditHotelConv(HotelConvDTO hotelConvDTO)
+        {
+            return await _hotelManager.UpdateHotelConv(hotelConvDTO);
+        } 
         #endregion
         #region AddConvs
+        public IEnumerable<AdditionalConvDTO> GetAdditionalConvs() => _additionalConvManager.GetConvs();
         public Task<OperationDetails> CreateAdditionalConv(AdditionalConvDTO additionalConvDTO) => _additionalConvManager.Create(additionalConvDTO);
         #endregion
 

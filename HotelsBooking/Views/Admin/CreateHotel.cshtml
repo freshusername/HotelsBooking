@@ -4,7 +4,7 @@
 }
 
 <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
-<link  href="~/css/nice-select.css" rel="stylesheet"/>
+<link href="~/css/nice-select.css" rel="stylesheet" />
 <body>
 
     <div class="row">
@@ -45,3 +45,6 @@
         </div>
     </div>
 </body>
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
