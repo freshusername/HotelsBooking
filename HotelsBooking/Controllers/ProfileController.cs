@@ -36,24 +36,30 @@ namespace HotelsBooking.Controllers
       return View(result);
     }
 
-    public async Task<IActionResult> Index()
+    public AllProfilesViewModel BuildProfileViewModel(IEnumerable<ProfileDto> users)
     {
-      var profiles =  _profileService
-        .GetAllProfilesAsync()
-        .Select(pr => new ProfileViewModel
-        {
-          ProfileId = pr.Id,
-          //Role = Roles
-          Email = pr.Email,
-          FirstName = pr.FirstName,
-          LastName = pr.LastName
-        });
-      
-      //var result = _mapper.Map<IEnumerable<ProfileDto>, IEnumerable<AllProfilesViewModel>>(profiles);
+      var profiles = users.Select(pr => new ProfileViewModel
+      {
+        ProfileId = pr.Id,
+        Roles = pr.Roles,
+        Email = pr.Email,
+        FirstName = pr.FirstName,
+        LastName = pr.LastName
+      });
+
       var model = new AllProfilesViewModel
       {
-        profilesList = profiles
+        ProfilesList = profiles
       };
+
+      return model;
+    }
+
+    public async Task<IActionResult> Index()
+    {
+      var users = await _profileService.GetAllProfilesAsync();
+
+      var model = BuildProfileViewModel(users);
 
       return View(model);
     }

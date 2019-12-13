@@ -20,13 +20,19 @@ namespace ApplicationCore.Services
   {
     private ApplicationDbContext _context;
     private UserManager<AppUser> _userManager;
+    private RoleManager<IdentityRole> _roleManager;
     private IMapper _mapper;
 
-    public ProfileService(ApplicationDbContext context, IMapper mapper, UserManager<AppUser> userManager)
+    public ProfileService(
+      ApplicationDbContext context, 
+      IMapper mapper, 
+      UserManager<AppUser> userManager,
+      RoleManager<IdentityRole> roleManager)
     {
       _context = context;
       _mapper = mapper;
       _userManager = userManager;
+      _roleManager = roleManager;
     }
     
     public async Task<ProfileDto> GetByIdAsync(string id)
@@ -46,19 +52,22 @@ namespace ApplicationCore.Services
         return null;
 
       var profile = _mapper.Map<AppUser, ProfileDto>(user);
+      //profile.Role = await GetRole(profile.Id);
       return profile;
     }
 
-    public IdentityUserRole<string> GetRole(string id)
+    public async Task<string> GetRole(string id)
     {
-      var user = _context.Users.SingleOrDefault(x => x.Id == id);
+      var user = _context.Users.SingleOrDefaultAsync(x => x.Id == id);
       if (user == null)
         return null;
-      var role = _context.UserRoles.Find(id);
+      var roleId = _context.UserRoles.FirstOrDefault(r => r.UserId == id)?.RoleId;
 
-      return role;
+      var role = await _roleManager.FindByIdAsync(roleId);
+
+      return role.ToString();
     }
-
+    
     public async Task<OperationDetails> UpdateProfile(ProfileDto model)
     {
       var user = await _userManager.FindByEmailAsync(model.Email);
@@ -77,11 +86,70 @@ namespace ApplicationCore.Services
       return new OperationDetails(true, "Your profile has been successfully updated", "Email");
     }
 
-    public IEnumerable<AppUser> GetAllProfilesAsync()
+    public async Task<IEnumerable<ProfileDto>> GetAllProfilesAsync()
     {
-      var users = _context.Users;
+      var users = _context.Users.ToList();
+      var userRoles = _context.UserRoles.ToList();
+
+      // List<ProfileDto> users_with_roles = new List<ProfileDto>();
+
+
+
+      //users.Select(u => new ProfileDto
+      //{
+      //  FirstName = u.FirstName,
+      //  LastName = u.LastName,
+      //  Email = u.Email,
+      //  Roles = _roleManager.Roles.Where(r => userRoles.Where(ur => ur.UserId == u.Id).ToList())  // FindByIdAsync(userRole.RoleId).Result.Name
+      //});
+      IEnumerable<ProfileDto> result = new List<ProfileDto>();
+      var users_with_roles = userRoles.GroupBy(ur => ur.UserId)
+                              .Select(g => new ProfileDto()
+                              {
+                                FirstName = users.FirstOrDefault(u => u.Id == g.Key).FirstName,
+                                LastName = users.FirstOrDefault(u => u.Id == g.Key).LastName,
+                                Email = users.FirstOrDefault(u => u.Id == g.Key).Email,
+                                Roles = g.Select(p => _roleManager.Roles.FirstOrDefault(r => r.Id == p.RoleId).Name).ToList()
+                              });
+
+
+
+      //foreach (var user_with_role in users_with_roles)
+      //{
+      //  ProfileDto profiledto = new ProfileDto();
+      //  profiledto.FirstName = users.FirstOrDefault(u => u.Id == user_with_role.Key).FirstName;
+      //  profiledto.LastName = users.FirstOrDefault(u => u.Id == user_with_role.Key).LastName;
+      //  profiledto.Email = users.FirstOrDefault(u => u.Id == user_with_role.Key).Email;
+         
+      //  foreach (var role in user_with_role)
+      //  {
+
+      //    profiledto.Roles.Add(_roleManager.Roles.); = _roleManager.Roles.Where(r => r.Id == role.RoleId);
+      //  }
+        
+      //}
+
+      /*foreach (var userRole in userRoles)
+      {
+        users_with_roles.Add(new ProfileDto()
+                            {
+                              FirstName = users.FirstOrDefault(u => u.Id == userRole.UserId).FirstName,
+                              LastName = users.FirstOrDefault(u => u.Id == userRole.UserId).LastName,
+                              Email = users.FirstOrDefault(u => u.Id == userRole.UserId).Email,
+                              Roles = _roleManager.Roles.Where(r => r.Id)  // FindByIdAsync(userRole.RoleId).Result.Name
+                            });
+      }*/
       //var profiles = _mapper.Map<IEnumerable<AppUser>, IEnumerable<ProfileDto>>(users);
-      return users; 
+      /*IEnumerable<ProfileDto> users_with_roles = users.Select(u => new ProfileDto()
+                              {
+                                FirstName = u.FirstName,
+                                LastName = u.LastName,
+                                Email = u.Email,
+                                Roles = _userManager.GetRolesAsync(u).Result
+                              });*/
+      //var profiles = _mapper.Map<IEnumerable<>, IEnumerable<ProfileDto>>(users_with_roles);
+
+      return users_with_roles; 
     }
   }
 }
