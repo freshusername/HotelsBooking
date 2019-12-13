@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ApplicationCore.DTOs;
+using ApplicationCore.DTOs.AppProfile;
 using ApplicationCore.Infrastructure;
 using AutoMapper;
 using Infrastructure.EF;
@@ -19,38 +20,58 @@ namespace ApplicationCore.Services
   {
     private ApplicationDbContext _context;
     private UserManager<AppUser> _userManager;
+    private RoleManager<IdentityRole> _roleManager;
     private IMapper _mapper;
 
-    public ProfileService(ApplicationDbContext context, IMapper mapper, UserManager<AppUser> userManager)
+    public ProfileService(
+      ApplicationDbContext context, 
+      IMapper mapper, 
+      UserManager<AppUser> userManager,
+      RoleManager<IdentityRole> roleManager)
     {
       _context = context;
       _mapper = mapper;
       _userManager = userManager;
+      _roleManager = roleManager;
     }
-
-    public async Task<ProfileDTO> GetByIdAsync(string id)
+    
+    public async Task<ProfileDto> GetByIdAsync(string id)
     {
       var user = await _context.Users.SingleOrDefaultAsync(x => x.Id == id);
       if (user == null)
         return null;
 
-      var profile = _mapper.Map<AppUser, ProfileDTO>(user);
+      var profile = _mapper.Map<AppUser, ProfileDto>(user);
       return profile;
     }
 
-    public async Task<ProfileDTO> GetByEmailAsync(string email)
+    public async Task<ProfileDto> GetByEmailAsync(string email)
     {
       var user = await _context.Users.SingleOrDefaultAsync(x => x.Email == email);
       if (user == null)
         return null;
 
-      var profile = _mapper.Map<AppUser, ProfileDTO>(user);
+      var profile = _mapper.Map<AppUser, ProfileDto>(user);
+      //profile.Role = await GetRole(profile.Id);
       return profile;
     }
 
-    public async Task<OperationDetails> UpdateProfile(ProfileDTO model)
+    public async Task<string> GetRole(string id)
+    {
+      var user = _context.Users.SingleOrDefaultAsync(x => x.Id == id);
+      if (user == null)
+        return null;
+      var roleId = _context.UserRoles.FirstOrDefault(r => r.UserId == id)?.RoleId;
+
+      var role = await _roleManager.FindByIdAsync(roleId);
+
+      return role.ToString();
+    }
+    
+    public async Task<OperationDetails> UpdateProfile(ProfileDto model)
     {
       var user = await _userManager.FindByEmailAsync(model.Email);
+
       if (user == null)
       {
         return new OperationDetails(false, "Something gone wrong", "Email");
@@ -65,16 +86,22 @@ namespace ApplicationCore.Services
       return new OperationDetails(true, "Your profile has been successfully updated", "Email");
     }
 
-    public IEnumerable<AppUser> GetAllProfilesAsync()
+    public async Task<IEnumerable<ProfileDto>> GetAllProfilesAsync()
     {
-      var users = _context.Users;
-      //var profiles = _mapper.Map<IEnumerable<AppUser>, IEnumerable<ProfileDTO>>(users);
-      return users; 
+      var users = _context.Users.ToList();
+      var userRoles = _context.UserRoles.ToList();
+
+      IEnumerable<ProfileDto> result = new List<ProfileDto>();
+      var users_with_roles = userRoles.GroupBy(ur => ur.UserId)
+                              .Select(g => new ProfileDto()
+                              {
+                                FirstName = users.FirstOrDefault(u => u.Id == g.Key)?.FirstName,
+                                LastName = users.FirstOrDefault(u => u.Id == g.Key)?.LastName,
+                                Email = users.FirstOrDefault(u => u.Id == g.Key)?.Email,
+                                Roles = g.Select(role => _roleManager.Roles.FirstOrDefault(r => r.Id == role.RoleId)?.Name).ToList()
+                              });
+
+      return users_with_roles; 
     }
-
-    //public Task<Profile> UpdateProfile()
-    //{
-
-    //}
   }
 }

@@ -98,6 +98,7 @@ namespace HotelsBooking
             services.AddTransient<IProfileManager, ProfileManager>();
             services.AddTransient<IProfileService, ProfileService>();
 
+
       //var mapper = config.CreateMapper();
 
 
