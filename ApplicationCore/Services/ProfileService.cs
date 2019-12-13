@@ -62,10 +62,10 @@ namespace ApplicationCore.Services
     {
 
       
-      var user = _context.Users.SingleOrDefaultAsync(x => x.Id == id);
+      var user = await _context.Users.SingleOrDefaultAsync(x => x.Id == id);
       if (user == null)
         return null;
-      var roles = _context.UserRoles.Where(x => x.UserId == id).ToList();
+      var roles =  _context.UserRoles.Where(x => x.UserId == id).ToList();
       
 
       List<IdentityRole> results = new List<IdentityRole>();
