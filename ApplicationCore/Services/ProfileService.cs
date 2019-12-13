@@ -16,12 +16,12 @@ using Microsoft.Extensions.Configuration;
 
 namespace ApplicationCore.Services
 {
-  public class ProfileService : IProfileService
-  {
-    private ApplicationDbContext _context;
-    private UserManager<AppUser> _userManager;
-    private RoleManager<IdentityRole> _roleManager;
-    private IMapper _mapper;
+    public class ProfileService : IProfileService
+    {
+        private ApplicationDbContext _context;
+        private UserManager<AppUser> _userManager;
+        private RoleManager<IdentityRole> _roleManager;
+        private IMapper _mapper;
 
     public ProfileService(
       ApplicationDbContext context, 
@@ -51,10 +51,9 @@ namespace ApplicationCore.Services
       if (user == null)
         return null;
 
-      var profile = _mapper.Map<AppUser, ProfileDto>(user);
-      //profile.Role = await GetRole(profile.Id);
-      return profile;
-    }
+            var profile = _mapper.Map<AppUser, ProfileDTO>(user);
+            return profile;
+        }
 
     public async Task<string> GetRole(string id)
     {
@@ -77,14 +76,14 @@ namespace ApplicationCore.Services
         return new OperationDetails(false, "Something gone wrong", "Email");
       }
 
-      user.FirstName = model.FirstName;
-      user.LastName = model.LastName;
-      user.Email = model.Email;
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.Email = model.Email;
 
-      await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
-      return new OperationDetails(true, "Your profile has been successfully updated", "Email");
-    }
+            return new OperationDetails(true, "Your profile has been successfully updated", "Email");
+        }
 
     public async Task<IEnumerable<ProfileDto>> GetAllProfilesAsync()
     {

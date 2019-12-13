@@ -97,6 +97,7 @@ namespace HotelsBooking
             services.AddTransient<IHotelManager, HotelManager>();
             services.AddTransient<IProfileManager, ProfileManager>();
             services.AddTransient<IProfileService, ProfileService>();
+            services.AddTransient<IPhotoManager, PhotoManager>();
 
 
       //var mapper = config.CreateMapper();
