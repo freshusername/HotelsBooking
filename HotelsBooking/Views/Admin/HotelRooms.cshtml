@@ -22,7 +22,7 @@
                             @foreach (var room in Model)
                             {
                                 <tr>
-                                    <td data-label="Number">@Math.Round(room.Price, 2)</td>
+                                    <td data-label="Number">@room.Number</td>
                                     <td data-label="Price">@Math.Round(room.Price,2)</td>
                                     <td data-label="Type">@room.Type</td>
                                     <td data-label="Actions">
