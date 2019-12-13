@@ -14,13 +14,16 @@
                             <div class="real-address">Washington, <b>USA</b></div>
                         </div>
                     </div>
-                    <div class="profile-role_wrap">
+                </div>
+                <div class="profile-role_wrap">
+                    <div class="profile-role_block">
                         @foreach (var role in Model.Roles)
                         {
-                            <a class="@(role.ToLower() + " role-button btn_2")" style="margin-left: 10px;">@role</a>
+                            @role
                         }
-                    </div>
+                    </div >
                 </div>
+                
                 <div class="profile-img">
                     <img src="https://i.imgur.com/f2kiwyi.png" alt="profile-img">
                 </div>
