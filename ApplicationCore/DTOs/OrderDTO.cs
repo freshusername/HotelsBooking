@@ -19,5 +19,13 @@ namespace ApplicationCore.DTOs
         public string UserId { get; set; }
 
         public int OrderDetailId { get; set; }
+
+        public decimal TotalPrice { get; set; }
+
+        public DateTimeOffset OrderDate { get; set; }
+
+        public DateTimeOffset CheckInDate { get; set; }
+
+        public DateTimeOffset CheckOutDate { get; set; }
     }
 }

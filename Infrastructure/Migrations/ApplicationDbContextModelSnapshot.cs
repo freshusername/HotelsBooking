@@ -146,11 +146,17 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("AppUserId");
 
+                    b.Property<DateTimeOffset>("CheckInDate");
+
+                    b.Property<DateTimeOffset>("CheckOutDate");
+
                     b.Property<string>("Email");
 
                     b.Property<string>("FullName");
 
                     b.Property<bool>("IsActive");
+
+                    b.Property<DateTimeOffset>("OrderDate");
 
                     b.Property<string>("PhoneNumber");
 
@@ -166,13 +172,7 @@ namespace Infrastructure.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTimeOffset>("CheckInDate");
-
-                    b.Property<DateTimeOffset>("CheckOutDate");
-
                     b.Property<int>("HotelRoomId");
-
-                    b.Property<DateTimeOffset>("OrderDate");
 
                     b.Property<int>("OrderId");
 
@@ -195,6 +195,8 @@ namespace Infrastructure.Migrations
                     b.Property<int>("HotelRoomId");
 
                     b.Property<string>("OrderId");
+
+                    b.Property<int>("Qty");
 
                     b.HasKey("OrderItemId");
 

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191212131747_MigrationDb")]
+    [Migration("20191213134345_MigrationDb")]
     partial class MigrationDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -148,11 +148,17 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("AppUserId");
 
+                    b.Property<DateTimeOffset>("CheckInDate");
+
+                    b.Property<DateTimeOffset>("CheckOutDate");
+
                     b.Property<string>("Email");
 
                     b.Property<string>("FullName");
 
                     b.Property<bool>("IsActive");
+
+                    b.Property<DateTimeOffset>("OrderDate");
 
                     b.Property<string>("PhoneNumber");
 
@@ -168,13 +174,7 @@ namespace Infrastructure.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTimeOffset>("CheckInDate");
-
-                    b.Property<DateTimeOffset>("CheckOutDate");
-
                     b.Property<int>("HotelRoomId");
-
-                    b.Property<DateTimeOffset>("OrderDate");
 
                     b.Property<int>("OrderId");
 
@@ -197,6 +197,8 @@ namespace Infrastructure.Migrations
                     b.Property<int>("HotelRoomId");
 
                     b.Property<string>("OrderId");
+
+                    b.Property<int>("Qty");
 
                     b.HasKey("OrderItemId");
 

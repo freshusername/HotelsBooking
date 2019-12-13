@@ -31,6 +31,8 @@ namespace ApplicationCore.Managers
             _mapper = mapper;
         }
 
+        
+
         public async Task<OperationDetails> Register(UserDTO userDTO)
         {
 

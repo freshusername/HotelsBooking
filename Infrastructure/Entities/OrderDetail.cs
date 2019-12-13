@@ -7,11 +7,9 @@ namespace Infrastructure.Entities
 {
     public class OrderDetail
     {
-        public int Id { get; set; }       
-        public DateTimeOffset OrderDate { get; set; }
-        public DateTimeOffset CheckInDate { get; set; }
-        public DateTimeOffset CheckOutDate { get; set; }
+        public int Id { get; set; }             
         public decimal TotalPrice { get; set; }
+        public int Qty { get; set; }
 
 
         public int HotelRoomId { get; set; }

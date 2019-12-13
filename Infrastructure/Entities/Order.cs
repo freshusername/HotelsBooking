@@ -13,6 +13,10 @@ namespace Infrastructure.Entities
         public string  Email { get; set; }
         public string PhoneNumber { get; set; }
 
+        public DateTimeOffset OrderDate { get; set; }
+        public DateTimeOffset CheckInDate { get; set; }
+        public DateTimeOffset CheckOutDate { get; set; }
+
         public string AppUserId { get; set; }
         public virtual AppUser User { get; set; }
         public ICollection<OrderDetail> OrderDetails { get; set; }

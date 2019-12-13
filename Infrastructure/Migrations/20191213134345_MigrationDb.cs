@@ -206,6 +206,9 @@ namespace Infrastructure.Migrations
                     FullName = table.Column<string>(nullable: true),
                     Email = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
+                    OrderDate = table.Column<DateTimeOffset>(nullable: false),
+                    CheckInDate = table.Column<DateTimeOffset>(nullable: false),
+                    CheckOutDate = table.Column<DateTimeOffset>(nullable: false),
                     AppUserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -298,9 +301,6 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    OrderDate = table.Column<DateTimeOffset>(nullable: false),
-                    CheckInDate = table.Column<DateTimeOffset>(nullable: false),
-                    CheckOutDate = table.Column<DateTimeOffset>(nullable: false),
                     TotalPrice = table.Column<decimal>(nullable: false),
                     HotelRoomId = table.Column<int>(nullable: false),
                     OrderId = table.Column<int>(nullable: false)
@@ -329,6 +329,7 @@ namespace Infrastructure.Migrations
                     OrderItemId = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     OrderId = table.Column<string>(nullable: true),
+                    Qty = table.Column<int>(nullable: false),
                     HotelRoomId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
