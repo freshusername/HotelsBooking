@@ -1,4 +1,4 @@
-﻿@model HotelsBooking.Models.CreateHotelConvViewModel;
+﻿@model HotelsBooking.Models.CreateAndEditHotelConvViewModel;
 @{
     ViewData["Title"] = "Edit Hotel";
 }
@@ -23,11 +23,17 @@
                     <label class="control-label col-lg-6 col-lg-offset-3">Name:</label>
                     <div>
                         <select asp-for="model.Name" class="nice-select option col-lg-6 col-lg-offset-3">
+                            <option value="@Model.model.Name" selected>
+                                @Model.model.Name
+                            </option>
                             @foreach (var addConv in Model.additionalConvs)
                             {
+                                if (@Model.model.Name != @addConv.Name)
+                                {
                                 <option value="@addConv.Name">
                                     @addConv.Name
                                 </option>
+                                }
                             }
                         </select>
                     </div>

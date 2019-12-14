@@ -35,7 +35,7 @@ namespace ApplicationCore.Managers
             _additionalConvManager = additionalConvManager;
         }
         #region Users
-        public List<AdminUserDTO> Users()
+        public List<AdminUserDTO> GetUsers()
         {
             List<AdminUserDTO> users = _mapper.Map<List<AppUser>, List<AdminUserDTO>>(_userManager.Users.ToList());
             return users;
@@ -99,7 +99,7 @@ namespace ApplicationCore.Managers
             HotelDTO hotel = await _hotelManager.GetHotelById(Id);
             return hotel;
         }
-        public IEnumerable<HotelDTO> Hotels()
+        public IEnumerable<HotelDTO> GetHotels()
         {
             IEnumerable<HotelDTO> hotels =_hotelManager.GetHotels(new FilterHotelDto() );
             return hotels;
@@ -117,7 +117,7 @@ namespace ApplicationCore.Managers
         {
             await _hotelManager.Delete(Id);
         }
-        public IEnumerable<HotelConvDTO> HotelConvs() => _hotelManager.GetHotelConvs();
+        public IEnumerable<HotelConvDTO> GetHotelConvs() => _hotelManager.GetHotelConvs();
 
         public Task<OperationDetails> CreateHotelConv(HotelConvDTO hotelConvDTO) => _hotelManager.CreateHotelConv(hotelConvDTO);
 
@@ -136,7 +136,13 @@ namespace ApplicationCore.Managers
             return await _hotelManager.UpdateHotelConv(hotelConvDTO);
         }
 
-        public IEnumerable<HotelRoomDTO> HotelRooms() => _hotelManager.GetHotelRooms();
+        public HotelRoomDTO GetHotelRoomById(int Id) => _hotelManager.GetHotelRoomById(Id);
+
+        public IEnumerable<HotelRoomDTO> GetHotelRooms() => _hotelManager.GetHotelRooms();
+
+        public async Task<OperationDetails> CreateHotelRoom(HotelRoomDTO hotelRoomDTO) => await _hotelManager.CreateHotelRoom(hotelRoomDTO); 
+
+        public async Task DeleteHotelRoom(int Id) => await _hotelManager.DeleteHotelRoom(Id);
         #endregion
         #region AddConvs
         public IEnumerable<AdditionalConvDTO> GetAdditionalConvs() => _additionalConvManager.GetConvs();

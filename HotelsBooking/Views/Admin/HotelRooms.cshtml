@@ -27,8 +27,9 @@
                                     <td data-label="Type">@room.Type</td>
                                     <td data-label="Actions">
                                         <form asp-action="DeleteHotelRoom" asp-controller="Admin">
-                                            <a class="btn btn-sm btn-warning" asp-action="EditHotelRoom" asp-route-id="@room.Id">Edit</a>
-                                            <button type="submit" class="btn btn-sm btn-danger" asp-action="DeleteHotelConv" asp-route-id="@room.Id" asp-route-HotelId="@room.HotelId">Delete</button>
+                                            <a class="btn btn-sm btn-outline-warning" asp-action="EditHotelRoom" asp-route-id="@room.Id">Edit</a>
+                                            <a class="btn btn-sm btn-outline-primary" asp-action="HotelRoomConv" asp-route-id="@room.HotelId">Conveniences</a>
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" asp-action="DeleteHotelRoom" asp-route-id="@room.Id" asp-route-HotelId="@room.HotelId">Delete</button>
                                         </form>
                                     </td>
                                 </tr>
@@ -37,7 +38,7 @@
                     </tbody>
                 </table>
                 <div class="button-center">
-                    <a asp-action="CreateHotelConv" class="btn btn-success" asp-route-id="@ViewContext.RouteData.Values["Id"]">Add new hotel room</a>
+                    <a asp-action="CreateHotelRoom" class="btn btn-success" asp-route-id="@ViewContext.RouteData.Values["Id"]">Add new hotel room</a>
                 </div>
             </div>
         </div>

@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Infrastructure.Enums;
 
 namespace ApplicationCore.Managers
 {
@@ -98,8 +99,9 @@ namespace ApplicationCore.Managers
 
         public HotelConvDTO GetHotelConvById(int Id)
         {
-            var hotelConv = _mapper.Map<HotelConv, HotelConvDTO>(_context.HotelConvs.Find(Id));
-            return hotelConv;
+            HotelConv hotelConv = _context.HotelConvs.Include(hc => hc.AdditionalConv)
+                                               .FirstOrDefault(hc => hc.Id == Id);
+            return _mapper.Map<HotelConv, HotelConvDTO>(hotelConv);
         }
 
         public IEnumerable<HotelConvDTO> GetHotelConvs()
@@ -162,6 +164,14 @@ namespace ApplicationCore.Managers
         }
         #endregion
         #region HotelRooms
+
+        public HotelRoomDTO GetHotelRoomById(int Id)
+        {
+            HotelRoom hotelRoom = _context.HotelRooms.Include(hr => hr.Room)
+                                                    .Include(hr => hr.Hotel)
+                                                    .FirstOrDefault(hr => hr.Id == Id);
+            return _mapper.Map<HotelRoom, HotelRoomDTO>(hotelRoom);
+        }
         public IEnumerable<HotelRoomDTO> GetHotelRooms()
         {
             List<HotelRoom> hotelRooms = _context.HotelRooms.ToList();
@@ -172,6 +182,34 @@ namespace ApplicationCore.Managers
                 (hr, r) => new HotelRoomDTO { Id = hr.Id, HotelId = hr.HotelId, Price = hr.Price, RoomId = r.Id, Type = r.RoomType, Number = hr.Number }
                 );
             return query;
+        }
+
+        public async Task<OperationDetails> CreateHotelRoom(HotelRoomDTO hotelRoomDTO)
+        {
+            HotelRoom check = _context.HotelRooms.FirstOrDefault(x => x.Number == hotelRoomDTO.Number);
+            if (check == null)
+            {
+                HotelRoom hotelRoom = new HotelRoom
+                {
+                    Price = hotelRoomDTO.Price,
+                    Number = hotelRoomDTO.Number,
+                    Hotel = _context.Hotels.First(h => h.Id == hotelRoomDTO.HotelId),
+                    HotelId = _context.Hotels.First(h => h.Id == hotelRoomDTO.HotelId).Id,
+                    Room = _context.Rooms.FirstOrDefault(r => r.RoomType == hotelRoomDTO.Type),
+                    RoomId = _context.Rooms.FirstOrDefault(r => r.RoomType == hotelRoomDTO.Type).Id
+                };
+                await _context.HotelRooms.AddAsync(hotelRoom);
+                await _context.SaveChangesAsync();
+                return new OperationDetails(true, "Hotel room added", "Number");
+            }
+            return new OperationDetails(false, "Hotel room with the same number in that hotel is already exists", "Number");
+        }
+
+        public async Task DeleteHotelRoom(int Id)
+        {
+            HotelRoom hotelRoom = _context.HotelRooms.Find(Id);
+            _context.HotelRooms.Remove(hotelRoom);
+            await _context.SaveChangesAsync();
         }
         #endregion
         public void Dispose()

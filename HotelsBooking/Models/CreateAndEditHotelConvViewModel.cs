@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HotelsBooking.Models
 {
-    public class CreateHotelConvViewModel
+    public class CreateAndEditHotelConvViewModel
     {
         public CreateOrEditHotelConvViewModel model { get; set; }
         public IEnumerable<AdditionalConvDTO> additionalConvs { get; set; }

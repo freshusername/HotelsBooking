@@ -11,7 +11,7 @@ namespace ApplicationCore.Interfaces
     public interface IAdminManager : IDisposable 
     {
         #region Users
-        List<AdminUserDTO> Users();
+        List<AdminUserDTO> GetUsers();
         Task<OperationDetails> CreateUser(UserDTO userDTO);
         Task<OperationDetails> EditUser(UserDTO userDTO);
         Task<OperationDetails> ChangePassword(UserDTO userDTO);
@@ -20,18 +20,21 @@ namespace ApplicationCore.Interfaces
 
         #region Hotels
         Task<HotelDTO> GetHotelById(int Id);
-        IEnumerable<HotelDTO> Hotels();
+        IEnumerable<HotelDTO> GetHotels();
         Task<OperationDetails> CreateHotel(HotelDTO hotelDTO);
         Task<OperationDetails> EditHotel(HotelDTO hotelDTO);
         Task DeleteHotel(int Id);
 
-        IEnumerable<HotelConvDTO> HotelConvs();
+        IEnumerable<HotelConvDTO> GetHotelConvs();
         Task<OperationDetails> CreateHotelConv(HotelConvDTO hotelConvDTO);
         Task DeleteHotelConv(int Id);
         HotelConvDTO GetHotelConvById(int Id);
         Task<OperationDetails> EditHotelConv(HotelConvDTO hotelConvDTO);
 
-        IEnumerable<HotelRoomDTO> HotelRooms();
+        HotelRoomDTO GetHotelRoomById(int Id);
+        IEnumerable<HotelRoomDTO> GetHotelRooms();
+        Task<OperationDetails> CreateHotelRoom(HotelRoomDTO hotelRoomDTO);
+        Task DeleteHotelRoom(int Id);
         #endregion
         #region AddConv
         IEnumerable<AdditionalConvDTO> GetAdditionalConvs();

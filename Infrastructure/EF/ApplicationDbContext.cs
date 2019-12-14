@@ -24,7 +24,7 @@ namespace Infrastructure.EF
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-            //Database.Migrate();
+            Database.Migrate();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -36,6 +36,12 @@ namespace Infrastructure.EF
                 .HasConversion(
                 v => v.ToString(),
                 v => (Season)Enum.Parse(typeof(Season), v));
+            modelBuilder
+                .Entity<Room>()
+                .Property(p => p.RoomType)
+                .HasConversion(
+                v => v.ToString(),
+                v => (RoomType)Enum.Parse(typeof(RoomType), v));
             //modelBuilder.Entity<HotelRoom>()
             //    .HasOne(pt => pt.Hotel)
             //    .WithMany(p => p.HotelRooms)

@@ -33,7 +33,7 @@ namespace HotelsBooking.Controllers
         [HttpGet]
         public IActionResult Users()
         {
-            List<UsersViewModel> users = _mapper.Map<List<AdminUserDTO>, List<UsersViewModel>>(_adminManager.Users());
+            List<UsersViewModel> users = _mapper.Map<List<AdminUserDTO>, List<UsersViewModel>>(_adminManager.GetUsers());
             return View(users);
         }
 
@@ -133,7 +133,7 @@ namespace HotelsBooking.Controllers
         [HttpGet]
         public IActionResult Hotels()
         {
-            IEnumerable<CreateOrEditHotelViewModel> hotels = _mapper.Map<IEnumerable<HotelDTO>, IEnumerable<CreateOrEditHotelViewModel>>(_adminManager.Hotels());
+            IEnumerable<CreateOrEditHotelViewModel> hotels = _mapper.Map<IEnumerable<HotelDTO>, IEnumerable<CreateOrEditHotelViewModel>>(_adminManager.GetHotels());
             return View(hotels);
         }
 
@@ -197,14 +197,14 @@ namespace HotelsBooking.Controllers
             await _adminManager.DeleteHotel(Id);
             return RedirectToAction("Hotels");
         }
-        
+
         #endregion
         #region HotelConvs
 
         [HttpGet]
-        public async Task<IActionResult> HotelConvs(int Id)
+        public IActionResult HotelConvs(int Id)
         {
-            IEnumerable<HotelConvsViewModel> hotelConvs = _mapper.Map<IEnumerable<HotelConvDTO>, IEnumerable<HotelConvsViewModel>>(_adminManager.HotelConvs().Where(hc => hc.HotelId == Id));
+            IEnumerable<HotelConvsViewModel> hotelConvs = _mapper.Map<IEnumerable<HotelConvDTO>, IEnumerable<HotelConvsViewModel>>(_adminManager.GetHotelConvs().Where(hc => hc.HotelId == Id));
             return View(hotelConvs);
         }
 
@@ -221,11 +221,9 @@ namespace HotelsBooking.Controllers
             CreateOrEditHotelConvViewModel hotelConv = new CreateOrEditHotelConvViewModel
             {
                 HotelId = Id,
-                Price = 0,
-                Name=""
             };
             IEnumerable<AdditionalConvDTO> additionalConvs = _adminManager.GetAdditionalConvs();
-            CreateHotelConvViewModel model = new CreateHotelConvViewModel
+            CreateAndEditHotelConvViewModel model = new CreateAndEditHotelConvViewModel
             {
                 additionalConvs = additionalConvs,
                 model = hotelConv
@@ -242,13 +240,12 @@ namespace HotelsBooking.Controllers
             }
             HotelConvDTO hotelConvDTO = _mapper.Map<CreateOrEditHotelConvViewModel, HotelConvDTO>(model);
             var res = await _adminManager.CreateHotelConv(hotelConvDTO);
-            int HotelId = model.HotelId;
             if (res.Succedeed)
-                return RedirectToAction("HotelConvs", new { Id = HotelId });
+                return RedirectToAction("HotelConvs", new { Id = model.HotelId });
             else
                 ModelState.AddModelError(res.Property, res.Message);
             IEnumerable<AdditionalConvDTO> additionalConvs = _adminManager.GetAdditionalConvs();
-            CreateHotelConvViewModel modelRes = new CreateHotelConvViewModel
+            CreateAndEditHotelConvViewModel modelRes = new CreateAndEditHotelConvViewModel
             {
                 additionalConvs = additionalConvs,
                 model = model
@@ -262,7 +259,7 @@ namespace HotelsBooking.Controllers
         {
             var hotelConv = _mapper.Map<HotelConvDTO, CreateOrEditHotelConvViewModel>(_adminManager.GetHotelConvById(Id));
             IEnumerable<AdditionalConvDTO> additionalConvs = _adminManager.GetAdditionalConvs();
-            CreateHotelConvViewModel model = new CreateHotelConvViewModel
+            CreateAndEditHotelConvViewModel model = new CreateAndEditHotelConvViewModel
             {
                 additionalConvs = additionalConvs,
                 model = hotelConv
@@ -285,7 +282,7 @@ namespace HotelsBooking.Controllers
             else
                 ModelState.AddModelError(res.Property, res.Message);
             IEnumerable<AdditionalConvDTO> additionalConvs = _adminManager.GetAdditionalConvs();
-            CreateHotelConvViewModel modelRes = new CreateHotelConvViewModel
+            CreateAndEditHotelConvViewModel modelRes = new CreateAndEditHotelConvViewModel
             {
                 additionalConvs = additionalConvs,
                 model = model
@@ -298,8 +295,47 @@ namespace HotelsBooking.Controllers
         [HttpGet]
         public IActionResult HotelRooms(int Id)
         {
-            IEnumerable<HotelRoomsViewModel> hotelRooms = _mapper.Map<IEnumerable<HotelRoomDTO>, IEnumerable<HotelRoomsViewModel>>(_adminManager.HotelRooms().Where(hr => hr.HotelId == Id));
+            IEnumerable<HotelRoomsViewModel> hotelRooms = _mapper.Map<IEnumerable<HotelRoomDTO>, IEnumerable<HotelRoomsViewModel>>(_adminManager.GetHotelRooms().Where(hr => hr.HotelId == Id));
             return View(hotelRooms);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteHotelRoom(int Id, int HotelId)
+        {
+            await _adminManager.DeleteHotelRoom(Id);
+            return RedirectToAction("HotelRooms", new { Id = HotelId });
+        }
+
+        [HttpGet]
+        public IActionResult CreateHotelRoom(int Id)
+        {
+            CreateOrEditHotelRoomViewModel model = new CreateOrEditHotelRoomViewModel
+            {
+                HotelId = Id
+            };
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateHotelRoom(CreateOrEditHotelRoomViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            HotelRoomDTO hotelRoom = _mapper.Map<CreateOrEditHotelRoomViewModel, HotelRoomDTO>(model);
+            var res = await _adminManager.CreateHotelRoom(hotelRoom);
+            if (res.Succedeed)
+                return RedirectToAction("HotelRooms", new { Id = model.HotelId });
+            else
+                ModelState.AddModelError(res.Property, res.Message);
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult EditHotelRoom(int Id)
+        {
+            CreateOrEditHotelRoomViewModel room = _mapper.Map<HotelRoomDTO,CreateOrEditHotelRoomViewModel>(_adminManager.GetHotelRoomById(Id));
+            return View(room);
         }
         #endregion
         #region Order
