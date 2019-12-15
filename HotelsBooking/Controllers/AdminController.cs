@@ -353,6 +353,18 @@ namespace HotelsBooking.Controllers
                 ModelState.AddModelError(res.Property, res.Message);
             return View(model);
         }
+
+        [HttpGet]
+        public IActionResult HotelRoomConvs()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult AddConvForRoom()
+        {
+            return View();
+        }
         #endregion
         #region Order
         public IActionResult Orders()
