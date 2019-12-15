@@ -205,6 +205,25 @@ namespace ApplicationCore.Managers
             return new OperationDetails(false, "Hotel room with the same number in that hotel is already exists", "Number");
         }
 
+        public async Task<OperationDetails> UpdateHotelRoom (HotelRoomDTO hotelRoomDTO)
+        {
+            HotelRoom check = _context.HotelRooms.FirstOrDefault(x => x.Number == hotelRoomDTO.Number);
+            if (check == null || check.Id == hotelRoomDTO.Id)
+            {
+
+                HotelRoom hotelRoom = _context.HotelRooms.Find(hotelRoomDTO.Id);
+                hotelRoom.Number = hotelRoomDTO.Number;
+                hotelRoom.Price = hotelRoomDTO.Price;
+                hotelRoom.Room = _context.Rooms.FirstOrDefault(r => r.RoomType == hotelRoomDTO.Type);
+                hotelRoom.RoomId = _context.Rooms.FirstOrDefault(r => r.RoomType == hotelRoomDTO.Type).Id;
+
+                _context.HotelRooms.Update(hotelRoom);
+                await _context.SaveChangesAsync();
+                return new OperationDetails(true, "Hotel room updated", "Number");
+            }
+            return new OperationDetails(false, "Hotel room with the same number in that hotel is already exists", "Number");
+        }
+
         public async Task DeleteHotelRoom(int Id)
         {
             HotelRoom hotelRoom = _context.HotelRooms.Find(Id);

@@ -34,6 +34,7 @@ namespace ApplicationCore.Interfaces
         HotelRoomDTO GetHotelRoomById(int Id);
         IEnumerable<HotelRoomDTO> GetHotelRooms();
         Task<OperationDetails> CreateHotelRoom(HotelRoomDTO hotelRoomDTO);
+        Task<OperationDetails> EditHotelRoom(HotelRoomDTO hotelRoomDTO);
         Task DeleteHotelRoom(int Id);
         #endregion
         #region AddConv

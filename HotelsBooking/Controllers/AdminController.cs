@@ -337,6 +337,22 @@ namespace HotelsBooking.Controllers
             CreateOrEditHotelRoomViewModel room = _mapper.Map<HotelRoomDTO,CreateOrEditHotelRoomViewModel>(_adminManager.GetHotelRoomById(Id));
             return View(room);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> EditHotelRoom(CreateOrEditHotelRoomViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            HotelRoomDTO hotelRoom = _mapper.Map<CreateOrEditHotelRoomViewModel, HotelRoomDTO>(model);
+            var res = await _adminManager.EditHotelRoom(hotelRoom);
+            if (res.Succedeed)
+                return RedirectToAction("HotelRooms", new { Id = model.HotelId });
+            else
+                ModelState.AddModelError(res.Property, res.Message);
+            return View(model);
+        }
         #endregion
         #region Order
         public IActionResult Orders()
