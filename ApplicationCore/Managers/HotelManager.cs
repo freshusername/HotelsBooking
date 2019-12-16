@@ -17,8 +17,8 @@ namespace ApplicationCore.Managers
     {
         private readonly ApplicationDbContext _context;
         private IMapper _mapper;
-       
-        public HotelManager(ApplicationDbContext context,IMapper mapper)
+
+        public HotelManager(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -33,7 +33,7 @@ namespace ApplicationCore.Managers
                                         .FirstOrDefault(h => h.Id == Id);
             return _mapper.Map<Hotel, HotelDTO>(hotel);
         }
-        public IEnumerable<HotelDTO> GetHotels(HotelFilterDto HotelFilterDto = null)
+        public IEnumerable<HotelDTO> GetHotels(HotelFilterDto HotelFilterDto)
         {
             var hotels = _context.Hotels.Include(h => h.HotelRooms)
                                             .ThenInclude(hr => hr.Room)
@@ -47,7 +47,7 @@ namespace ApplicationCore.Managers
                                     || h.Description.Contains(HotelFilterDto.KeyWord)
                                     || h.Location.Contains(HotelFilterDto.KeyWord));
             }
-            
+
             if (HotelFilterDto?.MinPrice >= 0)
             {
                 hotels = hotels.Where(h => h.HotelRooms.Any(p => p.Price >= HotelFilterDto.MinPrice));
@@ -58,10 +58,9 @@ namespace ApplicationCore.Managers
                 hotels = hotels.Where(h => h.HotelRooms.Any(p => p.Price <= HotelFilterDto.MaxPrice));
             }
 
-            if (HotelFilterDto.PagingDto != null)
-            { 
-                //TODO: Count, Skip, Take
-            }
+            //TODO: Count, Skip, Take
+            HotelFilterDto.HotelsAmount = hotels.Count();
+            hotels = hotels.Skip((HotelFilterDto.CurrentPage - 1) * HotelFilterDto.PageSize).Take(HotelFilterDto.PageSize);
 
 
             return _mapper.Map<IEnumerable<Hotel>, IEnumerable<HotelDTO>>(hotels.ToList());
@@ -119,17 +118,17 @@ namespace ApplicationCore.Managers
 
         public async Task<OperationDetails> CreateHotelConv(HotelConvDTO hotelConvDTO)
         {
-            
-            HotelConv check = _context.HotelConvs.FirstOrDefault(x => x.AdditionalConv.Name == hotelConvDTO.Name && x.HotelId==hotelConvDTO.HotelId);
+
+            HotelConv check = _context.HotelConvs.FirstOrDefault(x => x.AdditionalConv.Name == hotelConvDTO.Name && x.HotelId == hotelConvDTO.HotelId);
             if (check == null)
             {
-                HotelConv hotelConv = new HotelConv 
+                HotelConv hotelConv = new HotelConv
                 {
                     Price = hotelConvDTO.Price,
                     HotelId = hotelConvDTO.HotelId,
-                    Hotel = await _context.Hotels.FirstAsync(x=>x.Id==hotelConvDTO.HotelId),
-                    AdditionalConv = await _context.AdditionalConvs.FirstAsync(x=>x.Name==hotelConvDTO.Name),
-                    AdditionalConvId =  _context.AdditionalConvs.First(x=>x.Name==hotelConvDTO.Name).Id
+                    Hotel = await _context.Hotels.FirstAsync(x => x.Id == hotelConvDTO.HotelId),
+                    AdditionalConv = await _context.AdditionalConvs.FirstAsync(x => x.Name == hotelConvDTO.Name),
+                    AdditionalConvId = _context.AdditionalConvs.First(x => x.Name == hotelConvDTO.Name).Id
                 };
                 await _context.HotelConvs.AddAsync(hotelConv);
                 await _context.SaveChangesAsync();
@@ -148,7 +147,7 @@ namespace ApplicationCore.Managers
 
         public void Dispose()
         {
-            
+
         }
     }
 }

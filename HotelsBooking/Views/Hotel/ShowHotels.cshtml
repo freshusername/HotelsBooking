@@ -1,4 +1,4 @@
-﻿
+﻿@using ApplicationCore.DTOs
 @using HotelsBooking.Models.Hotel
 @model FilteredHotelsViewModel
 @{
@@ -134,7 +134,6 @@
         </style>
         <link rel="stylesheet" type="text/css" href="moz-extension://40c6e28c-f56d-40ab-9d96-39b4f5a84bc3/styles.css">
     </head>
-
     <body>
         <div class="mallbery-ext-install" style="z-index: 2147483647 !important; text-transform: none !important;"></div>
 
@@ -154,6 +153,7 @@
                 </div>
             </div>
         </section>
+
         <!-- breadcrumb start-->
         <!--================Category Product Area =================-->
         <section class="cat_product_area section_padding">
@@ -161,23 +161,37 @@
                 <div id="hotel_list" class="row">
                     <div class="col-lg-3">
                         <div class="left_sidebar_area">
+
                             <aside class="left_widgets p_filter_widgets">
                                 <div class="l_w_title">
-                                    <h3>Room price filter</h3>
                                     <form asp-action="ShowHotels" method="get">
+
                                         <div class="form-group">
-                                            <h4>min price: </h4>
-                                            @Html.EditorFor(x => Model.HotelFilterDto.MinPrice)
-                                            <h4>max price: </h4>
-                                            @Html.EditorFor(x => Model.HotelFilterDto.MaxPrice)
+                                            <h3>Room price filter</h3>
+                                            <label>min price: </label>
+                                            @Html.EditorFor(x => Model.HotelFilterDto.MinPrice, new { htmlAttributes = new { @class = "form-control rounded", @placeholder = "min price" }})
+                                            <br />
+                                            <label>max price: </label>
+                                            @Html.EditorFor(x => Model.HotelFilterDto.MaxPrice, new { htmlAttributes = new { @class = "form-control rounded", @placeholder = "max price" }})
                                         </div>
 
                                         <div class="form-group">
-                                            <input type="submit" value="Filter" class="btn btn-success" />
+                                            <label>Amount on page</label>
+                                            @Html.EditorFor(x => Model.HotelFilterDto.PageSize, new { htmlAttributes = new { @class = "form-control rounded", @placeholder = "amount on page" }})
                                         </div>
+
+                                        <input type="text" class="form-control"/>
+
+                                        <div class="form-group">
+                                            <label>Search for hotels/locations</label>
+                                            @Html.EditorFor(x => Model.HotelFilterDto.KeyWord, new { htmlAttributes = new { @class = "form-control rounded", @placeholder = "keyword" }})
+                                        </div>
+
+                                        <input type="submit" value="Filter" class="btn btn-success" />
                                     </form>
                                 </div>
                             </aside>
+
                             <aside class="left_widgets p_filter_widgets">
                                 <div class="l_w_title">
                                     <h3>Hotel Conveniences</h3>
@@ -195,6 +209,7 @@
                                     </ul>
                                 </div>
                             </aside>
+
                         </div>
                     </div>
 
@@ -222,31 +237,6 @@
                                         </div>
                                     </div>
 
-                                    <div>
-                                        <h5>hotels on page :</h5>
-                                        <select>
-                                            <option>1</option>
-                                            <option>5</option>
-                                            <option>10</option>
-                                            <option>20</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="single_product_menu d-flex">
-                                        <div class="input-group-prepend">
-                                            <form asp-action="ShowHotels" method="get">
-                                                <div class="form-group">
-                                                    <h5>Search for hotels/locations</h5>
-                                                    @Html.EditorFor(x => Model.HotelFilterDto.KeyWord)
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <input type="submit" value="Filter" class="btn btn-success" />
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-
                                 </div>
                             </div>
 
@@ -255,9 +245,29 @@
                         <div class="row align-items-center latest_product_inner">
                             @foreach (var item in Model.Hotels)
                             {
+                                //List<string> imageSources = new List<string>();
+                                //   foreach (var photo in item.HotelPhotos)
+                                //   {
+                                //       var base64 = Convert.ToBase64String(photo.Image);
+                                //       imageSources.Add(String.Format("data:image;base64,{0}", base64));
+                                //   }
+
                                 <div class="col-lg-4 col-sm-6">
                                     <div class="single_product_item">
-                                        <img src="">
+                                        @*@foreach (string imageSource in imageSources)
+                                        {
+                                            <div data-thumb="@imageSource" class="lslide" style="height: 450px; margin-bottom: 0px;">
+                                                <img src="@imageSource" width="80" height="80" />
+                                            </div>
+                                        }*@
+                                       @if(item.HotelPhotos.Any())
+                                       { 
+                                            byte[] img = item.HotelPhotos.First().Image;
+                                        
+                                            var base64 = Convert.ToBase64String(img);
+                                            string s = String.Format("data:image;base64,{0}", base64);
+                                            <img src="@s)">
+                                        }
                                         <div class="single_product_text">
                                             <h4>
                                                 @Html.DisplayFor(modelItem => item.Name)
@@ -277,17 +287,36 @@
                                 </div>
                             }
                         </div>
+
                         <nav aria-label="Page navigation example">
                             <ul class="pagination justify-content-center">
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1">Previous</a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">Next</a>
-                                </li>
+                                @if (Model.HotelFilterDto != null)
+                                {
+                                    @if (Model.HotelFilterDto.CurrentPage > 1)
+                                    {
+                                        <li class="page-item active">
+                                            <a asp-route-CurrentPage="@Model.HotelFilterDto.CurrentPage - 1" class="page-link">prev</a>
+                                        </li>
+                                    }
+
+
+                                    @for (var i = 1; i <= Model.HotelFilterDto.PagesCount; i++)
+                                    {
+                                        <li class="page-item @( i == Model.HotelFilterDto.CurrentPage ? "active" : "")">
+                                            @Html.ActionLink(i.ToString(), "ShowHotels", "Hotel", null, null, null,
+                                                new
+                                                {
+                                                    KeyWord = Model.HotelFilterDto.KeyWord,
+                                                    MaxPrice = Model.HotelFilterDto.MaxPrice,
+                                                    MinPrice = Model.HotelFilterDto.MinPrice,
+                                                    CurrentPage = i,
+                                                    HotelsAmount = Model.HotelFilterDto.HotelsAmount,
+                                                    PageSize = Model.HotelFilterDto.PageSize
+                                                },
+                                                null)
+                                        </li>
+                                    }
+                                }
                             </ul>
                         </nav>
                     </div>
