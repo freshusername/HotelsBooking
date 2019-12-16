@@ -35,21 +35,18 @@ namespace HotelsBooking.Mapping
             CreateMap<LoginViewModel, UserDTO>()
                 .ForMember(au => au.UserName, map => map.MapFrom(vm => vm.Email));
 
-            CreateMap<OrderDetail, OrderDetailDTO>().ReverseMap();
-            CreateMap<Order, OrderDTO>().ReverseMap();
+            CreateMap<OrderDetail, AdminOrderDetailDTO>().ReverseMap();
+            CreateMap<Order, AdminOrderDTO>().ReverseMap();
 
             CreateMap<AppUser, ProfileDTO>().ReverseMap();
             CreateMap<ProfileDTO, AllProfilesViewModel>().ReverseMap();
             CreateMap<ProfileDTO, ProfileViewModel>().ReverseMap();
 
-            CreateMap<OrderDTO, OrdersViewModel>();
+            CreateMap<AdminOrderDTO, OrdersViewModel>();
+            CreateMap<AdminOrderDetailDTO, OrderDetailsViewModel>();
 
-            CreateMap<OrderDetailDTO, OrderDetailsViewModel>();
-            CreateMap<OrderDTO, OrdersViewModel>();
-
-            CreateMap<CreateOrEditOrderViewModel, OrderDTO>();
-            CreateMap<OrderDTO, CreateOrEditOrderViewModel>();
-            CreateMap<CreateOrEditOrderDetailsViewModel, OrderDetailDTO>();
+            CreateMap<CreateOrEditOrderViewModel, AdminOrderDTO>().ReverseMap();
+            CreateMap<CreateOrEditOrderDetailsViewModel, AdminOrderDetailDTO>().ReverseMap();
         }
     }
 }

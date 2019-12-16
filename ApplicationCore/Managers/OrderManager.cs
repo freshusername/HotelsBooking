@@ -26,78 +26,115 @@ namespace ApplicationCore.Managers
         }
         #region Order
 
-        public async Task<OrderDTO> GetOrderById(int Id) 
+        public AdminOrderDTO GetOrderById(int Id) 
         {
-            Order orderFind = await _context.Orders.Include(p => p.User).FirstOrDefaultAsync(p => p.Id == Id);
+            Order orderFind = _context.Orders.Include(p => p.User).FirstOrDefault(p => p.Id == Id);
             if (orderFind != null)
             {
-                OrderDTO orderDTO = new OrderDTO
+                return new AdminOrderDTO
                 {
                     Id = orderFind.Id,
                     IsActive = orderFind.IsActive,
                     FirstName = orderFind.User.FirstName,
                     LastName = orderFind.User.LastName
                 };
-                return orderDTO;
             }
             else
                 return null;
         } 
-
-        public List<OrderDTO> GetOrders()
+        public List<AdminOrderDTO> GetOrders()
         {
-            List<OrderDTO> orderDTOs = new List<OrderDTO>();
+            List<AdminOrderDTO> orderDTOs = new List<AdminOrderDTO>();
             List<Order> res = _context.Orders.Include(p => p.User).ToList();
-            foreach(var s in res)
+            List<OrderDetail> details;
+            foreach (var s in res)
             {
-                orderDTOs.Add(new OrderDTO
+                details = _context.OrderDetails.Include(p => p.Order).Where(p => p.OrderId == s.Id).ToList();
+                bool Isactive = false;
+                if (details.Count() > 0)
+                {
+                    int dateIn, dateOut;
+                    foreach (var d in details)
+                    {
+                        dateIn = DateTimeOffset.Now.CompareTo(d.CheckInDate);
+                        dateOut = DateTimeOffset.Now.CompareTo(d.CheckOutDate);
+                        if (dateIn == 1 && dateOut == -1)
+                        {
+                            Isactive = true;
+                            break;
+                        }
+                    }
+                }
+                if (s.IsActive != Isactive)
+                {
+                    s.IsActive = Isactive;
+                    _context.Orders.Update(s);
+                    _context.SaveChanges();
+                }
+
+                orderDTOs.Add(new AdminOrderDTO
                 {
                     Id = s.Id,
-                    IsActive = s.IsActive,
+                    IsActive=Isactive,
                     FirstName = s.User.FirstName,
                     LastName = s.User.LastName
                 });
             }
             return orderDTOs;
         }
-        public async Task<OperationDetails> CreateOrder(OrderDTO orderDTO)
+        public Order AdminOrderDTOtoOrder(AdminOrderDTO orderDTO)
         {
-            Order orderCheck = _context.Orders.FirstOrDefault(x => x.Id == orderDTO.Id);
-            if (orderCheck == null)
-            {
-                AppUser appUser = _userManager.Users
-                .FirstOrDefault(p => p.FirstName == orderDTO.FirstName && p.LastName == orderDTO.LastName);
-                Order order = new Order()
-                {
-                    Id = orderDTO.Id,
-                    IsActive = orderDTO.IsActive,
-                    AppUserId = appUser.Id,
-                    User = appUser
-                };
-                await _context.Orders.AddAsync(order);
-                await _context.SaveChangesAsync();
-                return new OperationDetails(true, "Order is successfully added", "Id");
-            }
-            return new OperationDetails(false, "Order with the same ID already exists", "Id");
-        }
-
-        public async Task<OperationDetails> EditOrder(OrderDTO orderDTO)
-        {
-            Order orderCheck = _context.Orders.FirstOrDefault(x => x.Id == orderDTO.Id);
             AppUser appUser = _userManager.Users
-                .FirstOrDefault(p => p.FirstName == orderDTO.FirstName && p.LastName == orderDTO.LastName);
+                    .FirstOrDefault(p => p.FirstName == orderDTO.FirstName && p.LastName == orderDTO.LastName);
             Order order = new Order
             {
                 Id = orderDTO.Id,
                 IsActive = orderDTO.IsActive,
-                AppUserId = appUser.Id,
+                AppUserId = appUser?.Id,
                 User = appUser
             };
-            _context.Orders.Update(order);
+
+            return order;
+        }
+        public AdminOrderDTO OrderToAdminOrderDTO(Order order)
+        {
+
+            AdminOrderDTO orderDTO = new AdminOrderDTO()
+            {
+                Id = order.Id,
+                IsActive = order.IsActive,
+                FirstName = order.User.FirstName,
+                LastName = order.User.LastName
+            };
+            return orderDTO;
+            
+        }
+        public async Task<OperationDetails> CreateOrder(AdminOrderDTO orderDTO)
+        {
+            Order order = AdminOrderDTOtoOrder(orderDTO);
+            order.IsActive = false;
+            
+
+            await _context.Orders.AddAsync(order);
+            await _context.SaveChangesAsync();
+            return new OperationDetails(true, "Order is successfully added", "Id");
+        }
+        public async Task<OperationDetails> EditOrder(AdminOrderDTO orderDTO)
+        {
+            Order orderCheck = _context.Orders.FirstOrDefault(x => x.Id == orderDTO.Id);
+            if (orderCheck==null)
+            {
+                return new OperationDetails(false, "Order is not exists", "ID");
+            }
+            AppUser appUser = _userManager.Users
+                    .FirstOrDefault(p => p.FirstName == orderDTO.FirstName && p.LastName == orderDTO.LastName);
+            orderCheck.IsActive = orderDTO.IsActive;
+            orderCheck.AppUserId = appUser.Id;
+            orderCheck.User = appUser;
+            _context.Orders.Update(orderCheck);
             await _context.SaveChangesAsync();
             return new OperationDetails(true, "Order is updated", "ID");
         }
-
         public async Task DeleteOrder(int id)
         {
             Order order = _context.Orders.Find(id);
@@ -107,80 +144,147 @@ namespace ApplicationCore.Managers
         #endregion
 
         #region OrderDetails
-        public async Task<OrderDetailDTO> GetOrderDetailById(int id)
+        public AdminOrderDetailDTO GetOrderDetailById(int id)
         {
-            OrderDetail orderFind = await _context.OrderDetails.Include(p => p.HotelRoom)
+            OrderDetail orderFind = _context.OrderDetails.Include(p => p.HotelRoom)
                                                 .ThenInclude(p => p.Hotel)
-                                                .ThenInclude(p => p.Name)
                                            .Include(p => p.HotelRoom)
                                                 .ThenInclude(p => p.Room)
-                                                .ThenInclude(p => p.Id)
-                                           .FirstOrDefaultAsync(c => c.OrderId == id);
+                                           .FirstOrDefault(c => c.Id == id);
             if (orderFind != null)
             {
-                OrderDetailDTO orderDetailDTO = new OrderDetailDTO
+                AdminOrderDetailDTO orderDetailDTO = new AdminOrderDetailDTO
                 {
                     Id = orderFind.Id,
                     CheckInDate = orderFind.CheckInDate,
                     CheckOutDate = orderFind.CheckOutDate,
+                    
                     HotelName = orderFind.HotelRoom.Hotel.Name,
-                    RoomId = orderFind.HotelRoom.Room.Id,
-                    TotalPrice = orderFind.TotalPrice
+                    RoomId = orderFind.HotelRoom.Room.Id
                 };
                 return orderDetailDTO;
             }
             else
                 return null;
         }
-        public List<OrderDetailDTO> GetOrderDetails(int id)
+        public List<AdminOrderDetailDTO> GetOrderDetails(int id)
         {
-            List<OrderDetailDTO> orderDTOs = new List<OrderDetailDTO>();
+            List<AdminOrderDetailDTO> orderDTOs = new List<AdminOrderDetailDTO>();
             var res = _context.OrderDetails.Where(c => c.OrderId == id)
                                             .Include(p => p.HotelRoom)
                                                 .ThenInclude(p => p.Hotel)
-                                                .ThenInclude(p => p.Name)
                                            .Include(p => p.HotelRoom)
                                                 .ThenInclude(p => p.Room)
-                                                .ThenInclude(p => p.Id)
                                            .ToList();
             foreach (var s in res)
             {
-                orderDTOs.Add(new OrderDetailDTO
+                orderDTOs.Add(new AdminOrderDetailDTO
                 {
                     Id = s.Id,
                     CheckInDate = s.CheckInDate,
                     CheckOutDate = s.CheckOutDate,
-                    TotalPrice = s.TotalPrice,
                     HotelName = s.HotelRoom.Hotel.Name,
-                    RoomId = s.HotelRoom.Room.Id
+                    RoomId = s.HotelRoom.Room.Id,
+                    OrderDate=s.OrderDate
                 });
             }
             return orderDTOs;
         }
 
-        
-
-        public async Task<OperationDetails> CreateOrderDetails(OrderDetailDTO orderDetailDTO)
+        public OrderDetail AdminOrderDetailDTOtoOrderDetail(AdminOrderDetailDTO orderDTO)
         {
-            OrderDetail orderCheck = _context.OrderDetails.FirstOrDefault(x => x.Id == orderDetailDTO.Id);
-            if (orderCheck == null)
+            OrderDetail orderDetail = new OrderDetail
             {
-                OrderDetail order = _mapper.Map<OrderDetailDTO, OrderDetail>(orderDetailDTO);
-                await _context.OrderDetails.AddAsync(order);
-                await _context.SaveChangesAsync();
-                return new OperationDetails(true, "Order details are added", "Id");
+                OrderDate = DateTimeOffset.Now,
+                CheckInDate = orderDTO.CheckInDate,
+                CheckOutDate = orderDTO.CheckOutDate,
+                OrderId=orderDTO.OrderID
+            };
+            Hotel hotel = _context.Hotels.Include(p => p.HotelRooms)
+                                            .ThenInclude(p => p.Room)
+                                            .Include(p => p.HotelRooms)
+                                            .ThenInclude(p => p.Hotel)
+                                            .FirstOrDefault(p => p.Name == orderDTO.HotelName);
+            
+            
+            Room room = _context.Rooms.FirstOrDefault(p => p.Id == orderDTO.RoomId);
+            if (hotel == null || room == null)
+            {
+                orderDetail.HotelRoomId = 0;
+                return orderDetail;
             }
-            return new OperationDetails(false, "Order details with the same ID already exists", "Id");
+            foreach (HotelRoom hr in hotel.HotelRooms)
+            {
+                if (room.Id == hr.RoomId)
+                {
+                    orderDetail.HotelRoomId = hr.Id;
+                    return orderDetail;
+                }
+            }
+            orderDetail.HotelRoomId = 0;
+            return orderDetail;
+
         }
 
-        public async Task<OperationDetails> EditOrderDetails(OrderDetailDTO orderDetailDTO)
+        public AdminOrderDetailDTO OrderToAdminOrderDetailDTO(OrderDetail orderDetail)
+        {
+            AdminOrderDetailDTO detailDTO = new AdminOrderDetailDTO
+            {
+                CheckInDate = orderDetail.CheckInDate,
+                CheckOutDate = orderDetail.CheckOutDate,
+                Id = orderDetail.Id,
+                HotelName = orderDetail.HotelRoom.Hotel.Name,
+                RoomId = orderDetail.HotelRoom.Room.Id
+            };
+            return detailDTO;
+        }
+
+        public async Task<OperationDetails> CreateOrderDetails(AdminOrderDetailDTO orderDetailDTO)
+        {
+            OrderDetail order = AdminOrderDetailDTOtoOrderDetail(orderDetailDTO);
+            if (order.HotelRoomId == 0)
+                return new OperationDetails(false, "Room in the hotel is not exist", "HotelRoom");
+            await _context.OrderDetails.AddAsync(order);
+            await _context.SaveChangesAsync();
+            return new OperationDetails(true, "Order details are added", "Id");
+            
+        }
+
+        public async Task<OperationDetails> EditOrderDetails(AdminOrderDetailDTO orderDetailDTO)
         {
             OrderDetail orderDetailCheck = _context.OrderDetails.FirstOrDefault(x => x.Id == orderDetailDTO.Id);
+            orderDetailCheck.OrderDate = DateTimeOffset.Now;
+            orderDetailCheck.CheckInDate = orderDetailDTO.CheckInDate;
+            orderDetailCheck.CheckOutDate = orderDetailDTO.CheckOutDate;
+            Hotel hotel = _context.Hotels.Include(p => p.HotelRooms)
+                                            .ThenInclude(p => p.Room)
+                                            .Include(p => p.HotelRooms)
+                                            .ThenInclude(p => p.Hotel)
+                                            .FirstOrDefault(p => p.Name == orderDetailDTO.HotelName);
+            Room room = _context.Rooms.FirstOrDefault(p => p.Id == orderDetailDTO.RoomId);
+            if (hotel == null)
+            {
+                orderDetailCheck.HotelRoomId = 0;
+                return new OperationDetails(false, "Hotel is not found","HotelRoom");
+            }
+            if (hotel == null)
+            {
+                orderDetailCheck.HotelRoomId = 0;
+                return new OperationDetails(false, "Room is not found", "HotelRoom");
+            }
+            foreach (HotelRoom hr in hotel.HotelRooms)
+            {
+                if (room.Id == hr.RoomId)
+                {
+                    orderDetailCheck.HotelRoomId = hr.Id;
+                    break;
+                }
+            }
             _context.OrderDetails.Update(orderDetailCheck);
             await _context.SaveChangesAsync();
             return new OperationDetails(true, "Order details are updated", "ID");
         }
-
+        
         public async Task DeleteOrderDetails(int id)
         {
             OrderDetail order = _context.OrderDetails.Find(id);
@@ -212,5 +316,9 @@ namespace ApplicationCore.Managers
         {
 
         }
+
+        
+
+        
     }
 }

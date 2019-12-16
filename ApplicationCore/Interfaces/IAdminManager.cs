@@ -33,16 +33,16 @@ namespace ApplicationCore.Interfaces
         #endregion
 
         #region Orders
-        Task<OrderDTO> GetOrderById(int Id);
-        List<OrderDTO> GetOrders();
-        Task<OperationDetails> CreateOrder(OrderDTO orderDTO);
-        Task<OperationDetails> EditOrder(OrderDTO orderDTO);
+        AdminOrderDTO GetOrderById(int Id);
+        List<AdminOrderDTO> GetOrders();
+        Task<OperationDetails> CreateOrder(AdminOrderDTO orderDTO);
+        Task<OperationDetails> EditOrder(AdminOrderDTO orderDTO);
         Task DeleteOrder(int id);
 
-        Task<OrderDetailDTO> GetOrderDetailById(int Id);
-        List<OrderDetailDTO> GetOrderDetails(int Id);
-        Task<OperationDetails> CreateOrderDetails(OrderDetailDTO orderDTO);
-        Task<OperationDetails> EditOrderDetails(OrderDetailDTO orderDTO);
+        AdminOrderDetailDTO GetOrderDetailById(int Id);
+        List<AdminOrderDetailDTO> GetOrderDetails(int Id);
+        Task<OperationDetails> CreateOrderDetails(AdminOrderDetailDTO orderDTO);
+        Task<OperationDetails> EditOrderDetails(AdminOrderDetailDTO orderDTO);
         bool IsHotelExists(string HotelName);
         bool IsRoomExists(int RoomID);
         Task DeleteOrderDetails(int id);

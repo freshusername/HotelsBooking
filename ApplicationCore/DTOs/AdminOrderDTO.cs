@@ -5,7 +5,7 @@ using Infrastructure.Entities;
 
 namespace ApplicationCore.DTOs
 {
-    public class OrderDTO
+    public class AdminOrderDTO
     {
         public int Id { get; set; }
         public bool IsActive { get; set; }

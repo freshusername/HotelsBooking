@@ -131,16 +131,16 @@ namespace ApplicationCore.Managers
         #endregion
 
         #region Orders
-        public Task<OrderDTO> GetOrderById(int Id) => _orderManager.GetOrderById(Id);
-        public List<OrderDTO> GetOrders() => _orderManager.GetOrders();
-        public Task<OperationDetails> CreateOrder(OrderDTO orderDTO)=> _orderManager.CreateOrder(orderDTO);
-        public Task<OperationDetails> EditOrder(OrderDTO orderDTO) => _orderManager.EditOrder(orderDTO);
+        public AdminOrderDTO GetOrderById(int Id) => _orderManager.GetOrderById(Id);
+        public List<AdminOrderDTO> GetOrders() => _orderManager.GetOrders();
+        public Task<OperationDetails> CreateOrder(AdminOrderDTO orderDTO)=> _orderManager.CreateOrder(orderDTO);
+        public Task<OperationDetails> EditOrder(AdminOrderDTO orderDTO) => _orderManager.EditOrder(orderDTO);
         public async Task DeleteOrder(int id) => await _orderManager.DeleteOrder(id);
 
-        public Task<OrderDetailDTO> GetOrderDetailById(int Id) => _orderManager.GetOrderDetailById(Id);
-        public List<OrderDetailDTO> GetOrderDetails(int Id) => _orderManager.GetOrderDetails(Id);
-        public Task<OperationDetails> CreateOrderDetails(OrderDetailDTO orderDTO) => _orderManager.CreateOrderDetails(orderDTO);
-        public Task<OperationDetails> EditOrderDetails(OrderDetailDTO orderDTO) => _orderManager.EditOrderDetails(orderDTO);
+        public AdminOrderDetailDTO GetOrderDetailById(int Id) => _orderManager.GetOrderDetailById(Id);
+        public List<AdminOrderDetailDTO> GetOrderDetails(int Id) => _orderManager.GetOrderDetails(Id);
+        public Task<OperationDetails> CreateOrderDetails(AdminOrderDetailDTO orderDTO) => _orderManager.CreateOrderDetails(orderDTO);
+        public Task<OperationDetails> EditOrderDetails(AdminOrderDetailDTO orderDTO) => _orderManager.EditOrderDetails(orderDTO);
         public Task DeleteOrderDetails(int id) => _orderManager.DeleteOrderDetails(id);
         public bool IsHotelExists(string HotelName) => _orderManager.IsHotelExists(HotelName);
         public bool IsRoomExists(int RoomID) => _orderManager.IsRoomExists(RoomID);

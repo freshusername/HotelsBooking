@@ -6,34 +6,52 @@
 <body>
     <div id="viewport">
         @await Html.PartialAsync("_AdminPartial")
+        
         <div id="content">
             <div class="row">
-                <table class="table table-dark rwd-table">
-                    <tr><th>List of orders</th><th></th><th></th></tr>
-                    <tr><th>User</th><th>Is Active</th><th>Actions</th></tr>
+                <p class="text-black-50">List of orders</p>
+                <table class="table table-dark rwd-table text-center table-hover">
+                    <thead class="thead-light  text-center">
+                        <tr style="color:black" class="text-center">
+                            <th class="text-center">User</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
                     @if (!Model.Any())
                     {
-                        <tr><td colspan="4">No Orders</td></tr>
+                        <tr><td colspan="3">No Orders</td></tr>
                     }
                     else
                     {
+
                         @foreach (var order in Model)
                         {
-                        <tr>
-                            <td>(@order.FirstName + " " + @order.LastName)</td>
-                            <td>@order.IsActive</td>
-                            <td>
-                                <form asp-action="DeleteOrder" asp-controller="Admin" asp-route-id="@order.Id">
-                                    <a class="btn btn-sm btn-primary" asp-action="OrderDetails" asp-route-id="@order.Id">Details</a>
-                                    <button type="submit" class="btn btn-sm btn-danger" asp-action="DeleteOrder" asp-route-id="@order.Id">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
+
+                            <tr>
+                                <td>@order.FirstName @order.LastName</td>
+                                @if (order.IsActive)
+                                {
+                                    <td style="color:lightseagreen">Active</td>
+                                }
+                                else
+                                {
+                                    <td style="color:red">Not Active</td>
+                                }
+                                <td>
+                                    <form asp-action="DeleteOrder" asp-controller="Admin" asp-route-id="@order.Id">
+                                        <a class="btn btn-sm btn-warning" asp-action="EditOrder" asp-route-id="@order.Id">Edit</a>
+                                        <a class="btn btn-sm btn-primary" asp-action="OrderDetails" asp-route-id="@order.Id">Details</a>
+                                        <button type="submit" class="btn btn-sm btn-danger" asp-action="DeleteOrder" asp-route-id="@order.Id">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+
                         }
                     }
                 </table>
                 <div class="text-center">
-                    <a asp-action="CreateOrder" class="btn btn-success" style="width:20%;">Add new order</a>
+                    <a asp-action="CreateOrder" class="btn btn-success">Add new order</a>
                 </div>
             </div>
         </div>
