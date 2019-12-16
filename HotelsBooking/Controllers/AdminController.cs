@@ -355,9 +355,10 @@ namespace HotelsBooking.Controllers
         }
 
         [HttpGet]
-        public IActionResult HotelRoomConvs()
+        public IActionResult HotelRoomConvs(int Id)
         {
-            return View();
+            IEnumerable<HotelRoomConvsViewModel> convs = _mapper.Map<IEnumerable<HotelRoomConvDTO>, IEnumerable<HotelRoomConvsViewModel>>(_adminManager.GetRoomConvs(Id));
+            return View(_adminManager.GetRoomConvs(Id));
         }
 
         [HttpGet]
@@ -365,6 +366,7 @@ namespace HotelsBooking.Controllers
         {
             return View();
         }
+
         #endregion
         #region Order
         public IActionResult Orders()

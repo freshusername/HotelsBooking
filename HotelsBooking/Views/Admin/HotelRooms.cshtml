@@ -28,7 +28,7 @@
                                     <td data-label="Actions">
                                         <form asp-action="DeleteHotelRoom" asp-controller="Admin">
                                             <a class="btn btn-sm btn-outline-warning" asp-action="EditHotelRoom" asp-route-id="@room.Id">Edit</a>
-                                            <a class="btn btn-sm btn-outline-primary" asp-action="HotelRoomConv" asp-route-id="@room.HotelId">Conveniences</a>
+                                            <a class="btn btn-sm btn-outline-primary" asp-action="HotelRoomConvs" asp-route-id="@room.Id">Conveniences</a>
                                             <button type="submit" class="btn btn-sm btn-outline-danger" asp-action="DeleteHotelRoom" asp-route-id="@room.Id" asp-route-HotelId="@room.HotelId">Delete</button>
                                         </form>
                                     </td>

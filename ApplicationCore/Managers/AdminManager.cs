@@ -139,6 +139,7 @@ namespace ApplicationCore.Managers
         public HotelRoomDTO GetHotelRoomById(int Id) => _hotelManager.GetHotelRoomById(Id);
 
         public IEnumerable<HotelRoomDTO> GetHotelRooms() => _hotelManager.GetHotelRooms();
+        public IEnumerable<HotelRoomConvDTO> GetRoomConvs(int Id) => _hotelManager.GetHotelRoomConvs(Id);
 
         public async Task<OperationDetails> CreateHotelRoom(HotelRoomDTO hotelRoomDTO) => await _hotelManager.CreateHotelRoom(hotelRoomDTO);
 

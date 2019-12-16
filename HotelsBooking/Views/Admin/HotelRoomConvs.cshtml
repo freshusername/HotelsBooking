@@ -1,1 +1,44 @@
-﻿
+﻿@model IEnumerable<ApplicationCore.DTOs.HotelRoomConvDTO>
+<link href="~/css/Admin.css" rel="stylesheet" />
+<link href="~/css/ForTable.css" rel="stylesheet" />
+<link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+<body>
+    <div id="viewport">
+        @await Html.PartialAsync("_AdminPartial")
+        <div id="content" class="no-margin-top">
+            <div class="row">
+                <table class="table table-striped table-dark">
+                    <thead>
+                        <tr><th>List of conveniences for hotel room</th><th></th><th></th></tr>
+                        <tr><th data-breakpoints="mobile">Name</th><th data-breakpoints="mobile tablet">Price</th><th data-breakpoints="mobile tablet">Actions</th></tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.Any())
+                        {
+                            <tr><th colspan="3">No Conveniences</th></tr>
+                        }
+                        else
+                        {
+                            @foreach (var addConv in Model)
+                            {
+                                <tr>
+                                    <td data-label="Name">@addConv.ConvName</td>
+                                    <td data-label="Price">@Math.Round(addConv.Price, 2)</td>
+                                    <td data-label="Actions">
+                                        <form asp-action="DeleteHotelConv" asp-controller="Admin">
+                                            <a class="btn btn-sm btn-outline-warning" asp-action="EditHotelConvs" asp-route-id="@addConv.Id">Edit</a>
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" asp-action="DeleteHotelConv" asp-route-id="@addConv.Id" >Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                <div class="button-center">
+                    <a asp-action="CreateHotelConv" class="btn btn-success" asp-route-id="@ViewContext.RouteData.Values["Id"]">Add new hotel convenience</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

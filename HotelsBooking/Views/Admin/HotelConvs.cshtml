@@ -23,7 +23,7 @@
                             {
                                 <tr>
                                     <td data-label="Name">@addConv.Name</td>
-                                    <td data-label="Location">@Math.Round(addConv.Price, 2)</td>
+                                    <td data-label="Price">@Math.Round(addConv.Price, 2)</td>
                                     <td data-label="Actions">
                                         <form asp-action="DeleteHotelConv" asp-controller="Admin">
                                             <a class="btn btn-sm btn-outline-warning" asp-action="EditHotelConv" asp-route-id="@addConv.Id">Edit</a>

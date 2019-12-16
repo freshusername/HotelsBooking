@@ -184,6 +184,18 @@ namespace ApplicationCore.Managers
             return query;
         }
 
+        public IEnumerable<HotelRoomConvDTO> GetHotelRoomConvs(int Id)
+        {
+            IEnumerable<RoomConv> roomConvs = _context.RoomConvs.ToList().Where(rc => rc.HotelRoomId== Id);
+            List<AdditionalConv> convs = _context.AdditionalConvs.ToList();
+            var query = roomConvs.Join(convs,
+                rc => rc.AdditionalConvId,
+                c => c.Id,
+                (rc, c) => new HotelRoomConvDTO { Id = rc.Id, Price = rc.Price, RoomId = rc.HotelRoomId, ConvName = c.Name }
+                );
+            return query;
+        }
+
         public async Task<OperationDetails> CreateHotelRoom(HotelRoomDTO hotelRoomDTO)
         {
             HotelRoom check = _context.HotelRooms.FirstOrDefault(x => x.Number == hotelRoomDTO.Number);
