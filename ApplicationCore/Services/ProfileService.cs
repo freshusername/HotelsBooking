@@ -25,8 +25,8 @@ namespace ApplicationCore.Services
     private IMapper _mapper;
 
     public ProfileService(
-      ApplicationDbContext context, 
-      IMapper mapper, 
+      ApplicationDbContext context,
+      IMapper mapper,
       UserManager<AppUser> userManager,
       RoleManager<IdentityRole> roleManager)
     {
@@ -35,7 +35,7 @@ namespace ApplicationCore.Services
       _userManager = userManager;
       _roleManager = roleManager;
     }
-    
+
     public async Task<ProfileDto> GetByIdAsync(string id)
     {
       var user = await _context.Users.SingleOrDefaultAsync(x => x.Id == id);
@@ -60,13 +60,11 @@ namespace ApplicationCore.Services
 
     public async Task<List<string>> GetRoles(string id)
     {
-
-      
       var user = await _context.Users.SingleOrDefaultAsync(x => x.Id == id);
       if (user == null)
         return null;
-      var roles =  _context.UserRoles.Where(x => x.UserId == id).ToList();
-      
+      var roles = _context.UserRoles.Where(x => x.UserId == id).ToList();
+
 
       List<IdentityRole> results = new List<IdentityRole>();
 
@@ -84,7 +82,7 @@ namespace ApplicationCore.Services
 
       return roleNames;
     }
-    
+
     public async Task<OperationDetails> UpdateProfile(ProfileDto model)
     {
       var user = await _userManager.FindByEmailAsync(model.Email);
@@ -94,14 +92,14 @@ namespace ApplicationCore.Services
         return new OperationDetails(false, "Something gone wrong", "Email");
       }
 
-            user.FirstName = model.FirstName;
-            user.LastName = model.LastName;
-            user.Email = model.Email;
+      user.FirstName = model.FirstName;
+      user.LastName = model.LastName;
+      user.Email = model.Email;
 
-            await _context.SaveChangesAsync();
+      await _context.SaveChangesAsync();
 
-            return new OperationDetails(true, "Your profile has been successfully updated", "Email");
-        }
+      return new OperationDetails(true, "Your profile has been successfully updated", "Email");
+    }
 
     public async Task<IEnumerable<ProfileDto>> GetAllProfilesAsync()
     {
@@ -119,7 +117,7 @@ namespace ApplicationCore.Services
             Roles = g.Select(role => _roleManager.Roles.FirstOrDefault(r => r.Id == role.RoleId)?.Name).ToList()
           });
 
-      return users_with_roles; 
+      return users_with_roles;
     }
   }
 }

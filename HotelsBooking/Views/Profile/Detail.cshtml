@@ -25,7 +25,7 @@
                             }
                         </div>
                     </div>
-                  
+
                     <div class="profile-img">
                         @if (Model.ProfileImage != null)
                         {
@@ -35,7 +35,7 @@
                         }
                     </div>
                 </div>
-                <a asp-controller="Home" asp-action="Index" asp-route-id="@Model.ProfileId" class="btn_2">Edit</a>
+                <a asp-controller="Profile" asp-action="Edit" asp-route-id="@Model.Id" class="btn_2">Edit</a>
             </div>
             
             
