@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace HotelsBooking.Controllers
@@ -19,13 +20,15 @@ namespace HotelsBooking.Controllers
     {
         private readonly IMapper _mapper;
         public UserManager<AppUser> UserManager { get; private set; }
+        public SignInManager<AppUser> SignInManager { get; private set; }
 
         private readonly IAuthenticationManager _authenticationManager;
 
-        public AccountController(IAuthenticationManager authenticationManager,UserManager<AppUser> userManager ,  IMapper mapper)
+        public AccountController(IAuthenticationManager authenticationManager, UserManager<AppUser> userManager,SignInManager<AppUser> signInManager , IMapper mapper)
         {
             _authenticationManager = authenticationManager;
             UserManager = userManager;
+            SignInManager = signInManager;
             _mapper = mapper;
         }
 
@@ -51,13 +54,13 @@ namespace HotelsBooking.Controllers
             if (result.Succedeed)
             {
                 var confrirmaParam = await _authenticationManager.GetEmailConfirmationToken(user.Email);
-                var callbackUrl = Url.Action("ConfirmEmail","Account",  new { userId = confrirmaParam.UserId, code = confrirmaParam.Code }, protocol: HttpContext.Request.Scheme);
+                var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = confrirmaParam.UserId, code = confrirmaParam.Code }, protocol: HttpContext.Request.Scheme);
 
-                    EmailSender emailSender = new EmailSender();
-                      await emailSender.SendEmailAsync(model.Email, "Confirm your account",
-                          $"Your information has been sent successfully. In order to complete your registration, please click the confirmation link in the email that we have sent to you.: <a href='{callbackUrl}'>link</a>");
+                EmailSender emailSender = new EmailSender();
+                await emailSender.SendEmailAsync(model.Email, "Confirm your account",
+                    $"Your information has been sent successfully. In order to complete your registration, please click the confirmation link in the email that we have sent to you.: <a href='{callbackUrl}'>link</a>");
                 return View("EmailConfirmation");
-            }               
+            }
             else
                 ModelState.AddModelError(result.Property, result.Message);
 
@@ -85,11 +88,11 @@ namespace HotelsBooking.Controllers
 
             if (!identity.Succedeed)
             {
-               ModelState.AddModelError(identity.Property , identity.Message );
+                ModelState.AddModelError(identity.Property, identity.Message);
                 return View(model);
             }
 
-            return RedirectToAction("Index" , "Home");
+            return RedirectToAction("Index", "Home");
         }
 
         public async Task<IActionResult> Logout()
@@ -113,30 +116,30 @@ namespace HotelsBooking.Controllers
             if (ModelState.IsValid)
             {
                 var confirmParam = await _authenticationManager.GetPasswordConfirmationToken(model.Email);
-                 if (confirmParam == null)            
+                if (confirmParam == null)
                     ModelState.AddModelError("", "User with this email is not exist");
-                 else
-                 {
-                     var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = confirmParam.UserId, code = confirmParam.Code }, protocol: HttpContext.Request.Scheme);
+                else
+                {
+                    var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = confirmParam.UserId, code = confirmParam.Code }, protocol: HttpContext.Request.Scheme);
 
-                     EmailSender emailSender = new EmailSender();
-                       await emailSender.SendEmailAsync(model.Email, "Reset your password",
-                          $"Please reset your password by clicking here.: <a href='{callbackUrl}'>link</a>");
+                    EmailSender emailSender = new EmailSender();
+                    await emailSender.SendEmailAsync(model.Email, "Reset your password",
+                       $"Please reset your password by clicking here.: <a href='{callbackUrl}'>link</a>");
 
                     return View("ForgotPasswordConfirmation");
-                 }                                                                                                                     
+                }
             }
             return View(model);
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult ResetPassword(string code = null , string userId = null)
+        public IActionResult ResetPassword(string code = null, string userId = null)
         {
             if (userId == null || code == null)
                 return View("Error");
             else
-                return View("ResetPassword");          
+                return View("ResetPassword");
         }
 
         [HttpPost]
@@ -146,17 +149,17 @@ namespace HotelsBooking.Controllers
         {
             if (!ModelState.IsValid)
             {
-              return View(model);
-            }       
-                         
+                return View(model);
+            }
+
             var user = await UserManager.FindByNameAsync(model.Email);
-            if (user == null)      
+            if (user == null)
                 return View("ResetPasswordConfirmation");
-        
+
             var result = await UserManager.ResetPasswordAsync(user, model.Code, model.Password);
-            if (result.Succeeded)       
+            if (result.Succeeded)
                 return View("ResetPasswordConfirmation");
-       
+
             foreach (var error in result.Errors)
             {
                 ModelState.AddModelError(string.Empty, error.Description);
@@ -183,5 +186,30 @@ namespace HotelsBooking.Controllers
             else
                 return View("Error");
         }
+
+
+        [AllowAnonymous]
+        public IActionResult GoogleLogin()
+        {
+            string redirectUrl = Url.Action("GoogleResponse", "Account");
+            var properties = SignInManager.ConfigureExternalAuthenticationProperties("Google", redirectUrl);
+            return new ChallengeResult("Google", properties);
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> GoogleResponse()
+        {
+            ExternalLoginInfo info = await SignInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+                return RedirectToAction(nameof(Login));
+
+            var result = await SignInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false);
+            string[] userInfo = { info.Principal.FindFirst(ClaimTypes.Name).Value, info.Principal.FindFirst(ClaimTypes.Email).Value };
+            if (result.Succeeded)
+                return View(userInfo);
+            else
+          
+        }
     }
+        
 }
