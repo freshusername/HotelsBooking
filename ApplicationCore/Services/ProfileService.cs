@@ -94,14 +94,14 @@ namespace ApplicationCore.Services
         return new OperationDetails(false, "Something gone wrong", "Email");
       }
 
-      user.FirstName = model.FirstName;
-      user.LastName = model.LastName;
-      user.Email = model.Email;
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.Email = model.Email;
 
-      await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
-      return new OperationDetails(true, "Your profile has been successfully updated", "Email");
-    }
+            return new OperationDetails(true, "Your profile has been successfully updated", "Email");
+        }
 
     public async Task<IEnumerable<ProfileDto>> GetAllProfilesAsync()
     {
