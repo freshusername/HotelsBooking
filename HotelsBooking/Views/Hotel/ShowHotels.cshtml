@@ -32,6 +32,7 @@
         <!-- style CSS -->
         <link rel="stylesheet" href="css/style.css">
         <style type="text/css">
+
             .mallbery-serp-2kPdnU {
                 position: relative !important;
                 display: flex !important;
@@ -133,6 +134,7 @@
             }
         </style>
         <link rel="stylesheet" type="text/css" href="moz-extension://40c6e28c-f56d-40ab-9d96-39b4f5a84bc3/styles.css">
+        <link rel="stylesheet" type="text/css" href="~/css/show-hotels.css">
     </head>
     <body>
         <div class="mallbery-ext-install" style="z-index: 2147483647 !important; text-transform: none !important;"></div>
@@ -169,22 +171,20 @@
                                         <div class="form-group">
                                             <h3>Room price filter</h3>
                                             <label>min price: </label>
-                                            @Html.EditorFor(x => Model.HotelFilterDto.MinPrice, new { htmlAttributes = new { @class = "form-control rounded", @placeholder = "min price" }})
+                                            @Html.EditorFor(x => Model.HotelFilterDto.MinPrice, new { htmlAttributes = new { @class = "form-control rounded", @placeholder = "min price" } })
                                             <br />
                                             <label>max price: </label>
-                                            @Html.EditorFor(x => Model.HotelFilterDto.MaxPrice, new { htmlAttributes = new { @class = "form-control rounded", @placeholder = "max price" }})
+                                            @Html.EditorFor(x => Model.HotelFilterDto.MaxPrice, new { htmlAttributes = new { @class = "form-control rounded", @placeholder = "max price" } })
                                         </div>
 
                                         <div class="form-group">
                                             <label>Amount on page</label>
-                                            @Html.EditorFor(x => Model.HotelFilterDto.PageSize, new { htmlAttributes = new { @class = "form-control rounded", @placeholder = "amount on page" }})
+                                            @Html.EditorFor(x => Model.HotelFilterDto.PageSize, new { htmlAttributes = new { @class = "form-control rounded", @placeholder = "amount on page" } })
                                         </div>
-
-                                        <input type="text" class="form-control"/>
-
+                                        s
                                         <div class="form-group">
-                                            <label>Search for hotels/locations</label>
-                                            @Html.EditorFor(x => Model.HotelFilterDto.KeyWord, new { htmlAttributes = new { @class = "form-control rounded", @placeholder = "keyword" }})
+                                            <label>Search for hotels or locations</label>
+                                            @Html.EditorFor(x => Model.HotelFilterDto.KeyWord, new { htmlAttributes = new { @class = "form-control rounded", @placeholder = "keyword" } })
                                         </div>
 
                                         <input type="submit" value="Filter" class="btn btn-success" />
@@ -218,7 +218,7 @@
                             <div class="col-lg-12">
                                 <div class="product_top_bar d-flex justify-content-between align-items-center">
                                     <div class="single_product_menu">
-                                        <p><span>@Model.Hotels.Count() </span> hotels found</p>
+                                        <p><span>@Model.HotelFilterDto.HotelsAmount </span> hotels found</p>
                                     </div>
                                     <div class="single_product_menu d-flex">
                                         <h5>sort by : </h5>
@@ -245,28 +245,20 @@
                         <div class="row align-items-center latest_product_inner">
                             @foreach (var item in Model.Hotels)
                             {
-                                //List<string> imageSources = new List<string>();
-                                //   foreach (var photo in item.HotelPhotos)
-                                //   {
-                                //       var base64 = Convert.ToBase64String(photo.Image);
-                                //       imageSources.Add(String.Format("data:image;base64,{0}", base64));
-                                //   }
-
                                 <div class="col-lg-4 col-sm-6">
                                     <div class="single_product_item">
-                                        @*@foreach (string imageSource in imageSources)
+
+                                        @if (item.HotelPhotos.Any())
                                         {
-                                            <div data-thumb="@imageSource" class="lslide" style="height: 450px; margin-bottom: 0px;">
-                                                <img src="@imageSource" width="80" height="80" />
-                                            </div>
-                                        }*@
-                                       @if(item.HotelPhotos.Any())
-                                       { 
-                                            byte[] img = item.HotelPhotos.First().Image;
-                                        
-                                            var base64 = Convert.ToBase64String(img);
-                                            string s = String.Format("data:image;base64,{0}", base64);
-                                            <img src="@s)">
+                                            byte[] byteImg = item.HotelPhotos
+                                                .Where(p => p.HotelId == item.Id)
+                                                .Select(p => p.Image).FirstOrDefault();
+
+                                            var base64Img = Convert.ToBase64String(byteImg);
+                                            string img = String.Format("data:image;base64,{0}", base64Img);
+                                            <figure class="effect-winston">
+                                                <img src="@img" alt="img30" />
+                                            </figure>
                                         }
                                         <div class="single_product_text">
                                             <h4>
@@ -292,13 +284,9 @@
                             <ul class="pagination justify-content-center">
                                 @if (Model.HotelFilterDto != null)
                                 {
-                                    @if (Model.HotelFilterDto.CurrentPage > 1)
-                                    {
-                                        <li class="page-item active">
-                                            <a asp-route-CurrentPage="@Model.HotelFilterDto.CurrentPage - 1" class="page-link">prev</a>
-                                        </li>
-                                    }
-
+                                    <li class="page-item @(Model.HotelFilterDto.HasPrevious ? "active" : "")">
+                                        <a asp-route-CurrentPage="@Model.HotelFilterDto.CurrentPage - 1" class="page-link">prev</a>
+                                    </li>
 
                                     @for (var i = 1; i <= Model.HotelFilterDto.PagesCount; i++)
                                     {
@@ -311,11 +299,17 @@
                                                     MinPrice = Model.HotelFilterDto.MinPrice,
                                                     CurrentPage = i,
                                                     HotelsAmount = Model.HotelFilterDto.HotelsAmount,
-                                                    PageSize = Model.HotelFilterDto.PageSize
+                                                    PageSize = Model.HotelFilterDto.PageSize,
+                                                    HasPrevious = Model.HotelFilterDto.HasPrevious,
+                                                    HasNext = Model.HotelFilterDto.HasNext
+
                                                 },
                                                 null)
                                         </li>
                                     }
+                                    <li class="page-item @(Model.HotelFilterDto.HasNext ? "active" : "")">
+                                        <a asp-route-CurrentPage="@Model.HotelFilterDto.CurrentPage+1" class="page-link">next</a>
+                                    </li>
                                 }
                             </ul>
                         </nav>
@@ -451,7 +445,6 @@
         <script src="js/price_rangs.js"></script>
         <!-- custom js -->
         <script src="js/custom.js"></script>
-
         <div class="mallbery-ext-normal" style="z-index: 2147483647 !important; text-transform: none !important; position: fixed;"></div><div class="mallbery-caa" style="z-index: 2147483647 !important; text-transform: none !important; position: fixed;"></div>
     </body>
 </html>

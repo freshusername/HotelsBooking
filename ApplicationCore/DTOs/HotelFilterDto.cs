@@ -16,6 +16,7 @@ namespace ApplicationCore.DTOs
         public int HotelsAmount { get; set; }
         public int PagesCount => (int)Math.Ceiling(decimal.Divide(HotelsAmount, PageSize));
 
-        // public PagingDto PagingDto { get; set; }
+        public bool HasPrevious => CurrentPage > 1;
+        public bool HasNext => CurrentPage == PagesCount - 1;
     }
 }
