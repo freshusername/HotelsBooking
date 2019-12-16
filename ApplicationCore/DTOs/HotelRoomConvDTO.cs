@@ -10,7 +10,7 @@ namespace ApplicationCore.DTOs
         public string ConvName { get; set; }
         public decimal Price { get; set; }
         public int HotelId { get; set; }
-        public int RoomId { get; set; }
+        public int HotelRoomId { get; set; }
         public int AdditionalId { get; set; }
     }
 }

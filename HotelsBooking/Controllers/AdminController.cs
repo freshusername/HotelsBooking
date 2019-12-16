@@ -358,7 +358,7 @@ namespace HotelsBooking.Controllers
         public IActionResult HotelRoomConvs(int Id)
         {
             IEnumerable<HotelRoomConvsViewModel> convs = _mapper.Map<IEnumerable<HotelRoomConvDTO>, IEnumerable<HotelRoomConvsViewModel>>(_adminManager.GetRoomConvs(Id));
-            return View(_adminManager.GetRoomConvs(Id));
+            return View(convs);
         }
 
         [HttpGet]

@@ -191,7 +191,7 @@ namespace ApplicationCore.Managers
             var query = roomConvs.Join(convs,
                 rc => rc.AdditionalConvId,
                 c => c.Id,
-                (rc, c) => new HotelRoomConvDTO { Id = rc.Id, Price = rc.Price, RoomId = rc.HotelRoomId, ConvName = c.Name }
+                (rc, c) => new HotelRoomConvDTO { Id = rc.Id, Price = rc.Price, HotelRoomId = rc.HotelRoomId, ConvName = c.Name }
                 );
             return query;
         }
