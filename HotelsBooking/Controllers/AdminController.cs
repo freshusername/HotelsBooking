@@ -361,6 +361,13 @@ namespace HotelsBooking.Controllers
             return View(convs);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> DeleteHotelRoomConv(int Id,int HotelRoomId)
+        {
+            await _adminManager.DeleteHotelRoomConv(Id);
+            return RedirectToAction("HotelRoomConvs", new { Id = HotelRoomId });
+        }
+
         [HttpGet]
         public IActionResult AddConvForRoom()
         {

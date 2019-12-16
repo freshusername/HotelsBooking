@@ -33,10 +33,12 @@ namespace ApplicationCore.Interfaces
 
         HotelRoomDTO GetHotelRoomById(int Id);
         IEnumerable<HotelRoomDTO> GetHotelRooms();
-        IEnumerable<HotelRoomConvDTO> GetRoomConvs(int Id);
         Task<OperationDetails> CreateHotelRoom(HotelRoomDTO hotelRoomDTO);
         Task<OperationDetails> EditHotelRoom(HotelRoomDTO hotelRoomDTO);
         Task DeleteHotelRoom(int Id);
+
+        IEnumerable<HotelRoomConvDTO> GetRoomConvs(int Id);
+        Task DeleteHotelRoomConv(int Id);
         #endregion
         #region AddConv
         IEnumerable<AdditionalConvDTO> GetAdditionalConvs();

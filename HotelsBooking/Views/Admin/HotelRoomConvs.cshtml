@@ -25,9 +25,8 @@
                                     <td data-label="Name">@addConv.ConvName</td>
                                     <td data-label="Price">@Math.Round(addConv.Price, 2)</td>
                                     <td data-label="Actions">
-                                        <form asp-action="DeleteHotelConv" asp-controller="Admin">
-                                            <a class="btn btn-sm btn-outline-warning" asp-action="EditHotelConvs" asp-route-id="@addConv.Id">Edit</a>
-                                            <button type="submit" class="btn btn-sm btn-outline-danger" asp-action="DeleteHotelConv" asp-route-id="@addConv.Id" >Delete</button>
+                                        <form asp-action="DeleteHotelRoomConv" asp-controller="Admin">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" asp-action="DeleteHotelRoomConv" asp-route-id="@addConv.Id" asp-route-hotelroomid="@addConv.HotelRoomId" >Delete</button>
                                         </form>
                                     </td>
                                 </tr>

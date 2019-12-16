@@ -24,9 +24,11 @@ namespace ApplicationCore.Interfaces
 
         HotelRoomDTO GetHotelRoomById(int Id);
         IEnumerable<HotelRoomDTO> GetHotelRooms();
-        IEnumerable<HotelRoomConvDTO> GetHotelRoomConvs(int Id);
         Task<OperationDetails> CreateHotelRoom(HotelRoomDTO hotelRoomDTO);
         Task<OperationDetails> UpdateHotelRoom(HotelRoomDTO hotelRoomDTO);
         Task DeleteHotelRoom(int Id);
+
+        IEnumerable<HotelRoomConvDTO> GetHotelRoomConvs(int Id);
+        Task DeleteHotelRoomConv(int Id);
     }
 }
