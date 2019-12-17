@@ -244,6 +244,28 @@ namespace ApplicationCore.Managers
                 );
             return query;
         }
+
+        public async Task<OperationDetails> CreateHotelRoomConv(HotelRoomConvDTO conv)
+        {
+            RoomConv check = _context.RoomConvs.FirstOrDefault(rc => rc.Id == conv.Id && rc.AdditionalConv.Name == conv.ConvName);
+            if(check == null)
+            {
+                RoomConv roomConv = new RoomConv
+                {
+                    Price = _context.HotelConvs.First(x => x.AdditionalConv.Name == conv.ConvName).Price,
+                    HotelRoom = _context.HotelRooms.First(x => x.Id == conv.HotelRoomId),
+                    HotelRoomId = conv.HotelRoomId,
+                    AdditionalConv = _context.AdditionalConvs.First(x => x.Name == conv.ConvName),
+                    AdditionalConvId = _context.AdditionalConvs.First(x => x.Name == conv.ConvName).Id
+                };
+
+                _context.Add(roomConv);
+                await _context.SaveChangesAsync();
+                return new OperationDetails(true, "Room conv added", "Name");
+            }
+            return new OperationDetails(false, "Convenience with the same name already exists", "Name");
+        }
+
         public async Task DeleteHotelRoomConv(int Id)
         {
             RoomConv roomConv = _context.RoomConvs.Find(Id);

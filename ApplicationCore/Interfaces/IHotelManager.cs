@@ -29,6 +29,7 @@ namespace ApplicationCore.Interfaces
         Task DeleteHotelRoom(int Id);
 
         IEnumerable<HotelRoomConvDTO> GetHotelRoomConvs(int Id);
+        Task<OperationDetails> CreateHotelRoomConv(HotelRoomConvDTO conv);
         Task DeleteHotelRoomConv(int Id);
     }
 }

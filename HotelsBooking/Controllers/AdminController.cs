@@ -205,6 +205,7 @@ namespace HotelsBooking.Controllers
         public IActionResult HotelConvs(int Id)
         {
             IEnumerable<HotelConvsViewModel> hotelConvs = _mapper.Map<IEnumerable<HotelConvDTO>, IEnumerable<HotelConvsViewModel>>(_adminManager.GetHotelConvs().Where(hc => hc.HotelId == Id));
+            ViewData["Id"] = Id;
             return View(hotelConvs);
         }
 
@@ -295,7 +296,11 @@ namespace HotelsBooking.Controllers
         [HttpGet]
         public IActionResult HotelRooms(int Id)
         {
-            IEnumerable<HotelRoomsViewModel> hotelRooms = _mapper.Map<IEnumerable<HotelRoomDTO>, IEnumerable<HotelRoomsViewModel>>(_adminManager.GetHotelRooms().Where(hr => hr.HotelId == Id));
+            IEnumerable<HotelRoomsViewModel> hotelRooms = _mapper
+                .Map<IEnumerable<HotelRoomDTO>, IEnumerable<HotelRoomsViewModel>>(_adminManager.GetHotelRooms()
+                .Where(hr => hr.HotelId == Id));
+
+            ViewData["Id"] = Id;
             return View(hotelRooms);
         }
 
@@ -322,19 +327,25 @@ namespace HotelsBooking.Controllers
             {
                 return View(model);
             }
-            HotelRoomDTO hotelRoom = _mapper.Map<CreateOrEditHotelRoomViewModel, HotelRoomDTO>(model);
+
+            HotelRoomDTO hotelRoom = _mapper
+                .Map<CreateOrEditHotelRoomViewModel, HotelRoomDTO>(model);
+
             var res = await _adminManager.CreateHotelRoom(hotelRoom);
+
             if (res.Succedeed)
                 return RedirectToAction("HotelRooms", new { Id = model.HotelId });
             else
                 ModelState.AddModelError(res.Property, res.Message);
+
             return View(model);
         }
 
         [HttpGet]
         public IActionResult EditHotelRoom(int Id)
         {
-            CreateOrEditHotelRoomViewModel room = _mapper.Map<HotelRoomDTO,CreateOrEditHotelRoomViewModel>(_adminManager.GetHotelRoomById(Id));
+            CreateOrEditHotelRoomViewModel room = _mapper
+                .Map<HotelRoomDTO,CreateOrEditHotelRoomViewModel>(_adminManager.GetHotelRoomById(Id));
             return View(room);
         }
 
@@ -357,7 +368,13 @@ namespace HotelsBooking.Controllers
         [HttpGet]
         public IActionResult HotelRoomConvs(int Id)
         {
-            IEnumerable<HotelRoomConvsViewModel> convs = _mapper.Map<IEnumerable<HotelRoomConvDTO>, IEnumerable<HotelRoomConvsViewModel>>(_adminManager.GetRoomConvs(Id));
+            IEnumerable<HotelRoomConvsViewModel> convs = _mapper
+                .Map<IEnumerable<HotelRoomConvDTO>, IEnumerable<HotelRoomConvsViewModel>>(_adminManager.GetRoomConvs(Id));
+
+            HotelRoomDTO room = _adminManager.GetHotelRoomById(Id);
+
+            ViewData["Id"] = Id;
+            ViewData["HotelId"] = room.HotelId;
             return View(convs);
         }
 
@@ -369,11 +386,61 @@ namespace HotelsBooking.Controllers
         }
 
         [HttpGet]
-        public IActionResult AddConvForRoom()
+        public IActionResult AddConvForRoom(int Id, int HotelId)
         {
-            return View();
+            IEnumerable<HotelConvsViewModel> hotelConvs = _mapper
+                .Map<IEnumerable<HotelConvDTO>, IEnumerable<HotelConvsViewModel>>(_adminManager.GetHotelConvs()
+                .Where(hc => hc.HotelId == HotelId));
+
+            IEnumerable<HotelRoomConvsViewModel> convs = _mapper
+                .Map<IEnumerable<HotelRoomConvDTO>, IEnumerable<HotelRoomConvsViewModel>>(_adminManager.GetRoomConvs(Id));
+
+            List<HotelRoomConvsViewModel> res = new List<HotelRoomConvsViewModel>();
+
+            foreach (var h in hotelConvs)
+            {
+                if (!convs.Any(c => c.ConvName == h.Name))
+                {
+                    HotelRoomConvsViewModel roomConv = new HotelRoomConvsViewModel
+                    {
+                        Price = h.Price,
+                        ConvName = h.Name,
+                        HotelRoomId = Id
+                    };
+                    res.Add(roomConv);
+                }
+                   
+            }
+            AddRoomConvViewModel model = new AddRoomConvViewModel
+            {
+                convs = res,
+                HotelRoomId = Id
+            };
+            return View(model);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AddConvForRoom(AddRoomConvViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            foreach(var a in model.SelectedItems)
+            {
+                HotelRoomConvDTO conv = new HotelRoomConvDTO
+                {
+                    ConvName = a,
+                    HotelRoomId = model.HotelRoomId
+                };
+                var res = await _adminManager.CreateRoomConv(conv);
+                if (res.Succedeed)
+                    return RedirectToAction("HotelRoomConvs", new { Id = model.HotelRoomId });
+                else
+                    ModelState.AddModelError(res.Property, res.Message);
+            }
+            return View(model);
+        }
         #endregion
         #region Order
         public IActionResult Orders()

@@ -8,13 +8,14 @@ namespace HotelsBooking.Models
 {
     public class HotelRoomConvsViewModel
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public string ConvName { get; set; }
 
         [Required]
         public decimal Price { get; set; }
+
         public int HotelRoomId { get; set; }
     }
 }

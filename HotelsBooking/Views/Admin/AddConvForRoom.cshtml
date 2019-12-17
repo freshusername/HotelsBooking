@@ -1,22 +1,50 @@
 ﻿@{
     Layout = null;
 }
+@model AddRoomConvViewModel;
 <html>
 <head>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true">
     <link href="~/css/Bootstrap-multiselect.css" rel="stylesheet" type="text/css" />
 </head>
+
 <body>
     <div class="container body-content">
         <div class="row">
-
             <div class="col-lg-8 col-lg-offset-2 col-md-6 col-md-offset-3 col-sm-12">
-                <div class="text-center">
-                    <span style="font-size:20px">Add new conveniences for room</span>
+                <div class="text-center" style=" margin-bottom:20px">
+                    <span style="font-size:20px;">Add new conveniences for room</span>
                 </div>
-                <form asp-action="CreateUser" asp-controller="Admin" method="post">
-                    <select id="example-getting-started" multiple="multiple">
-                    </select>
+                <form asp-action="AddConvForRoom" asp-controller="Admin" method="post">
+                    <div asp-validation-summary="All" class="text-danger text-center" style="margin-top:10px;"></div>
+                    <div class="form-group">
+                        <input type="hidden" asp-for="HotelRoomId" value="@Model.HotelRoomId" />
+                    </div>
+                    <div class="form-group">
+                        <div class="text-center">
+                            @*<select id="example-getting-started" multiple="multiple">
+                    @foreach (var addConv in Model)
+                    {
+                        <option value="@addConv.ConvName">
+                            @addConv.ConvName
+                        </option>
+                    }
+                </select>*@
+                            <ul class="ks-cboxtags">
+                                @foreach (var item in Model.convs)
+                                {
+                                    <li>
+                                        <input name="SelectedItems" type="checkbox" id="@item.Id" value="@item.ConvName">
+                                        <label for="@item.Id">@item.ConvName   @Math.Round(item.Price, 2)</label>
+                                    </li>
+                                }
+                            </ul>
+
+                        </div>
+                    </div>
+                    <div class="button-center">
+                        <input type="submit" value="Save" class="btn btn-success text-center" style="width:20%" />
+                    </div>
                 </form>
             </div>
         </div>

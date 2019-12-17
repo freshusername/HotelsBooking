@@ -146,6 +146,7 @@ namespace ApplicationCore.Managers
         public async Task DeleteHotelRoom(int Id) => await _hotelManager.DeleteHotelRoom(Id);
 
         public IEnumerable<HotelRoomDTO> GetHotelRooms() => _hotelManager.GetHotelRooms();
+        public async Task<OperationDetails> CreateRoomConv(HotelRoomConvDTO roomConv) => await _hotelManager.CreateHotelRoomConv(roomConv);
         public async Task DeleteHotelRoomConv(int Id) => await _hotelManager.DeleteHotelRoomConv(Id);
         #endregion
         #region AddConvs
