@@ -11,7 +11,7 @@ namespace ApplicationCore.Interfaces
     public interface IAdminManager : IDisposable 
     {
         #region Users
-        List<AdminUserDTO> GetUsers();
+        List<AdminUserDTO> GetUsers(string sortOrder);
         Task<OperationDetails> CreateUser(UserDTO userDTO);
         Task<OperationDetails> EditUser(UserDTO userDTO);
         Task<OperationDetails> ChangePassword(UserDTO userDTO);

@@ -35,9 +35,30 @@ namespace ApplicationCore.Managers
             _additionalConvManager = additionalConvManager;
         }
         #region Users
-        public List<AdminUserDTO> GetUsers()
+        public List<AdminUserDTO> GetUsers(string sortOrder)
         {
             List<AdminUserDTO> users = _mapper.Map<List<AppUser>, List<AdminUserDTO>>(_userManager.Users.ToList());
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    users = users.OrderByDescending(u => u.Email).ToList();
+                    break;
+                case "first":
+                    users = users.OrderBy(u => u.FirstName).ToList();
+                    break;
+                case "first_desc":
+                    users = users.OrderByDescending(u => u.FirstName).ToList();
+                    break;
+                case "second":
+                    users = users.OrderBy(u => u.LastName).ToList();
+                    break;
+                case "second_desc":
+                    users = users.OrderByDescending(u => u.LastName).ToList();
+                    break;
+                default:
+                    users = users.OrderBy(u => u.Email).ToList();
+                    break;
+            }
             return users;
         }
         public async Task<OperationDetails> CreateUser(UserDTO userDTO)

@@ -31,9 +31,12 @@ namespace HotelsBooking.Controllers
         #region Users
 
         [HttpGet]
-        public IActionResult Users()
+        public IActionResult Users(string sortOrder)
         {
-            List<UsersViewModel> users = _mapper.Map<List<AdminUserDTO>, List<UsersViewModel>>(_adminManager.GetUsers());
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["FirstNameSortParm"] = sortOrder == "first" ? "first_desc" : "first";
+            ViewData["SecondNameSortParm"] = sortOrder == "second" ? "second_desc" : "second";
+            List<UsersViewModel> users = _mapper.Map<List<AdminUserDTO>, List<UsersViewModel>>(_adminManager.GetUsers(sortOrder));
             return View(users);
         }
 
