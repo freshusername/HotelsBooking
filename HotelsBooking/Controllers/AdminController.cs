@@ -396,6 +396,7 @@ namespace HotelsBooking.Controllers
                 .Map<IEnumerable<HotelRoomConvDTO>, IEnumerable<HotelRoomConvsViewModel>>(_adminManager.GetRoomConvs(Id));
 
             List<HotelRoomConvsViewModel> res = new List<HotelRoomConvsViewModel>();
+            
             int i = 0;
             foreach (var hc in hotelConvs)
             {
@@ -458,13 +459,15 @@ namespace HotelsBooking.Controllers
                 .Map<IEnumerable<HotelRoomConvDTO>, IEnumerable<HotelRoomConvsViewModel>>(_adminManager.GetRoomConvs(model.HotelRoomId));
 
             List<HotelRoomConvsViewModel> viewResult = new List<HotelRoomConvsViewModel>();
-
+            int i = 0;
             foreach (var hc in hotelConvs)
             {
                 if (!convs.Any(c => c.ConvName == hc.Name))
                 {
+                    i++;
                     HotelRoomConvsViewModel roomConv = new HotelRoomConvsViewModel
                     {
+                        Id = i,
                         Price = hc.Price,
                         ConvName = hc.Name,
                         HotelRoomId = model.HotelRoomId

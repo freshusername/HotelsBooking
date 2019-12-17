@@ -4,7 +4,7 @@
 }
 
     ul.ks-cboxtags li {
-        display: inline;
+        display: block;
     }
 
         ul.ks-cboxtags li label {
