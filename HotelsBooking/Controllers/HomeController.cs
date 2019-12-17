@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using ApplicationCore.DTOs.AppProfile;
+﻿using System.Threading.Tasks;
 using ApplicationCore.Interfaces;
 using ApplicationCore.Services;
 using AutoMapper;
-using HotelsBooking.Models.AppProfile;
 using Infrastructure.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +23,7 @@ namespace HotelsBooking.Controllers
 		    _userManager = userManager;
 	    }
 
-	    public async Task<IActionResult> Detail()
+	    public async Task<IActionResult> Detail() 
 	    {
 		    var result = _userManager.GetUserId(User);
 			
@@ -38,8 +32,7 @@ namespace HotelsBooking.Controllers
 
 		public IActionResult Index()
         {
-
-            return View();
+	        return View();
         }
 
 

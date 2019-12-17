@@ -1,21 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ApplicationCore.AppProfile.DTOs;
-using ApplicationCore.DTOs;
 using ApplicationCore.DTOs.AppProfile;
 using ApplicationCore.Services;
 using AutoMapper;
-using HotelsBooking.Models;
-using Infrastructure.Entities;
 using HotelsBooking.Models.AppProfile;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Internal;
 using ApplicationCore.Interfaces;
 
 namespace HotelsBooking.Controllers
@@ -25,12 +16,14 @@ namespace HotelsBooking.Controllers
 		private readonly IMapper _mapper;
 		private readonly IProfileService _profileService;
 		private readonly IProfileManager _profileManager;
+		private readonly IOrderManager _orderManager;
 
-		public ProfileController(IMapper mapper, IProfileService profileService, IProfileManager profileManager)
+		public ProfileController(IMapper mapper, IProfileService profileService, IProfileManager profileManager, IOrderManager orderManager)
 		{
 			_mapper = mapper;
 			_profileService = profileService;
 			_profileManager = profileManager;
+			_orderManager = orderManager;
 		}
 
 		public async Task<IActionResult> Detail(string id)
@@ -51,6 +44,10 @@ namespace HotelsBooking.Controllers
 				LastName = pr.LastName,
 				ProfileImage =  pr.ProfileImage
 			});
+
+			var userOrders = _profileService.GetUserOrdersByUserId();
+
+			var orderDetails = _orderManager.GetOrderDetails()
 
 			var model = new AllProfilesViewModel
 			{
@@ -89,7 +86,8 @@ namespace HotelsBooking.Controllers
 			await _profileManager.UpdateProfileInfoAsync(model);
 			await _profileService.UpdateProfile(profile);
 			return RedirectToAction("Detail", "Profile", new { id = profile.Id });
-
 		}
+
+
 	}
 }

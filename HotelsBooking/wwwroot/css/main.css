@@ -78,8 +78,7 @@
     background-color: #acacac;
     height: 120px !important;
     position: relative;
-    top: -8px;
-    width: 100% !important;
+    width: 500px;
     border-radius: 0 10px 10px 0;
 }
 
@@ -113,8 +112,8 @@
 }
 
 .profile-role_wrap {
-    margin-left: 250px;
-    margin-bottom: 10px;
+    margin-top: 20px;
+    margin-left: 340px;
 }
 
 .mini-avatar {
@@ -128,4 +127,15 @@
     width: 100px;
     height: 100px;
     padding: 10px;
+}
+
+.edit-btn {
+    color: #ffffff !important;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.orders-list {
+    margin-top: 100px;
 }

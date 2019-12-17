@@ -19,5 +19,6 @@ namespace ApplicationCore.Services
     Task<OperationDetails> UpdateProfile(ProfileDto model);
 
     Task<List<string>> GetRoles(string id);
+    Task<IEnumerable<Order>> GetUserOrdersByUserId(string id);
   }
 }

@@ -1,22 +1,13 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
-using ApplicationCore.DTOs;
 using ApplicationCore.DTOs.AppProfile;
 using ApplicationCore.Infrastructure;
 using AutoMapper;
 using Infrastructure.EF;
 using Infrastructure.Entities;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Update;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json.Schema;
 
 namespace ApplicationCore.Services
 {
@@ -41,7 +32,6 @@ namespace ApplicationCore.Services
 			_roleManager = roleManager;
 			_signInManager = signInManager;
 		}
-
 
 		public async Task<IEnumerable<ProfileDto>> GetAllProfilesAsync()
 		{
@@ -126,11 +116,10 @@ namespace ApplicationCore.Services
 
 			return new OperationDetails(true, "Your profile has been successfully updated", "Email");
 		}
-		
-		//To compare images
-		static bool Compare(byte[] a1, byte[] a2)
+
+		public async Task<IEnumerable<Order>> GetUserOrdersByUserId(string id)
 		{
-			return StructuralComparisons.StructuralEqualityComparer.Equals(a1, a2);
+			return _context.Orders.Where(o => o.AppUserId == id).ToList();
 		}
 	}
 }

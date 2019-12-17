@@ -6,6 +6,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="profile-info_wrap">
+                        <a asp-controller="Profile" asp-action="Edit" asp-route-id="@Model.Id" class="edit-btn"><i class="fas fa-pen"></i></a>
                         <div class="profile-info d-flex flex-column">
                             <div class="profile-name">
                                 <b>@Model.FirstName @Model.LastName</b>
@@ -13,7 +14,6 @@
                             <div class="profile-address">
                                 <div class="address_wrap">
                                     <div class="address mail-adress">@Model.Email</div>
-                                    <div class="address real-adress">Washington, <b>USA</b></div>
                                 </div>
                             </div>
                         </div>
@@ -21,7 +21,7 @@
 
                             @foreach (var role in Model.Roles)
                             {
-                                <a class="@(role.ToLower() + " role-button btn_2")">@role</a>
+                                <a class="@(role.ToLower() + " role-button")">@role</a>
                             }
 
                         </div>
@@ -35,70 +35,33 @@
                             }
                         </div>
                     </div>
-                    <a asp-controller="Profile" asp-action="Edit" asp-route-id="@Model.Id" class="btn_2">Edit</a>
                 </div>
 
-
-                <div class="orders-list d-flex flex-column">
-                    <div class="order d-flex justify-content-start align-items-center">
-                        <div class="order-photo">
-                            <img src="https://pix10.agoda.net/hotelImages/96605/-1/dd32d9b188d86d6d8dc40d1ff9a0ebf6.jpg?s=1024x768"
-                                 alt="order photo">
-                        </div>
-                        <div class="order-info d-flex justify-content-around align-items-center active-order">
-                            <div class="hotel-title">
-                                <span>Order Title</span>
-                            </div>
-                            <div class="order-date">
-                                <div class="top-date">10.10.2019</div>
-                                -
-                                <div class="bootom-date">12.10.2019</div>
-                            </div>
-                            <div class="order-price">
-                                <span>700$</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="order d-flex justify-content-start align-items-center ">
-                        <div class="order-photo">
-                            <img src="https://pix10.agoda.net/hotelImages/96605/-1/dd32d9b188d86d6d8dc40d1ff9a0ebf6.jpg?s=1024x768"
-                                 alt="order photo">
-                        </div>
-                        <div class="order-info active-order d-flex justify-content-around align-items-center">
-                            <div class="hotel-title">
-                                <span>Order Title</span>
-                            </div>
-                            <div class="order-date">
-                                <div class="top-date">10.10.2019</div>
-                                -
-                                <div class="bootom-date">12.10.2019</div>
-                            </div>
-                            <div class="order-price">
-                                <span>700$</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="order d-flex justify-content-start align-items-center">
-                        <div class="order-photo">
-                            <img src="https://pix10.agoda.net/hotelImages/96605/-1/dd32d9b188d86d6d8dc40d1ff9a0ebf6.jpg?s=1024x768"
-                                 alt="order photo">
-                        </div>
-                        <div class="order-info d-flex justify-content-around align-items-center">
-                            <div class="hotel-title">
-                                <span>Order Title</span>
-                            </div>
-                            <div class="order-date">
-                                <div class="top-date">10.10.2019</div>
-                                -
-                                <div class="bootom-date">12.10.2019</div>
-                            </div>
-                            <div class="order-price">
-                                <span>700$</span>
+                <div class="row">
+                    <div class="">
+                        <div class="orders-list">
+                            <div class="order d-flex justify-content-start align-items-center">
+                                <div class="order-photo">
+                                    <img src="https://pix10.agoda.net/hotelImages/96605/-1/dd32d9b188d86d6d8dc40d1ff9a0ebf6.jpg?s=1024x768"
+                                         alt="order photo">
+                                </div>
+                                <div class="order-info d-flex justify-content-around align-items-center active-order">
+                                    <div class="hotel-title">
+                                        <span>Order Title</span>
+                                    </div>
+                                    <div class="order-date">
+                                        <div class="top-date">10.10.2019</div>
+                                        -
+                                        <div class="bottom-date">12.10.2019</div>
+                                    </div>
+                                    <div class="order-price">
+                                        <span>700$</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
