@@ -363,6 +363,32 @@ namespace HotelsBooking.Controllers
             return View("OrderDetails", model);
         }
 
+        /*public IActionResult OrderDetailsConvs()
+        {
+
+        }
+        */
+        #endregion
+        #region Conveniences
+        public IActionResult Conveniences()
+        {
+            return View(new List<ConvsViewModel>());
+        }
+
+        public IActionResult CreateConv()
+        {
+            return View();
+        }
+
+        public IActionResult EditConv()
+        {
+            return View();
+        }
+
+        public IActionResult DeleteConv()
+        {
+            return View();
+        }
         #endregion
     }
 }

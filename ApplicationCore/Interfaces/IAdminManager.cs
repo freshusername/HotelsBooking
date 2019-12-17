@@ -31,7 +31,6 @@ namespace ApplicationCore.Interfaces
         #region AddConv
         Task<OperationDetails> CreateAdditionalConv(AdditionalConvDTO additionalConvDTO);
         #endregion
-
         #region Orders
         AdminOrderDTO GetOrderById(int Id);
         List<AdminOrderDTO> GetOrders();
@@ -46,6 +45,14 @@ namespace ApplicationCore.Interfaces
         bool IsHotelExists(string HotelName);
         bool IsRoomExists(int RoomID);
         Task DeleteOrderDetails(int id);
+        #endregion
+
+        #region Convs
+        List<AdminRoomConvDTO> GetConvs();
+        AdminRoomConvDTO GetConvById(int Id);
+        Task<OperationDetails> CreateConv(AdminRoomConvDTO convDTO);
+        Task<OperationDetails> EditConv(AdminRoomConvDTO convDTO);
+        Task DeleteConv(int Id);
         #endregion
 
     }

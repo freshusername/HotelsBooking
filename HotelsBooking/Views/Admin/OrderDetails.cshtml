@@ -28,15 +28,16 @@
                         @foreach (var detail in Model)
                         {
                         <tr>
-                            <td title="@detail.OrderDate.ToUniversalTime()">@detail.OrderDate.Date.ToShortDateString()</td>
-                            <td title="@detail.CheckInDate.ToUniversalTime()">@detail.CheckInDate.Date.ToShortDateString()</td>
-                            <td title="@detail.CheckOutDate.ToUniversalTime()">@detail.CheckOutDate.Date.ToShortDateString()</td>
+                            <td title="@detail.OrderDate.DateTime.ToLocalTime()">@detail.OrderDate.DateTime.ToShortDateString()</td>
+                            <td>@detail.CheckInDate.DateTime.ToShortDateString()</td>
+                            <td>@detail.CheckOutDate.DateTime.ToShortDateString()</td>
                             <td>@detail.HotelName</td>
                             <td>@detail.RoomId</td>
                             <td>@detail.TotalPrice</td>     
                             <td>
                                 <form asp-action="DeleteOrderDetails" asp-controller="Admin" asp-route-OrderID="@ViewBag.OrderID" asp-route-id="@detail.Id">
                                     <a class="btn btn-sm btn-warning" asp-action="EditOrderDetails" asp-route-OrderID="@ViewBag.OrderID" asp-route-id="@detail.Id">Edit</a>
+                                    <a class="btn btn-sm btn-primary" asp-action="OrderDetailsConvs" asp-route-OrderID="@ViewBag.OrderID" asp-route-id="@detail.Id">Conveniences</a>
                                     <button type="submit" class="btn btn-sm btn-danger" asp-action="DeleteOrderDetails" asp-route-OrderID="@ViewBag.OrderID" asp-route-id="@detail.Id">Delete</button>
                                 </form>
                             </td>
@@ -45,7 +46,7 @@
                     }
                 </table>
                 <div class="text-center">
-                    <a asp-action="CreateOrderDetails" asp-route-id="@ViewBag.OrderID"  class="btn btn-success">Add new order</a>
+                    <a asp-action="CreateOrderDetails" asp-route-id="@ViewBag.OrderID"  class="btn btn-success">Add new order details</a>
                 </div>
             </div>
         </div>

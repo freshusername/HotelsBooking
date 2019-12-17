@@ -175,7 +175,7 @@ namespace ApplicationCore.Managers
                                                 .ThenInclude(p => p.Hotel)
                                            .Include(p => p.HotelRoom)
                                                 .ThenInclude(p => p.Room)
-                                           .ToList();
+                                           .OrderByDescending(p => p.OrderDate).ToList();
             foreach (var s in res)
             {
                 orderDTOs.Add(new AdminOrderDetailDTO
@@ -190,7 +190,6 @@ namespace ApplicationCore.Managers
             }
             return orderDTOs;
         }
-
         public OrderDetail AdminOrderDetailDTOtoOrderDetail(AdminOrderDetailDTO orderDTO)
         {
             OrderDetail orderDetail = new OrderDetail
@@ -225,8 +224,7 @@ namespace ApplicationCore.Managers
             return orderDetail;
 
         }
-
-        public AdminOrderDetailDTO OrderToAdminOrderDetailDTO(OrderDetail orderDetail)
+        public AdminOrderDetailDTO OrderDetailToAdminOrderDetailDTO(OrderDetail orderDetail)
         {
             AdminOrderDetailDTO detailDTO = new AdminOrderDetailDTO
             {
@@ -238,7 +236,6 @@ namespace ApplicationCore.Managers
             };
             return detailDTO;
         }
-
         public async Task<OperationDetails> CreateOrderDetails(AdminOrderDetailDTO orderDetailDTO)
         {
             OrderDetail order = AdminOrderDetailDTOtoOrderDetail(orderDetailDTO);
@@ -249,7 +246,6 @@ namespace ApplicationCore.Managers
             return new OperationDetails(true, "Order details are added", "Id");
             
         }
-
         public async Task<OperationDetails> EditOrderDetails(AdminOrderDetailDTO orderDetailDTO)
         {
             OrderDetail orderDetailCheck = _context.OrderDetails.FirstOrDefault(x => x.Id == orderDetailDTO.Id);
@@ -284,15 +280,12 @@ namespace ApplicationCore.Managers
             await _context.SaveChangesAsync();
             return new OperationDetails(true, "Order details are updated", "ID");
         }
-        
         public async Task DeleteOrderDetails(int id)
         {
             OrderDetail order = _context.OrderDetails.Find(id);
             _context.OrderDetails.Remove(order);
             await _context.SaveChangesAsync();
         }
-        
-
         public bool IsHotelExists(string HotelName)
         {
             Hotel hotel = _context.Hotels.FirstOrDefault(p => p.Name == HotelName);
@@ -301,7 +294,6 @@ namespace ApplicationCore.Managers
             else
                 return true;
         }
-
         public bool IsRoomExists(int RoomID)
         {
             Room room = _context.Rooms.FirstOrDefault(p => p.Id == RoomID);
@@ -310,15 +302,37 @@ namespace ApplicationCore.Managers
             else
                 return true;
         }
+        public HotelRoom GetHotelRoom(string HotelName,int RoomId)
+        {
+            HotelRoom hotelRoom = new HotelRoom();
+            Hotel hotel = _context.Hotels.Include(p => p.HotelRooms)
+                                            .ThenInclude(p => p.Room)
+                                            .Include(p => p.HotelRooms)
+                                            .ThenInclude(p => p.Hotel)
+                                            .FirstOrDefault(p => p.Name == HotelName);
+
+
+            Room room = _context.Rooms.FirstOrDefault(p => p.Id == RoomId);
+            if (hotel == null || room == null)
+            {
+                hotelRoom = null;
+                return hotelRoom;
+            }
+            foreach (HotelRoom hr in hotel.HotelRooms)
+            {
+                if (room.Id == hr.RoomId)
+                {
+                    hotelRoom = hr;
+                    return hotelRoom;
+                }
+            }
+            return hotelRoom;
+        }
         #endregion
 
         public void Dispose()
         {
 
         }
-
-        
-
-        
     }
 }

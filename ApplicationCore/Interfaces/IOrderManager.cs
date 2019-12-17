@@ -23,7 +23,7 @@ namespace ApplicationCore.Interfaces
         Task<OperationDetails> CreateOrderDetails(AdminOrderDetailDTO orderDTO);
         Task<OperationDetails> EditOrderDetails(AdminOrderDetailDTO orderDTO);
         OrderDetail AdminOrderDetailDTOtoOrderDetail(AdminOrderDetailDTO orderDetailDTO);
-        AdminOrderDetailDTO OrderToAdminOrderDetailDTO(OrderDetail orderDetail);
+        AdminOrderDetailDTO OrderDetailToAdminOrderDetailDTO(OrderDetail orderDetail);
         bool IsHotelExists(string HotelName);
         bool IsRoomExists(int RoomID);
         Task DeleteOrderDetails(int id);
