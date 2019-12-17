@@ -14,9 +14,8 @@ namespace ApplicationCore.Services
   {
     Task<ProfileDto> GetByIdAsync(string id);
     Task<ProfileDto> GetByEmailAsync(string email);
-    
 
-    Task<IEnumerable<ProfileDto>> GetAllProfilesAsync();
+	Task<IEnumerable<ProfileDto>> GetAllProfilesAsync();
     Task<OperationDetails> UpdateProfile(ProfileDto model);
 
     Task<List<string>> GetRoles(string id);

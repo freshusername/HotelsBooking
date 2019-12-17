@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace ApplicationCore.DTOs
+namespace ApplicationCore.AppProfile.DTOs
 {
     public class ProfileUpdateDTO
     {

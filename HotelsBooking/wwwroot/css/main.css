@@ -10,8 +10,8 @@
 }
 
 .profile-info_wrap {
-    height: 408px;
-    width: 455px !important;
+    height: 200px;
+    width: 700px !important;
     padding: 30px;
     background: linear-gradient(45deg, #ff0f52, #ff4d35);
     border-radius: 8px;
@@ -29,42 +29,31 @@
     line-height: .8;
 }
 
-.real-address, .mail-address {
+.address {
     height: 34px;
     color: #ffffff;
     font-size: 22px;
     font-weight: 300 !important;
     padding: 20px 0px;
+
 }
 
-.profile-role_wrap {
+.mail-adress {
     position: absolute;
-    bottom: 0;
+    left: 50px;
+    top: 70px;
 }
 
-.profile-role_block {
-    width: 270px !important;
-    height: 90px;
-    background: linear-gradient(45deg, #ff4d35,#ff0f52);
-    border-radius: 12px;
-    box-shadow: -5px 9px 3.95px 1.05px rgba(0, 0, 0, 0.18);
-    margin-bottom: 51px;
-    display: flex;
-    padding-left: 29px;
-    float: left;
-    flex-flow: column;
+.real-adress {
+    position: absolute;
+    left: 50px;
+    top: 110px;
 }
-
-    .profile-role_block span {
-        text-transform: uppercase;
-        font-weight: 500;
-        font-size: 30px;
-    }
 
 .profile-info_wrap .profile-img {
     position: absolute;
-    left: 250px;
-    bottom: 25px;
+    left: 600px;
+    top: 10px;
 }
 
 .profile-img img {
@@ -121,4 +110,22 @@
 
 .shadow-standart {
     box-shadow: -2px 5px 20px 5px rgba(0, 0, 0, 0.18);
+}
+
+.profile-role_wrap {
+    margin-left: 250px;
+    margin-bottom: 10px;
+}
+
+.mini-avatar {
+    width: 80px;
+    height: 80px;
+    box-shadow: -3px 3px 3.95px 1.05px rgba(0, 0, 0, 0.18);
+    border-radius: 50%;
+}
+
+.avatar-wrap {
+    width: 100px;
+    height: 100px;
+    padding: 10px;
 }

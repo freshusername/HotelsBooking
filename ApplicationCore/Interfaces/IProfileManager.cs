@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using ApplicationCore.AppProfile.DTOs;
 using ApplicationCore.DTOs;
 using ApplicationCore.Infrastructure;
 using AutoMapper;

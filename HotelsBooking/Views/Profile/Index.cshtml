@@ -14,7 +14,23 @@
                         <div class="review_item shadow-standart" style="padding: 20px;">
                             <div class="media">
                                 <div class="d-flex">
-                                    <img src="img/product/single-product/review-3.png" alt="">
+                                    @{
+                                        string imageSource;
+                                        if (profile.ProfileImage != null)
+                                        {
+                                            var base64 = Convert.ToBase64String(profile.ProfileImage);
+                                            imageSource = String.Format("data:image;base64,{0}", base64);
+                                        }
+                                        else
+                                        {
+                                            imageSource = $"https://upload.wikimedia.org/wikipedia/commons/8/83/Lama_Portrait_06072007_01.jpg";
+
+
+                                        }
+                                    }
+                                    <div class="avatar-wrap">
+                                         <img class="mini-avatar" src="@imageSource" alt="">
+                                    </div>
                                 </div>
                                 <div class="media-body" style="height: 80px">
                                     <h4 style="margin-right: 40px; margin-top: 10px; margin-bottom: 10px">@profile.FirstName @profile.LastName</h4>
@@ -33,25 +49,27 @@
                             </p>
                         </div>
                     </a>
-
                 }
             </div>
         </div>
     </section>
 </body>
 
-@*<div class="single_product_item">
-        <img src="">
-        <div class="single_product_text">
-            <h4>
-                SLS Hotel
-            </h4>
-            <h3>
-                Beverly Hills
-            </h3>
-            <h3>
-                Hot
-            </h3>
-            <a href="/Hotel/HotelMain">Details</a>
+
+
+@*<div v-for="item in Hotels" class="row align-items-center latest_product_inner">
+        <div class="single_product_item">
+            <div class="single_product_text">
+                <h4>
+                    Le Grand Bellevue
+                </h4>
+                <h3>
+                    Gstaad
+                </h3>
+                <h3>
+                    Cold
+                </h3>
+                <a href="/Hotel/HotelMain">Details</a>
+            </div>
         </div>
     </div>*@

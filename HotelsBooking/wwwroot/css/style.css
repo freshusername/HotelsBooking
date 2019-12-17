@@ -7849,5 +7849,15 @@ h6 {
     box-shadow: 6px 4px 10px 0px rgba(14, 84, 175, 0.8);
     background-image: linear-gradient(16deg, #0E549B 0%, #39B7D8 64%, #A2E8FA 100% );
 }
+.owner {
+    background-color: #39B7D8 !important;
+    box-shadow: 6px 4px 10px 0px rgba(14, 84, 175, 0.8);
+    background-image: linear-gradient(16deg, #0E549B 0%, #39B7D8 64%, #A2E8FA 100% );
+}
+.user {
+    background-color: #39B7D8 !important;
+    box-shadow: 6px 4px 10px 0px rgba(14, 84, 175, 0.8);
+    background-image: linear-gradient(16deg, #0E549B 0%, #39B7D8 64%, #A2E8FA 100% );
+}
 
 /*# sourceMappingURL=style.css.map */
