@@ -19,22 +19,23 @@
     <link rel="stylesheet" href="~/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="~/css/style.css" type="text/css">
 </head>
-
+@using ApplicationCore.DTOs
+@model FilterHotelDto
 <!-- Search Filter Section Begin -->
 <section class="search-filter">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                <form action="#" class="check-form">
+                <form asp-controller="Hotel" asp-action="ShowHotels" method="get" class="check-form">
                     <h4>Check Availability</h4>
                     <div class="datepicker">
                         <p>From</p>
-                        <input type="text" class="datepicker-1" value="dd / mm / yyyy">
+                        <input asp-for="@Model.FromDate" type="text" class="datepicker-1" placeholder="dd / mm / yyyy">
                         <img src="img/calendar.png" alt="">
                     </div>
                     <div class="datepicker">
                         <p>To</p>
-                        <input type="text" class="datepicker-2" value="dd / mm / yyyy">
+                        <input asp-for="@Model.ToDate" type="text" class="datepicker-2" placeholder="dd / mm / yyyy">
                         <img src="img/calendar.png" alt="">
                     </div>
                     <div class="room-quantity">
@@ -53,14 +54,15 @@
                     </div>
                     <div class="room-selector">
                         <p>Room</p>
-                        <select class="suit-select">
-                            <option>Eg. Master suite</option>
-                            <option value="">Double Room</option>
-                            <option value="">Single Room</option>
-                            <option value="">Special Room</option>
+                        <select asp-for="@Model.Location" class="suit-select">
+                            <option value="@String.Empty">Enter location</option>
+                            <option value="New-York">New-York</option>
+                            <option value="Beverly Hills">Beverly Hills</option>
+                            <option value="Zurich">Zurich</option>
+                            <option value="Gstaad">Gstaad</option>
                         </select>
                     </div>
-                    <button type="submit">Go</button>
+                    <button value="Filter" type="submit">Go</button>
                 </form>
             </div>
         </div>

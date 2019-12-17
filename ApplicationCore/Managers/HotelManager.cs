@@ -40,6 +40,8 @@ namespace ApplicationCore.Managers
                                             .ThenInclude(hr => hr.Room)
                                         .Include(h => h.HotelRooms)
                                                 .ThenInclude(hr => hr.RoomConvs)
+                                        .Include(h => h.HotelRooms)
+                                            .ThenInclude(hr => hr.OrderDetails)
                                         .Include(h => h.HotelPhotos)
                                     .Select(h => h);
             if (!String.IsNullOrEmpty(filterHotelDto?.KeyWord))
@@ -48,7 +50,22 @@ namespace ApplicationCore.Managers
                                     || h.Description.Contains(filterHotelDto.KeyWord)
                                     || h.Location.Contains(filterHotelDto.KeyWord));
             }
-            
+
+            if (!String.IsNullOrEmpty(filterHotelDto?.Location))
+            {
+                hotels = hotels.Where(h => h.Location.Contains(filterHotelDto.Location));
+            }
+
+            if (filterHotelDto?.FromDate != null)
+            {
+                hotels = hotels.Where(h => h.Location.Contains(filterHotelDto.Location));
+            }
+
+            if (filterHotelDto?.ToDate != null)
+            {
+                hotels = hotels.Where(h => h.Location.Contains(filterHotelDto.Location));
+            }
+
             if (filterHotelDto?.MinPrice >= 0)
             {
                 hotels = hotels.Where(h => h.HotelRooms.Any(p => p.Price >= filterHotelDto.MinPrice));
