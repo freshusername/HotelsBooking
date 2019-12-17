@@ -1,5 +1,6 @@
 ﻿using ApplicationCore.DTOs;
 using ApplicationCore.Infrastructure;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,5 +15,6 @@ namespace ApplicationCore.Interfaces
         Task<ConfirmDTO> GetPasswordConfirmationToken(string userName);
         Task<ConfirmDTO> GetEmailConfirmationToken(string userName);
         Task Logout();
+        Task<IdentityResult> GoogleAuthentication();
     }
 }

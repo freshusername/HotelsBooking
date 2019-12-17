@@ -189,7 +189,7 @@ namespace HotelsBooking.Controllers
 
 
         [AllowAnonymous]
-        public IActionResult GoogleLogin()
+        public IActionResult SingInGoogle()
         {
             string redirectUrl = Url.Action("GoogleResponse", "Account");
             var properties = SignInManager.ConfigureExternalAuthenticationProperties("Google", redirectUrl);
@@ -199,17 +199,16 @@ namespace HotelsBooking.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GoogleResponse()
         {
-            ExternalLoginInfo info = await SignInManager.GetExternalLoginInfoAsync();
-            if (info == null)
+            var result = await _authenticationManager.GoogleAuthentication();
+            if (result == null)
                 return RedirectToAction(nameof(Login));
 
-            var result = await SignInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false);
-            string[] userInfo = { info.Principal.FindFirst(ClaimTypes.Name).Value, info.Principal.FindFirst(ClaimTypes.Email).Value };
             if (result.Succeeded)
-                return View(userInfo);
-            else
-          
+                return RedirectToAction("Index", "Home");
+
+            return View("AccessDenied");
         }
     }
-        
 }
+        
+

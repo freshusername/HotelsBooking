@@ -97,8 +97,7 @@ namespace HotelsBooking
             services.AddMvc();
             services.AddAutoMapper(typeof(AutoMapperProfile).GetTypeInfo().Assembly);  
             services.AddTransient<IAuthenticationManager, AuthenticationManager>();
-            //services.AddTransient<IOrderManager, OrderManager>();
-
+            services.AddTransient<IOrderManager, OrderManager>();
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<IOrderService, OrderService>();
 

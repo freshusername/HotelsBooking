@@ -35,11 +35,8 @@ namespace ApplicationCore.Managers
 
         public async Task<OperationDetails> Register(UserDTO userDTO)
         {
-
-            AppUser user = await UserManager.FindByEmailAsync(userDTO.Email);
-
+            var user = await UserManager.FindByEmailAsync(userDTO.Email);
             if (user == null)
-
             {
                 var userIdentity = _mapper.Map<UserDTO, AppUser>(userDTO);
                  var result = await UserManager.CreateAsync(userIdentity, userDTO.Password);
@@ -49,7 +46,6 @@ namespace ApplicationCore.Managers
 
                 await UserManager.AddToRoleAsync(userIdentity, "User");
                 await _context.SaveChangesAsync();
-
                   
                 return new OperationDetails(true, "Congratulations! Your account has been created.", "");
             }
@@ -78,7 +74,7 @@ namespace ApplicationCore.Managers
             if (user == null || (await UserManager.IsEmailConfirmedAsync(user)))
                 return (null);
                     
-              var code =  await UserManager.GenerateEmailConfirmationTokenAsync(user);
+            var code =  await UserManager.GenerateEmailConfirmationTokenAsync(user);
             return new ConfirmDTO { Code = code,UserId = user.Id };
         }
 
@@ -110,6 +106,37 @@ namespace ApplicationCore.Managers
             await SignInManager.SignOutAsync();
         }
 
+        public async Task<IdentityResult> GoogleAuthentication()
+        {
+           
+            ExternalLoginInfo info = await SignInManager.GetExternalLoginInfoAsync();
+              if (info == null) return (null);
 
+            string fullName = info.Principal.FindFirst(ClaimTypes.Name).Value;
+               var names = fullName.Split(' ');
+
+            var userIdentity = new AppUser
+            {
+                Email = info.Principal.FindFirst(ClaimTypes.Email).Value,
+                UserName = info.Principal.FindFirst(ClaimTypes.Email).Value,
+                FirstName = names[0],
+                LastName = names[1]
+            };
+
+            IdentityResult identResult = await UserManager.CreateAsync(userIdentity);
+              if (identResult.Succeeded)
+              {
+                  identResult = await UserManager.AddLoginAsync(userIdentity, info);
+                    if(identResult.Succeeded)
+                    {   
+                       await SignInManager.SignInAsync(userIdentity, false);              
+                       return identResult;
+                    }
+              }
+           
+            return identResult;
+                                                       
+        }
+   
     }
 }
