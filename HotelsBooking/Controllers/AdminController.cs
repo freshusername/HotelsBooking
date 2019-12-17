@@ -396,15 +396,17 @@ namespace HotelsBooking.Controllers
                 .Map<IEnumerable<HotelRoomConvDTO>, IEnumerable<HotelRoomConvsViewModel>>(_adminManager.GetRoomConvs(Id));
 
             List<HotelRoomConvsViewModel> res = new List<HotelRoomConvsViewModel>();
-
-            foreach (var h in hotelConvs)
+            int i = 0;
+            foreach (var hc in hotelConvs)
             {
-                if (!convs.Any(c => c.ConvName == h.Name))
+                if (!convs.Any(c => c.ConvName == hc.Name))
                 {
+                    i++;
                     HotelRoomConvsViewModel roomConv = new HotelRoomConvsViewModel
                     {
-                        Price = h.Price,
-                        ConvName = h.Name,
+                        Id = i,
+                        Price = hc.Price,
+                        ConvName = hc.Name,
                         HotelRoomId = Id
                     };
                     res.Add(roomConv);
@@ -414,7 +416,8 @@ namespace HotelsBooking.Controllers
             AddRoomConvViewModel model = new AddRoomConvViewModel
             {
                 convs = res,
-                HotelRoomId = Id
+                HotelRoomId = Id,
+                HotelId = HotelId
             };
             return View(model);
         }
@@ -426,20 +429,57 @@ namespace HotelsBooking.Controllers
             {
                 return View(model);
             }
-            foreach(var a in model.SelectedItems)
+            if (model.SelectedItems!=null)
             {
-                HotelRoomConvDTO conv = new HotelRoomConvDTO
+                foreach (var convName in model.SelectedItems)
                 {
-                    ConvName = a,
-                    HotelRoomId = model.HotelRoomId
-                };
-                var res = await _adminManager.CreateRoomConv(conv);
-                if (res.Succedeed)
+                    HotelRoomConvDTO conv = new HotelRoomConvDTO
+                    {
+                        ConvName = convName,
+                        HotelRoomId = model.HotelRoomId
+                    };
+                    var res = await _adminManager.CreateRoomConv(conv);
+                    if (!res.Succedeed)
+                        ModelState.AddModelError(res.Property, res.Message);
+                    
+                        
+                }
+                if(ModelState.IsValid)
                     return RedirectToAction("HotelRoomConvs", new { Id = model.HotelRoomId });
-                else
-                    ModelState.AddModelError(res.Property, res.Message);
             }
-            return View(model);
+            else
+                return RedirectToAction("HotelRoomConvs", new { Id = model.HotelRoomId });
+            
+            IEnumerable<HotelConvsViewModel> hotelConvs = _mapper
+                .Map<IEnumerable<HotelConvDTO>, IEnumerable<HotelConvsViewModel>>(_adminManager.GetHotelConvs()
+                .Where(hc => hc.HotelId == model.HotelId));
+
+            IEnumerable<HotelRoomConvsViewModel> convs = _mapper
+                .Map<IEnumerable<HotelRoomConvDTO>, IEnumerable<HotelRoomConvsViewModel>>(_adminManager.GetRoomConvs(model.HotelRoomId));
+
+            List<HotelRoomConvsViewModel> viewResult = new List<HotelRoomConvsViewModel>();
+
+            foreach (var hc in hotelConvs)
+            {
+                if (!convs.Any(c => c.ConvName == hc.Name))
+                {
+                    HotelRoomConvsViewModel roomConv = new HotelRoomConvsViewModel
+                    {
+                        Price = hc.Price,
+                        ConvName = hc.Name,
+                        HotelRoomId = model.HotelRoomId
+                    };
+                    viewResult.Add(roomConv);
+                }
+
+            }
+            AddRoomConvViewModel viewModel = new AddRoomConvViewModel
+            {
+                convs = viewResult,
+                HotelRoomId = model.HotelRoomId,
+                HotelId =model.HotelId
+            };
+            return View(viewModel);
         }
         #endregion
         #region Order
