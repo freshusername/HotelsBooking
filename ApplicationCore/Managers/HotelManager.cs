@@ -158,7 +158,7 @@ namespace ApplicationCore.Managers
             return _mapper.Map<HotelConv, HotelConvDTO>(hotelConv);
         }
 
-        public IEnumerable<HotelConvDTO> GetHotelConvs(string sortOrder=null)
+        public IEnumerable<HotelConvDTO> GetHotelConvs(string sortOrder=null, string searchString=null)
         {
             List<HotelConv> hotelConvs = _context.HotelConvs.ToList();
             List<AdditionalConv> addConvs = _context.AdditionalConvs.ToList();
@@ -168,6 +168,11 @@ namespace ApplicationCore.Managers
                 ac => ac.Id,
                 (hc, ac) => new HotelConvDTO { Id = hc.Id, Name = ac.Name, HotelId = hc.HotelId, Price = hc.Price }
                 );
+
+            if (!String.IsNullOrEmpty(searchString))
+                query = query.Where(u => u.Name.Contains(searchString)
+                                    || Convert.ToString(Math.Round(u.Price,0))
+                                    .Equals(searchString));
 
             switch (sortOrder)
             {

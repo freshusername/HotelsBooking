@@ -17,7 +17,7 @@ namespace ApplicationCore.Interfaces
         Task<OperationDetails> Update(HotelDTO hotelDTO);
         Task Delete(int Id);
 
-        IEnumerable<HotelConvDTO> GetHotelConvs(string sortOrder);
+        IEnumerable<HotelConvDTO> GetHotelConvs(string sortOrder, string searchString);
         Task<OperationDetails> CreateHotelConv(HotelConvDTO hotelConvDTO);
         Task DeleteHotelConv(int Id);
         HotelConvDTO GetHotelConvById(int Id);
