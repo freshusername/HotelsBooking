@@ -56,8 +56,8 @@ namespace Infrastructure.DbInitialize
 
             var user = new AppUser
             {
-                Email = "nechypor.dan@gmail.com",
-                UserName = "nechypor.dan@gmail.com",
+                Email = "user@user.com",
+                UserName = "user@user.com",
                 FirstName = "User",
                 LastName = "User",
                 PhoneNumber = "+380930000000",

@@ -1,3 +1,9 @@
+/*Google and Facebook authentication*/
+
+
+
+
+
 /*Color Variables*/
 /**************** extend css start ****************/
 @import url("https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800&display=swap");
@@ -514,11 +520,11 @@ ul {
 /* line 38, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_button.scss */
 .btn_3 {
     display: inline-block;
-    padding: 4.5px 22px;
+    padding: 4px 44px;
     border-radius: 50px;
     background-color: #ff3368;
     border: 1px solid #ecfdff;
-    font-size: 12px;
+    font-size: 17px;
     font-weight: 700;
     color: #fff;
     text-transform: uppercase;
@@ -5460,6 +5466,7 @@ ul {
         font-size: 14px;
         margin-bottom: 0;
         margin-left: 10px;
+        margin-right: 180px;
     }
 
 /* line 1964, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
@@ -5473,8 +5480,8 @@ ul {
 .login_part .lost_pass {
     color: #777777;
     text-align: right;
-    float: right;
     text-transform: capitalize;
+    float: left;
 }
 
 /* line 1980, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */

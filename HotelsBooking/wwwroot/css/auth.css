@@ -1,0 +1,35 @@
+﻿
+.btn-google {
+    color: white;
+    background-color: #ea4335;
+    border-radius: 100px;
+    padding: 4.5px 22px;
+    font-size: 17px;
+}
+
+.btn-google a {
+    text-decoration: none;
+    color: white;
+}
+
+.btn-google a:hover {
+    color: black;
+}
+
+.btn-facebook {
+    color: white;
+    background-color: #3b5998;
+    border-radius: 100px;
+    padding: 4.5px 22px;
+    font-size: 17px;
+}
+
+.btn-facebook a {
+    text-decoration: none;
+    color: white;     
+}
+
+.btn-facebook a:hover {
+    color: black;
+}
+

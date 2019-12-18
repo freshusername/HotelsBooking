@@ -137,7 +137,8 @@ namespace ApplicationCore.Managers
                 Email = info.Principal.FindFirst(ClaimTypes.Email).Value,
                 UserName = info.Principal.FindFirst(ClaimTypes.Email).Value,
                 FirstName = names[0],
-                LastName = names[1]
+                LastName = names[1],
+                EmailConfirmed = true
             };
 
              IdentityResult identResult = await UserManager.CreateAsync(userIdentity);

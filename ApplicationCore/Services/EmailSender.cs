@@ -16,7 +16,10 @@ namespace ApplicationCore.Services
         {
             _senderOptions = options;
         }
+        public EmailSender()
+        {
 
+        }
         public async Task SendEmailAsync(string email, string subject, string message)
         {
             var emailMessage = new MimeMessage();

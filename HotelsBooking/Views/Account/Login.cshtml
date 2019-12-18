@@ -1,9 +1,11 @@
 @model HotelsBooking.Models.LoginViewModel
-@using System.Collections.Generic
-@using System.Linq
-@using Microsoft.AspNetCore.Identity
-@using Microsoft.AspNetCore.Http
-@using Microsoft.AspNetCore.Http.Authentication
+@using System.Collections.Generic;
+@using System.Linq;
+@using Microsoft.AspNetCore.Identity;
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Http.Authentication;
+
+<link href="~/css/auth.css" rel="stylesheet" />
 <section class="login_part padding_top">
     <div class="container">
         <div class="row align-items-center">
@@ -23,7 +25,7 @@
                 <div class="login_part_form">
                     <div class="login_part_form_iner">
                         <h3 class="text-center">
-                            Welcome Back !<br/>
+                            Welcome Back !<br />
                             Please Sign in now
                         </h3>
 
@@ -41,13 +43,17 @@
                                 <div class="creat_account d-flex align-items-center">
                                     <input type="checkbox" id="f-option" name="selector">
                                     <label for="f-option">@Html.DisplayNameFor(m => m.RememberMe)</label>
+                                    <a asp-action="ForgotPassword" asp-controller="Account" class="lost_pass">Forget password?</a>
                                 </div>
+                              
                                 <button type="submit" value="submit" class="btn_3">
                                     Sign In
                                 </button>
-                                <a asp-action="ForgotPassword" asp-controller="Account" class="lost_pass" >Forget password?</a>
+
                             </div>
                         </form>
+                        <a asp-action="SignInGoogle" asp-controller="Account" class="btn btn-lg btn-google btn-block text-uppercase"><i class="fab fa-google mr-2"></i>Sign in with Google</a>
+                        <button class="btn btn-lg btn-facebook btn-block text-uppercase" type="submit"><i class="fab fa-facebook-f mr-2"></i> Sign in with Facebook</button>
                     </div>
                 </div>
             </div>

@@ -27,5 +27,7 @@ namespace ApplicationCore.DTOs
         public DateTimeOffset CheckInDate { get; set; }
 
         public DateTimeOffset CheckOutDate { get; set; }
+
+
     }
 }
