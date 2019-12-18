@@ -35,9 +35,16 @@ namespace ApplicationCore.Managers
             _additionalConvManager = additionalConvManager;
         }
         #region Users
-        public List<AdminUserDTO> GetUsers(string sortOrder = null)
+        public IEnumerable<AdminUserDTO> GetUsers(string sortOrder = null, string searchString = null)
         {
-            List<AdminUserDTO> users = _mapper.Map<List<AppUser>, List<AdminUserDTO>>(_userManager.Users.ToList());
+            IEnumerable<AdminUserDTO> users = _mapper.Map<List<AppUser>, List<AdminUserDTO>>(_userManager.Users.ToList());
+            
+            if (!String.IsNullOrEmpty(searchString))
+                users = users.Where(u => u.Email.Contains(searchString)
+                                    || u.FirstName.Contains(searchString)
+                                    || u.LastName.Contains(searchString));
+            
+
             switch (sortOrder)
             {
                 case "name_desc":
