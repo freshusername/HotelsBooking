@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace ApplicationCore.DTOs
@@ -17,6 +18,6 @@ namespace ApplicationCore.DTOs
         public int PagesCount => (int)Math.Ceiling(decimal.Divide(HotelsAmount, PageSize));
 
         public bool HasPrevious => CurrentPage > 1;
-        public bool HasNext => CurrentPage == PagesCount - 1;
+        public bool HasNext => CurrentPage < PagesCount - 1;
     }
 }
