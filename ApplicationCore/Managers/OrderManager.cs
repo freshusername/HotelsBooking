@@ -302,32 +302,6 @@ namespace ApplicationCore.Managers
             else
                 return true;
         }
-        public HotelRoom GetHotelRoom(string HotelName,int RoomId)
-        {
-            HotelRoom hotelRoom = new HotelRoom();
-            Hotel hotel = _context.Hotels.Include(p => p.HotelRooms)
-                                            .ThenInclude(p => p.Room)
-                                            .Include(p => p.HotelRooms)
-                                            .ThenInclude(p => p.Hotel)
-                                            .FirstOrDefault(p => p.Name == HotelName);
-
-
-            Room room = _context.Rooms.FirstOrDefault(p => p.Id == RoomId);
-            if (hotel == null || room == null)
-            {
-                hotelRoom = null;
-                return hotelRoom;
-            }
-            foreach (HotelRoom hr in hotel.HotelRooms)
-            {
-                if (room.Id == hr.RoomId)
-                {
-                    hotelRoom = hr;
-                    return hotelRoom;
-                }
-            }
-            return hotelRoom;
-        }
         #endregion
 
         public void Dispose()

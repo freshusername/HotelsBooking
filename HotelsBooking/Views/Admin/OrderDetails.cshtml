@@ -37,7 +37,6 @@
                             <td>
                                 <form asp-action="DeleteOrderDetails" asp-controller="Admin" asp-route-OrderID="@ViewBag.OrderID" asp-route-id="@detail.Id">
                                     <a class="btn btn-sm btn-warning" asp-action="EditOrderDetails" asp-route-OrderID="@ViewBag.OrderID" asp-route-id="@detail.Id">Edit</a>
-                                    <a class="btn btn-sm btn-primary" asp-action="OrderDetailsConvs" asp-route-OrderID="@ViewBag.OrderID" asp-route-id="@detail.Id">Conveniences</a>
                                     <button type="submit" class="btn btn-sm btn-danger" asp-action="DeleteOrderDetails" asp-route-OrderID="@ViewBag.OrderID" asp-route-id="@detail.Id">Delete</button>
                                 </form>
                             </td>

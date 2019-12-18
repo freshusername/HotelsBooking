@@ -287,6 +287,9 @@ namespace HotelsBooking.Controllers
             return View(model);
         }
 
+        public IActionResult IsRoomExists(int Id) => Json(_adminManager.IsRoomExists(Id));
+        public IActionResult IsHotelExists(string HotelName) => Json(_adminManager.IsHotelExists(HotelName));
+
         [HttpPost]
         public async Task<IActionResult> CreateOrderDetails(CreateOrEditOrderDetailsViewModel model)
         {
@@ -302,13 +305,13 @@ namespace HotelsBooking.Controllers
             }
             if (!_adminManager.IsHotelExists(model.HotelName))
             {
-                ModelState.AddModelError("HotelName", "Hotel is not exist");
+                ModelState.AddModelError("HotelName", "The hotel is not exist");
                 return View(model);
             }
 
             if (!_adminManager.IsRoomExists(model.RoomId))
             {
-                ModelState.AddModelError("RoomID", "Room is not exist");
+                ModelState.AddModelError("RoomID", "The room is not exist");
                 return View(model);
             }
 
@@ -362,17 +365,12 @@ namespace HotelsBooking.Controllers
             ViewBag.OrderID = OrderID;
             return View("OrderDetails", model);
         }
-
-        /*public IActionResult OrderDetailsConvs()
-        {
-
-        }
-        */
         #endregion
-        #region Conveniences
-        public IActionResult Conveniences()
+        #region Convs
+        public IActionResult Convs()
         {
-            return View(new List<ConvsViewModel>());
+            return View(_mapper.Map<List<AdditionalConvDTO>, List<ConvsViewModel>>
+                        (_adminManager.GetConvs()));
         }
 
         public IActionResult CreateConv()
@@ -380,14 +378,56 @@ namespace HotelsBooking.Controllers
             return View();
         }
 
-        public IActionResult EditConv()
+        [HttpPost]
+        public async Task<IActionResult> CreateConv(ConvsViewModel model)
         {
-            return View();
+            if (!ModelState.IsValid)
+                return View(model);
+            AdditionalConvDTO conv = _mapper.Map<ConvsViewModel, AdditionalConvDTO>(model);
+            var res = await _adminManager.CreateConv(conv);
+            if (res.Succedeed)
+            {
+                return RedirectToAction("Convs");
+            }
+            else
+            {
+                ModelState.AddModelError(res.Property, res.Message);
+                return View(model);
+            }
         }
 
-        public IActionResult DeleteConv()
+        public IActionResult EditConv(int Id)
         {
-            return View();
+            AdditionalConvDTO addConv = _adminManager.GetConvById(Id);
+            if (addConv == null)
+                return NotFound();
+            else
+                return View(_mapper.Map<AdditionalConvDTO,ConvsViewModel>(addConv));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditConv(ConvsViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+            AdditionalConvDTO conv = _mapper.Map<ConvsViewModel, AdditionalConvDTO>(model);
+            var res = await _adminManager.EditConv(conv);
+            if (res.Succedeed)
+            {
+                return RedirectToAction("Convs");
+            }
+            else
+            {
+                ModelState.AddModelError(res.Property, res.Message);
+                return View(model);
+            }
+        }
+
+        public async Task<IActionResult> DeleteConv(int Id)
+        {
+            if (_adminManager.GetConvById(Id) != null)
+                await _adminManager.DeleteConv(Id);
+            return RedirectToAction("Convs");
         }
         #endregion
     }

@@ -14,28 +14,20 @@
                     <thead class="thead-light  text-center">
                         <tr style="color:black" class="text-center">
                             <th class="text-center">Name</th>
-                            <th class="text-center">Hotel</th>
-                            <th class="text-center">Room</th>
-                            <th class="text-center">Price</th>
-                            <th class="text-center">Actions</th>
+                            <th class=" text-center">Actions</th>
                         </tr>
                     </thead>
                     @if (!Model.Any())
                     {
-                        <tr><td colspan="5">No Conveniences</td></tr>
+                        <tr><td colspan="2">No Conveniences</td></tr>
                     }
                     else
                     {
-
                         @foreach (var conv in Model)
                         {
 
                             <tr>
                                 <td>@conv.Name</td>
-                                <td>@conv.HotelName</td>
-                                <td>@conv.RoomID</td>
-                                <td>@conv.Price</td>
-                                <td></td>
                                 <td>
                                     <form asp-action="DeleteConv" asp-controller="Admin" asp-route-id="@conv.Id">
                                         <a class="btn btn-sm btn-warning" asp-action="EditConv" asp-route-id="@conv.Id">Edit</a>

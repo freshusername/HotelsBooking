@@ -34,6 +34,7 @@ namespace ApplicationCore.Managers
             _hotelManager = hotelManager;
             _orderManager = orderManager;
             _additionalConvManager = additionalConvManager;
+            _convsManager = convsManager;
         }
         #region Users
         public List<AdminUserDTO> Users()
@@ -148,11 +149,11 @@ namespace ApplicationCore.Managers
         #endregion
 
 
-        #region RoomConvs
-        public List<AdminRoomConvDTO> GetConvs() => _convsManager.GetConvs();
-        public AdminRoomConvDTO GetConvById(int Id) => _convsManager.GetConvById(Id);
-        public Task<OperationDetails> CreateConv(AdminRoomConvDTO convDTO) => _convsManager.CreateConv(convDTO);
-        public Task<OperationDetails> EditConv(AdminRoomConvDTO convDTO) => _convsManager.EditConv(convDTO);
+        #region Convs
+        public List<AdditionalConvDTO> GetConvs() => _convsManager.GetConvs();
+        public AdditionalConvDTO GetConvById(int Id) => _convsManager.GetConvById(Id);
+        public Task<OperationDetails> CreateConv(AdditionalConvDTO convDTO) => _convsManager.CreateConv(convDTO);
+        public Task<OperationDetails> EditConv(AdditionalConvDTO convDTO) => _convsManager.EditConv(convDTO);
         public Task DeleteConv(int Id) => _convsManager.DeleteConv(Id);
         #endregion
         public void Dispose()

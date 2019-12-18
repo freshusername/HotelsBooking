@@ -16,6 +16,7 @@ namespace HotelsBooking.Models
         public DateTimeOffset CheckInDate { get; set; }
         [Required]
         public DateTimeOffset CheckOutDate { get; set; }
+        [Required]
         public string HotelName { get; set; }
         [Required]
         public int RoomId { get; set; }

@@ -9,11 +9,10 @@ namespace ApplicationCore.Interfaces
 {
     public interface IConvsManager
     {
-        List<AdminRoomConvDTO> GetConvs();
-        HotelRoom GetHotelRoom(AdminOrderDetailDTO orderDTO);
-        AdminRoomConvDTO GetConvById(int Id);
-        Task<OperationDetails> CreateConv(AdminRoomConvDTO convDTO);
-        Task<OperationDetails> EditConv(AdminRoomConvDTO convDTO);
+        List<AdditionalConvDTO> GetConvs();
+        AdditionalConvDTO GetConvById(int Id);
+        Task<OperationDetails> CreateConv(AdditionalConvDTO convDTO);
+        Task<OperationDetails> EditConv(AdditionalConvDTO convDTO);
         Task DeleteConv(int Id);
     }
 }
