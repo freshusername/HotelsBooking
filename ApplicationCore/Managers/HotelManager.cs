@@ -31,10 +31,27 @@ namespace ApplicationCore.Managers
                                         .Include(h => h.HotelRooms)
                                                 .ThenInclude(hr => hr.RoomConvs)
                                                 .ThenInclude(rc => rc.AdditionalConv)
+                                        .Include(h => h.HotelRooms)
+                                                .ThenInclude(hr => hr.OrderDetails)
                                         .Include(h => h.HotelPhotos)
                                         .FirstOrDefault(h => h.Id == Id);
             return _mapper.Map<Hotel, HotelDTO>(hotel);
         }
+
+        public async Task<HotelDTO> GetHotelDetails(FilterHotelDetailDTO filterHotelDetailDTO)
+        {
+            HotelDTO hotelDTO = await GetHotelById(filterHotelDetailDTO.HotelId);
+
+            if (filterHotelDetailDTO?.FromDate != null && filterHotelDetailDTO?.ToDate != null)
+            {
+                hotelDTO.HotelRooms = hotelDTO.HotelRooms.Where(hr => hr.OrderDetails
+                                                            .Any(od => CheckIfAvailable(od.CheckInDate, od.CheckOutDate, filterHotelDetailDTO.FromDate, filterHotelDetailDTO.ToDate))
+                                                            || !hr.OrderDetails.Any()).ToList();
+            }
+
+            return hotelDTO;
+        }
+
         public IEnumerable<HotelDTO> GetHotels(FilterHotelDto filterHotelDto = null)
         {
             var hotels = _context.Hotels.Include(h => h.HotelRooms)
