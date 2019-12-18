@@ -28,10 +28,10 @@ namespace HotelsBooking.Controllers
             var model = new FilteredHotelsViewModel
             {
                 Hotels = hotels,
-                FilterHotelDto = filterHotelDto
-            };
-
-
+                FilterHotelDto = filterHotelDto,
+                HotelConvs = _hotelManager.GetHotelConvs().Distinct(),
+                RoomConvs = _hotelManager.GetRoomConvs().Distinct()
+        };
             return View(model);
         }
 

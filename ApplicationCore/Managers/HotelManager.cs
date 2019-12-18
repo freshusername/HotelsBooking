@@ -40,6 +40,7 @@ namespace ApplicationCore.Managers
                                         .Include(h => h.HotelRooms)
                                                 .ThenInclude(hr => hr.RoomConvs)
                                         .Include(h => h.HotelPhotos)
+                                        .Include(h => h.HotelConvs)
                                     .Select(h => h);
             if (!String.IsNullOrEmpty(filterHotelDto?.KeyWord))
             {
@@ -101,6 +102,17 @@ namespace ApplicationCore.Managers
                 hc => hc.AdditionalConvId,
                 ac => ac.Id,
                 (hc, ac) => new HotelConvDTO { Id = hc.Id, Name = ac.Name, HotelId = hc.HotelId, Price = hc.Price }
+                );
+            return query;
+        }
+        public IEnumerable<RoomConvDTO> GetRoomConvs()
+        {
+            List<RoomConv> roomConvs = _context.RoomConvs.ToList();
+            List<AdditionalConv> addConvs = _context.AdditionalConvs.ToList();
+            var query = roomConvs.Join(addConvs,
+                hc => hc.AdditionalConvId,
+                ac => ac.Id,
+                (hc, ac) => new RoomConvDTO { Id = hc.Id, Name = ac.Name, HotelRoomId = hc.HotelRoomId, Price = hc.Price }
                 );
             return query;
         }
