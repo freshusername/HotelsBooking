@@ -55,5 +55,12 @@ namespace ApplicationCore.Interfaces
         Task DeleteConv(int Id);
         #endregion
 
+        #region Rooms
+        List<AdminRoomDTO> GetRooms();
+        AdminRoomDTO GetRoomById(int Id);
+        Task<OperationDetails> CreateRoom(AdminRoomDTO convDTO);
+        Task<OperationDetails> EditRoom(AdminRoomDTO convDTO);
+        Task DeleteRoom(int Id);
+        #endregion
     }
 }

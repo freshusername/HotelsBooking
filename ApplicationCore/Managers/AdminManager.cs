@@ -20,12 +20,13 @@ namespace ApplicationCore.Managers
         private IMapper _mapper;
         private IAuthenticationManager _authenticationManager;
         private IHotelManager _hotelManager;
-        private IOrderManager _orderManager;
+        private readonly IOrderManager _orderManager;
         private IAdditionalConvManager _additionalConvManager;
-        private IConvsManager _convsManager;
+        private readonly IConvsManager _convsManager;
+        private readonly IAdminRoomManager _roomManager;
         public AdminManager(ApplicationDbContext applicationDbContext, UserManager<AppUser> userManager,IMapper mapper, 
             IAuthenticationManager authenticationManager, IHotelManager hotelManager, IOrderManager orderManager,
-            IAdditionalConvManager additionalConvManager,IConvsManager convsManager)
+            IAdditionalConvManager additionalConvManager,IConvsManager convsManager,IAdminRoomManager roomManager)
         {
             _applicationDbContext = applicationDbContext;
             _userManager = userManager;
@@ -35,6 +36,7 @@ namespace ApplicationCore.Managers
             _orderManager = orderManager;
             _additionalConvManager = additionalConvManager;
             _convsManager = convsManager;
+            _roomManager = roomManager;
         }
         #region Users
         public List<AdminUserDTO> Users()
@@ -155,6 +157,14 @@ namespace ApplicationCore.Managers
         public Task<OperationDetails> CreateConv(AdditionalConvDTO convDTO) => _convsManager.CreateConv(convDTO);
         public Task<OperationDetails> EditConv(AdditionalConvDTO convDTO) => _convsManager.EditConv(convDTO);
         public Task DeleteConv(int Id) => _convsManager.DeleteConv(Id);
+        #endregion
+
+        #region Rooms
+        public List<AdminRoomDTO> GetRooms() => _roomManager.GetRooms();
+        public AdminRoomDTO GetRoomById(int Id) => _roomManager.GetRoomById(Id);
+        public Task<OperationDetails> CreateRoom(AdminRoomDTO convDTO) => _roomManager.CreateRoom(convDTO);
+        public Task<OperationDetails> EditRoom(AdminRoomDTO convDTO) => _roomManager.EditRoom(convDTO);
+        public Task DeleteRoom(int Id) => _roomManager.DeleteRoom(Id);
         #endregion
         public void Dispose()
         {

@@ -50,6 +50,9 @@ namespace HotelsBooking.Mapping
 
             CreateMap<AdditionalConv, AdditionalConvDTO>().ReverseMap();
             CreateMap<ConvsViewModel, AdditionalConvDTO>().ReverseMap();
+
+            CreateMap<Room, AdminRoomDTO>().ReverseMap();
+            CreateMap<AdminRoomsViewModel, AdminRoomDTO>().ReverseMap();
         }
     }
 }

@@ -5,7 +5,7 @@ using static Infrastructure.Enums;
 
 namespace ApplicationCore.DTOs
 {
-    class AdminRoomDTO
+    public class AdminRoomDTO
     {
         public int Id { get; set; }
         public RoomType RoomType { get; set; }

@@ -15,7 +15,7 @@ namespace ApplicationCore.Managers
     public class ConvsManager :  IConvsManager
     {
         private readonly ApplicationDbContext _context;
-        private IMapper _mapper;
+        private readonly IMapper _mapper;
 
         public ConvsManager(ApplicationDbContext context, IMapper mapper)
         {

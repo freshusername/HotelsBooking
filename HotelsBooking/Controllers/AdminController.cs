@@ -433,7 +433,65 @@ namespace HotelsBooking.Controllers
         #region Rooms
         public IActionResult Rooms()
         {
+            return View(_mapper.Map<List<AdminRoomDTO>, List<AdminRoomsViewModel>>
+                        (_adminManager.GetRooms()));
+        }
+
+        public IActionResult CreateRoom()
+        {
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateRoom(AdminRoomsViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+            AdminRoomDTO conv = _mapper.Map<AdminRoomsViewModel, AdminRoomDTO>(model);
+            var res = await _adminManager.CreateRoom(conv);
+            if (res.Succedeed)
+            {
+                return RedirectToAction("Rooms");
+            }
+            else
+            {
+                ModelState.AddModelError(res.Property, res.Message);
+                return View(model);
+            }
+        }
+
+        public IActionResult EditRoom(int Id)
+        {
+            AdminRoomDTO addConv = _adminManager.GetRoomById(Id);
+            if (addConv == null)
+                return NotFound();
+            else
+                return View(_mapper.Map<AdminRoomDTO, AdminRoomsViewModel>(addConv));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditRoom(AdminRoomsViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+            AdminRoomDTO conv = _mapper.Map<AdminRoomsViewModel, AdminRoomDTO>(model);
+            var res = await _adminManager.EditRoom(conv);
+            if (res.Succedeed)
+            {
+                return RedirectToAction("Rooms");
+            }
+            else
+            {
+                ModelState.AddModelError(res.Property, res.Message);
+                return View(model);
+            }
+        }
+
+        public async Task<IActionResult> DeleteRoom(int Id)
+        {
+            if (_adminManager.GetRoomById(Id) != null)
+                await _adminManager.DeleteRoom(Id);
+            return RedirectToAction("Rooms");
         }
         #endregion
     }
