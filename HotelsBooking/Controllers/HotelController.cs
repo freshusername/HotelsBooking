@@ -26,7 +26,7 @@ namespace HotelsBooking.Controllers
         
         
         {
-            var hotels = _hotelManager.GetHotels(filterHotelDto,null);
+            var hotels = _hotelManager.GetHotels(HotelFilterDto);
             var model = new FilteredHotelsViewModel
             {
                 Hotels = hotels,

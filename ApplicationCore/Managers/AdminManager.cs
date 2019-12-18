@@ -116,7 +116,7 @@ namespace ApplicationCore.Managers
 
         #region Hotels
         public async Task<HotelDTO> GetHotelById(int Id) => await _hotelManager.GetHotelById(Id);
-        public IEnumerable<HotelDTO> GetHotels(string sortOrder = null) => _hotelManager.GetHotels(new FilterHotelDto(), sortOrder);
+        public IEnumerable<HotelDTO> GetHotels(string sortOrder = null) => _hotelManager.GetHotelsAdmin(sortOrder);
         public async Task<OperationDetails> CreateHotel(HotelDTO hotelDTO) => await _hotelManager.Create(hotelDTO);
         public async Task<OperationDetails> EditHotel(HotelDTO hotelDTO) => await _hotelManager.Update(hotelDTO);
         public async Task DeleteHotel(int Id) => await _hotelManager.Delete(Id);

@@ -37,7 +37,7 @@ namespace ApplicationCore.Managers
                                         .FirstOrDefault(h => h.Id == Id);
             return _mapper.Map<Hotel, HotelDTO>(hotel);
         }
-        public IEnumerable<HotelDTO> GetHotels(FilterHotelDto filterHotelDto = null, string sortOrder=null)
+        public IEnumerable<HotelDTO> GetHotels(HotelFilterDto HotelFilterDto)
         {
             var hotels = _context.Hotels.Include(h => h.HotelRooms)
                                             .ThenInclude(hr => hr.Room)
@@ -61,6 +61,21 @@ namespace ApplicationCore.Managers
             {
                 hotels = hotels.Where(h => h.HotelRooms.Any(p => p.Price <= HotelFilterDto.MaxPrice));
             }
+            //TODO: Count, Skip, Take
+            HotelFilterDto.HotelsAmount = hotels.Count();
+            hotels = hotels.Skip((HotelFilterDto.CurrentPage - 1) * HotelFilterDto.PageSize).Take(HotelFilterDto.PageSize);
+
+            return _mapper.Map<IEnumerable<Hotel>, IEnumerable<HotelDTO>>(hotels.ToList());
+        }
+
+        public IEnumerable<HotelDTO> GetHotelsAdmin(string sortOrder = null)
+        {
+            var hotels = _context.Hotels.Include(h => h.HotelRooms)
+                                            .ThenInclude(hr => hr.Room)
+                                        .Include(h => h.HotelRooms)
+                                                .ThenInclude(hr => hr.RoomConvs)
+                                        .Include(h => h.HotelPhotos)
+                                    .Select(h => h);
 
             switch (sortOrder)
             {
@@ -69,7 +84,7 @@ namespace ApplicationCore.Managers
                     break;
                 case "location":
                     hotels = hotels.OrderBy(u => u.Location)
-                        .ThenBy(u=>u.Name);
+                        .ThenBy(u => u.Name);
                     break;
                 case "location_desc":
                     hotels = hotels.OrderByDescending(u => u.Location)
@@ -87,9 +102,6 @@ namespace ApplicationCore.Managers
                     hotels = hotels.OrderBy(u => u.Name);
                     break;
             }
-            //TODO: Count, Skip, Take
-            HotelFilterDto.HotelsAmount = hotels.Count();
-            hotels = hotels.Skip((HotelFilterDto.CurrentPage - 1) * HotelFilterDto.PageSize).Take(HotelFilterDto.PageSize);
 
             return _mapper.Map<IEnumerable<Hotel>, IEnumerable<HotelDTO>>(hotels.ToList());
         }
@@ -109,7 +121,7 @@ namespace ApplicationCore.Managers
 
         public async Task<OperationDetails> Update(HotelDTO hotelDTO)
         {
-            Hotel hotelCheck = _context.Hotels.FirstOrDefault(x => x.Name == hotelDTO.Name && x.Id != hotelDTO.Id);
+            Hotel hotelCheck = _context.Hotels.FirstOrDefault(x => x.Name == hotelDTO.Name && x.Id != hotelDTO.Id && x.Location == hotelDTO.Location);
             if (hotelCheck == null)
             {
                 Hotel hotel = await _context.Hotels.FindAsync(hotelDTO.Id);
