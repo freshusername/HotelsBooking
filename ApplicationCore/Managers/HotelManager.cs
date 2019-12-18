@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Infrastructure.Enums;
 
 namespace ApplicationCore.Managers
 {
@@ -56,6 +57,11 @@ namespace ApplicationCore.Managers
                 hotels = hotels.Where(h => h.Location.Contains(filterHotelDto.Location));
             }
 
+            if (filterHotelDto.Season.HasValue)
+            {
+                hotels = hotels.Where(h => h.Season.Equals(Enum.Parse(typeof(Season), filterHotelDto.Season.ToString())));
+            }
+
             if (filterHotelDto?.FromDate != null && filterHotelDto?.ToDate != null)
             {
                 hotels = hotels.Where(h => h.HotelRooms
@@ -64,7 +70,7 @@ namespace ApplicationCore.Managers
                                                             || !hr.OrderDetails.Any()));
             }
 
-            if (filterHotelDto?.MaxAdults >= 0 && filterHotelDto?.MaxChildren >= 0)
+            if (filterHotelDto.MaxAdults.HasValue)
             {
                 hotels = hotels.Where(h => h.HotelRooms
                                                 .Any(hr => (filterHotelDto.MaxAdults <= hr.MaxAdults && filterHotelDto.MaxChildren <= hr.MaxChildren)

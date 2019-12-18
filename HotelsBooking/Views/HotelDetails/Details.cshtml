@@ -66,12 +66,14 @@
                         <h3>@Model.Name</h3>
                         <ul class="list">
                             <li>
-                                <a class="active" href="#">
+                                <a class="active" asp-controller="Hotel" asp-action="ShowHotels" asp-route-Season="@Model.Season">
                                     <span>Season</span> : @Model.Season
                                 </a>
                             </li>
                             <li>
-                                <a href="#"> <span>Location</span> : @Model.Location</a>
+                                <a class="active" asp-controller="Hotel" asp-action="ShowHotels" asp-route-Location="@Model.Location"> 
+                                    <span>Location</span> : @Model.Location
+                                </a>
                             </li>
                         </ul>
                         <p>
@@ -113,7 +115,7 @@
                                 {
                                     <tr>
                                         <td>@hotelRoom.Room.RoomType</td>
-                                        <td>@hotelRoom.Price</td>
+                                        <td>@hotelRoom.Price.ToString("0.00")</td>
                                         <td>
                                             @foreach (var room_conv in hotelRoom.RoomConvs)
                                             {
