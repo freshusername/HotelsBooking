@@ -68,7 +68,7 @@ namespace ApplicationCore.Managers
             return _mapper.Map<IEnumerable<Hotel>, IEnumerable<HotelDTO>>(hotels.ToList());
         }
 
-        public IEnumerable<HotelDTO> GetHotelsAdmin(string sortOrder = null)
+        public IEnumerable<HotelDTO> GetHotelsAdmin(string sortOrder = null, string searchString=null)
         {
             var hotels = _context.Hotels.Include(h => h.HotelRooms)
                                             .ThenInclude(hr => hr.Room)
@@ -76,6 +76,12 @@ namespace ApplicationCore.Managers
                                                 .ThenInclude(hr => hr.RoomConvs)
                                         .Include(h => h.HotelPhotos)
                                     .Select(h => h);
+
+            if (!String.IsNullOrEmpty(searchString))
+                hotels = hotels.Where(u => u.Name.Contains(searchString)
+                                    || u.Location.Contains(searchString)
+                                    || u.Season.ToString().ToUpper()
+                                    .Contains(searchString.ToUpper()));
 
             switch (sortOrder)
             {

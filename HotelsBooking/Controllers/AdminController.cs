@@ -137,12 +137,14 @@ namespace HotelsBooking.Controllers
         #region Hotels
 
         [HttpGet]
-        public IActionResult Hotels(string sortOrder)
+        public IActionResult Hotels(string sortOrder, string searchString)
         {
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["LocationSortParm"] = sortOrder == "location" ? "location_desc" : "location";
             ViewData["SeasonSortParm"] = sortOrder == "season" ? "season_desc" : "season";
-            IEnumerable<CreateOrEditHotelViewModel> hotels = _mapper.Map<IEnumerable<HotelDTO>, IEnumerable<CreateOrEditHotelViewModel>>(_adminManager.GetHotels(sortOrder));
+            ViewData["CurrentFilter"] = searchString;
+
+            IEnumerable<CreateOrEditHotelViewModel> hotels = _mapper.Map<IEnumerable<HotelDTO>, IEnumerable<CreateOrEditHotelViewModel>>(_adminManager.GetHotels(sortOrder,searchString));
             return View(hotels);
         }
 
