@@ -430,5 +430,11 @@ namespace HotelsBooking.Controllers
             return RedirectToAction("Convs");
         }
         #endregion
+        #region Rooms
+        public IActionResult Rooms()
+        {
+            return View();
+        }
+        #endregion
     }
 }
