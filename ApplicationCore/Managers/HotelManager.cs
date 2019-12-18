@@ -6,6 +6,7 @@ using Infrastructure.EF;
 using Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,7 @@ namespace ApplicationCore.Managers
             _context = context;
             _mapper = mapper;
         }
+
         public async Task<HotelDTO> GetHotelById(int Id)
         {
             Hotel hotel = _context.Hotels.Include(h => h.HotelRooms)
@@ -52,6 +54,13 @@ namespace ApplicationCore.Managers
             if (filterHotelDto?.MinPrice >= 0 && filterHotelDto?.MaxPrice > 0)
             {
                 hotels = hotels.Where(h => h.HotelRooms.Where(p => p.Price >= filterHotelDto.MinPrice && p.Price <= filterHotelDto.MaxPrice).Any());
+            }
+
+            if(filterHotelDto.HotelConvs.Any())
+            {
+                var hotconvid = hotels.Select(h => h.HotelConvs.Select(hc => hc.Id)).ToList();
+                hotels = hotels.Where(h => h.HotelConvs.Select(hc => hc.Id).Intersect(filterHotelDto.HotelConvs).Any());              
+
             }
 
             return _mapper.Map<IEnumerable<Hotel>, IEnumerable<HotelDTO>>(hotels.ToList());
@@ -144,9 +153,10 @@ namespace ApplicationCore.Managers
             _context.HotelConvs.Remove(hotelConv);
             await _context.SaveChangesAsync();
         }
-        #endregion
+    #endregion
 
-        public void Dispose()
+    
+    public void Dispose()
         {
             
         }
