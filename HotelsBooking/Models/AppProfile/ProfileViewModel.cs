@@ -14,10 +14,9 @@ namespace HotelsBooking.Models.AppProfile
 		public string LastName { get; set; }
 		public byte[] ProfileImage { get; set; }
 		public string Email { get; set; }
-		public string Location { get; set; }
-
+		
 		public List<string> Roles { get; set; }
 
-		public ICollection<ProfileOrderDto> Orders { get; set; }
+		public IEnumerable<ProfileOrderDto> Orders { get; set; }
 	}
 }

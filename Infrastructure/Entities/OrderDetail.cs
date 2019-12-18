@@ -19,6 +19,6 @@ namespace Infrastructure.Entities
 
         public int OrderId { get; set; }
         public virtual Order Order { get; set; }
-      
-    }
+
+	}
 }

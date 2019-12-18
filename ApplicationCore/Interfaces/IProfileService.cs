@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using ApplicationCore.DTOs;
 using ApplicationCore.DTOs.AppProfile;
 using ApplicationCore.Infrastructure;
 using Infrastructure.Entities;
@@ -19,6 +20,6 @@ namespace ApplicationCore.Services
     Task<OperationDetails> UpdateProfile(ProfileDto model);
 
     Task<List<string>> GetRoles(string id);
-    Task<IEnumerable<Order>> GetUserOrdersByUserId(string id);
+    IEnumerable<OrderDTO> GetUserOrdersByUserId(string id);
   }
 }

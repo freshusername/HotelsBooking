@@ -12,6 +12,7 @@ namespace ApplicationCore.DTOs
         public DateTimeOffset CheckOutDate { get; set; }
         public decimal TotalPrice { get; set; }
         public string HotelName { get; set; }
+		public byte[] HotelImage { get; set; }
         public int RoomId { get; set; }
     }
 }

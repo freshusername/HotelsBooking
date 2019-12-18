@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ApplicationCore.DTOs;
 using ApplicationCore.DTOs.AppProfile;
 using ApplicationCore.Infrastructure;
 using AutoMapper;
@@ -117,9 +118,11 @@ namespace ApplicationCore.Services
 			return new OperationDetails(true, "Your profile has been successfully updated", "Email");
 		}
 
-		public async Task<IEnumerable<Order>> GetUserOrdersByUserId(string id)
+		public IEnumerable<OrderDTO> GetUserOrdersByUserId(string id)
 		{
-			return _context.Orders.Where(o => o.AppUserId == id).ToList();
+			var orders = _context.Orders.Where(o => o.AppUserId == id).ToList();
+
+			return _mapper.Map<IEnumerable<Order>, IEnumerable<OrderDTO>>(orders);
 		}
 	}
 }

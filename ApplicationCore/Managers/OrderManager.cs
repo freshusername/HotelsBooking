@@ -138,10 +138,9 @@ namespace ApplicationCore.Managers
             var res = _context.OrderDetails.Where(c => c.OrderId == id)
                                             .Include(p => p.HotelRoom)
                                                 .ThenInclude(p => p.Hotel)
-                                                .ThenInclude(p => p.Name)
-                                           .Include(p => p.HotelRoom)
+													.ThenInclude(h => h.HotelPhotos)
+                                            .Include(p => p.HotelRoom)
                                                 .ThenInclude(p => p.Room)
-                                                .ThenInclude(p => p.Id)
                                            .ToList();
             foreach (var s in res)
             {
@@ -152,7 +151,8 @@ namespace ApplicationCore.Managers
                     CheckOutDate = s.CheckOutDate,
                     TotalPrice = s.TotalPrice,
                     HotelName = s.HotelRoom.Hotel.Name,
-                    RoomId = s.HotelRoom.Room.Id
+                    RoomId = s.HotelRoom.Room.Id,
+					HotelImage = s.HotelRoom.Hotel.HotelPhotos.FirstOrDefault()?.Image
                 });
             }
             return orderDTOs;

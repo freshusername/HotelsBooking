@@ -34,4 +34,76 @@
     </div>
 </section>
 
+<body>
+    <section id="content">
+        <div class="d-flex justify-content-around align-items-start ">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="profile-info_wrap">
+                        <form asp-action="UpdateProfile" method="post" id="UpdateProfile" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label asp-for="FirstName"></label>
+                                <input asp-for="FirstName" class="form-control" />
+
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <label asp-for="LastName"></label>
+                                <input asp-for="LastName" class="form-control" />
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <label asp-for="Email"></label>
+                                <input asp-for="Email" class="form-control" />
+                            </div>
+                            <div>
+                                <div class="form-group">
+                                    <input asp-for="ProfileImage" class="form-control" type="file"/>
+                                </div>
+
+                            </div>
+                            <button type="submit" id="submitProfileUpdateButton" class="btn btn-dark">Update</button>
+                        </form>
+                        
+
+                        <div class="profile-info d-flex flex-column">
+                            <div class="profile-name">
+                                <b>@Model.FirstName @Model.LastName</b>
+                            </div>
+                            <div class="profile-address">
+                                <div class="address_wrap">
+                                    <div class="address mail-adress">@Model.Email</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="profile-role_wrap">
+
+                            @foreach (var role in Model.Roles)
+                            {
+                                <a class="@(role.ToLower() + " role-button")">@role</a>
+                            }
+
+                        </div>
+
+                        <div class="profile-img">
+                            @{
+                                string imageSource;
+                                if (Model.ProfileImage != null)
+                                {
+                                    var base64 = Convert.ToBase64String(Model.ProfileImage);
+                                    imageSource = String.Format("data:image;base64,{0}", base64);
+                                }
+                                else
+                                {
+                                    imageSource = $"https://upload.wikimedia.org/wikipedia/commons/8/83/Lama_Portrait_06072007_01.jpg";
+                                }
+                            }
+                            <img src="@imageSource"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
 

@@ -12,5 +12,10 @@ namespace ApplicationCore.DTOs
         public bool IsActive { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-    }
+
+
+        public ICollection<OrderDetailDTO> OrderDetails { get; set; }
+		public decimal Total { get; set; } = 0;
+		public byte[] HotelImage { get; set; }
+	}
 }

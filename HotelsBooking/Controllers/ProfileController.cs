@@ -8,6 +8,8 @@ using AutoMapper;
 using HotelsBooking.Models.AppProfile;
 using Microsoft.AspNetCore.Mvc;
 using ApplicationCore.Interfaces;
+using Infrastructure.Entities;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HotelsBooking.Controllers
 {
@@ -29,11 +31,45 @@ namespace HotelsBooking.Controllers
 		public async Task<IActionResult> Detail(string id)
 		{
 			var profile = await _profileService.GetByIdAsync(id);
-			var result = _mapper.Map<ProfileDto, ProfileViewModel>(profile);
+			var result = BuildProfileViewModel(profile);
 			return View(result);
 		}
 
-		public AllProfilesViewModel BuildProfileViewModel(IEnumerable<ProfileDto> users)
+		public ProfileViewModel BuildProfileViewModel(ProfileDto user)
+		{
+			var orders = _profileService.GetUserOrdersByUserId(user.Id).ToList();
+			foreach (var o in orders)
+			{
+				o.OrderDetails = _orderManager.GetOrderDetails(o.Id);
+			}
+
+			foreach (var order in orders)
+			{
+				foreach (var orderDetail in order.OrderDetails)
+				{
+					order.Total += orderDetail.TotalPrice;
+					order.HotelImage = orderDetail.HotelImage;
+				}
+			}
+
+			var result = _mapper.Map<ProfileDto, ProfileViewModel>(user);
+
+			result.Orders = orders.Select(o => new ProfileOrderDto
+			{
+
+				HotelName = o.OrderDetails.FirstOrDefault().HotelName,
+				CheckInDate = o.OrderDetails.FirstOrDefault().CheckInDate,
+				CheckOutDate = o.OrderDetails.FirstOrDefault().CheckOutDate,
+				Total = o.Total,
+				HotelImage = o.HotelImage
+			});
+			
+			return result;
+		}
+
+
+		//Here we build it WITHOUT orders info
+		public AllProfilesViewModel BuildAllProfilesViewModel(IEnumerable<ProfileDto> users)
 		{
 			var profiles = users.Select(pr => new ProfileViewModel
 			{
@@ -44,11 +80,7 @@ namespace HotelsBooking.Controllers
 				LastName = pr.LastName,
 				ProfileImage =  pr.ProfileImage
 			});
-
-			var userOrders = _profileService.GetUserOrdersByUserId();
-
-			var orderDetails = _orderManager.GetOrderDetails()
-
+			
 			var model = new AllProfilesViewModel
 			{
 				ProfilesList = profiles
@@ -61,7 +93,7 @@ namespace HotelsBooking.Controllers
 		{
 			var users = await _profileService.GetAllProfilesAsync();
 
-			var model = BuildProfileViewModel(users);
+			var model = BuildAllProfilesViewModel(users);
 
 			return View(model);
 		}

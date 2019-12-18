@@ -27,40 +27,62 @@
                         </div>
 
                         <div class="profile-img">
-                            @if (Model.ProfileImage != null)
-                            {
-                                var base64 = Convert.ToBase64String(Model.ProfileImage);
-                                string imageSource = String.Format("data:image;base64,{0}", base64);
-                                <img src="@imageSource" alt="profile-img">
+                            @{
+                                string imageSource;
+                                if (Model.ProfileImage != null)
+                                {
+                                    var base64 = Convert.ToBase64String(Model.ProfileImage);
+                                    imageSource = String.Format("data:image;base64,{0}", base64);
+                                }
+                                else
+                                {
+                                    imageSource = $"https://upload.wikimedia.org/wikipedia/commons/8/83/Lama_Portrait_06072007_01.jpg";
+                                }
                             }
+                            <img src="@imageSource"/>
                         </div>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="">
-                        <div class="orders-list">
+
+                    <div class="orders-list">
+
+                        @foreach (var order in Model.Orders)
+                        {
                             <div class="order d-flex justify-content-start align-items-center">
                                 <div class="order-photo">
-                                    <img src="https://pix10.agoda.net/hotelImages/96605/-1/dd32d9b188d86d6d8dc40d1ff9a0ebf6.jpg?s=1024x768"
-                                         alt="order photo">
+                                    @{
+                                        string imageHotel;
+                                        if (order.HotelImage != null)
+                                        {
+                                            var base64 = Convert.ToBase64String(order.HotelImage);
+                                            imageHotel = String.Format("data:image;base64,{0}", base64);
+                                        }
+                                        else
+                                        {
+                                            imageHotel = $"https://pix10.agoda.net/hotelImages/96605/-1/dd32d9b188d86d6d8dc40d1ff9a0ebf6.jpg?s=1024x768";
+                                        }
+                                    }
+                                    <img src="@imageHotel"/>
                                 </div>
                                 <div class="order-info d-flex justify-content-around align-items-center active-order">
                                     <div class="hotel-title">
-                                        <span>Order Title</span>
+                                        <span>@order.HotelName</span>
                                     </div>
                                     <div class="order-date">
-                                        <div class="top-date">10.10.2019</div>
+                                        <div class="top-date">@order.CheckInDate.ToString("yyyy-MM-dd")</div>
                                         -
-                                        <div class="bottom-date">12.10.2019</div>
+                                        <div class="bottom-date">@order.CheckOutDate.ToString("yyyy-MM-dd")</div>
                                     </div>
                                     <div class="order-price">
-                                        <span>700$</span>
+                                        <span>@order.Total.ToString("C")</span>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        }
                     </div>
+
                 </div>
             </div>
         </div>
