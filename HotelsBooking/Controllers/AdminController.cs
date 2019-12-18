@@ -312,15 +312,16 @@ namespace HotelsBooking.Controllers
         #endregion
         #region HotelRooms
         [HttpGet]
-        public IActionResult HotelRooms(int Id, string sortOrder)
+        public IActionResult HotelRooms(int Id, string sortOrder, string searchString)
         {
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "number_desc" : "";
             ViewData["PriceSortParm"] = sortOrder == "price" ? "price_desc" : "price";
             ViewData["TypeSortParm"] = sortOrder == "type" ? "type_desc" : "type";
+            ViewData["CurrentFilter"] = searchString;
             ViewData["Id"] = Id;
 
             IEnumerable<HotelRoomsViewModel> hotelRooms = _mapper
-                .Map<IEnumerable<HotelRoomDTO>, IEnumerable<HotelRoomsViewModel>>(_adminManager.GetHotelRooms(sortOrder)
+                .Map<IEnumerable<HotelRoomDTO>, IEnumerable<HotelRoomsViewModel>>(_adminManager.GetHotelRooms(sortOrder, searchString)
                 .Where(hr => hr.HotelId == Id));
             
             return View(hotelRooms);
@@ -391,17 +392,18 @@ namespace HotelsBooking.Controllers
         #region HotelRoomConvs
 
         [HttpGet]
-        public IActionResult HotelRoomConvs(int Id, string sortOrder)
+        public IActionResult HotelRoomConvs(int Id, string sortOrder, string searchString)
         {
             HotelRoomDTO room = _adminManager.GetHotelRoomById(Id);
 
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["PriceSortParm"] = sortOrder == "price" ? "price_desc" : "price";
+            ViewData["CurrentFilter"] = searchString;
             ViewData["Id"] = Id;
             ViewData["HotelId"] = room.HotelId;
 
             IEnumerable<HotelRoomConvsViewModel> convs = _mapper
-                .Map<IEnumerable<HotelRoomConvDTO>, IEnumerable<HotelRoomConvsViewModel>>(_adminManager.GetRoomConvs(Id,sortOrder));
+                .Map<IEnumerable<HotelRoomConvDTO>, IEnumerable<HotelRoomConvsViewModel>>(_adminManager.GetRoomConvs(Id,sortOrder,searchString));
             
             return View(convs);
         }
@@ -421,7 +423,7 @@ namespace HotelsBooking.Controllers
                 .Where(hc => hc.HotelId == HotelId));
 
             IEnumerable<HotelRoomConvsViewModel> convs = _mapper
-                .Map<IEnumerable<HotelRoomConvDTO>, IEnumerable<HotelRoomConvsViewModel>>(_adminManager.GetRoomConvs(Id,null));
+                .Map<IEnumerable<HotelRoomConvDTO>, IEnumerable<HotelRoomConvsViewModel>>(_adminManager.GetRoomConvs(Id,null,null));
 
             List<HotelRoomConvsViewModel> res = new List<HotelRoomConvsViewModel>();
             
@@ -484,7 +486,7 @@ namespace HotelsBooking.Controllers
                 .Where(hc => hc.HotelId == model.HotelId));
 
             IEnumerable<HotelRoomConvsViewModel> convs = _mapper
-                .Map<IEnumerable<HotelRoomConvDTO>, IEnumerable<HotelRoomConvsViewModel>>(_adminManager.GetRoomConvs(model.HotelRoomId,null));
+                .Map<IEnumerable<HotelRoomConvDTO>, IEnumerable<HotelRoomConvsViewModel>>(_adminManager.GetRoomConvs(model.HotelRoomId,null,null));
 
             List<HotelRoomConvsViewModel> viewResult = new List<HotelRoomConvsViewModel>();
             int i = 0;

@@ -24,12 +24,12 @@ namespace ApplicationCore.Interfaces
         Task<OperationDetails> UpdateHotelConv(HotelConvDTO hotelConvDTO);
 
         HotelRoomDTO GetHotelRoomById(int Id);
-        IEnumerable<HotelRoomDTO> GetHotelRooms(string sortOrder);
+        IEnumerable<HotelRoomDTO> GetHotelRooms(string sortOrder, string searchString);
         Task<OperationDetails> CreateHotelRoom(HotelRoomDTO hotelRoomDTO);
         Task<OperationDetails> UpdateHotelRoom(HotelRoomDTO hotelRoomDTO);
         Task DeleteHotelRoom(int Id);
 
-        IEnumerable<HotelRoomConvDTO> GetHotelRoomConvs(int Id, string sortOrder);
+        IEnumerable<HotelRoomConvDTO> GetHotelRoomConvs(int Id, string sortOrder, string searchString);
         Task<OperationDetails> CreateHotelRoomConv(HotelRoomConvDTO conv);
         Task DeleteHotelRoomConv(int Id);
     }
