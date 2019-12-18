@@ -20,24 +20,24 @@ namespace ApplicationCore.Interfaces
 
         #region Hotels
         Task<HotelDTO> GetHotelById(int Id);
-        IEnumerable<HotelDTO> GetHotels();
+        IEnumerable<HotelDTO> GetHotels(string sortOrder);
         Task<OperationDetails> CreateHotel(HotelDTO hotelDTO);
         Task<OperationDetails> EditHotel(HotelDTO hotelDTO);
         Task DeleteHotel(int Id);
 
-        IEnumerable<HotelConvDTO> GetHotelConvs();
+        IEnumerable<HotelConvDTO> GetHotelConvs(string sortOrder);
         Task<OperationDetails> CreateHotelConv(HotelConvDTO hotelConvDTO);
         Task DeleteHotelConv(int Id);
         HotelConvDTO GetHotelConvById(int Id);
         Task<OperationDetails> EditHotelConv(HotelConvDTO hotelConvDTO);
 
         HotelRoomDTO GetHotelRoomById(int Id);
-        IEnumerable<HotelRoomDTO> GetHotelRooms();
+        IEnumerable<HotelRoomDTO> GetHotelRooms(string sortOrder);
         Task<OperationDetails> CreateHotelRoom(HotelRoomDTO hotelRoomDTO);
         Task<OperationDetails> EditHotelRoom(HotelRoomDTO hotelRoomDTO);
         Task DeleteHotelRoom(int Id);
 
-        IEnumerable<HotelRoomConvDTO> GetRoomConvs(int Id);
+        IEnumerable<HotelRoomConvDTO> GetRoomConvs(int Id, string sortOrder);
         Task<OperationDetails> CreateRoomConv(HotelRoomConvDTO roomConv);
         Task DeleteHotelRoomConv(int Id);
         #endregion

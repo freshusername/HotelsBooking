@@ -37,7 +37,7 @@ namespace ApplicationCore.Managers
                                         .FirstOrDefault(h => h.Id == Id);
             return _mapper.Map<Hotel, HotelDTO>(hotel);
         }
-        public IEnumerable<HotelDTO> GetHotels(FilterHotelDto filterHotelDto = null)
+        public IEnumerable<HotelDTO> GetHotels(FilterHotelDto filterHotelDto = null, string sortOrder=null)
         {
             var hotels = _context.Hotels.Include(h => h.HotelRooms)
                                             .ThenInclude(hr => hr.Room)
@@ -55,6 +55,32 @@ namespace ApplicationCore.Managers
             if (filterHotelDto?.MinPrice >= 0 && filterHotelDto?.MaxPrice > 0)
             {
                 hotels = hotels.Where(h => h.HotelRooms.Where(p => p.Price >= filterHotelDto.MinPrice && p.Price <= filterHotelDto.MaxPrice).Any());
+            }
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    hotels = hotels.OrderByDescending(u => u.Name);
+                    break;
+                case "location":
+                    hotels = hotels.OrderBy(u => u.Location)
+                        .ThenBy(u=>u.Name);
+                    break;
+                case "location_desc":
+                    hotels = hotels.OrderByDescending(u => u.Location)
+                        .ThenByDescending(u => u.Name);
+                    break;
+                case "season":
+                    hotels = hotels.OrderBy(u => u.Season)
+                        .ThenBy(u => u.Name);
+                    break;
+                case "season_desc":
+                    hotels = hotels.OrderByDescending(u => u.Season)
+                        .ThenByDescending(u => u.Name);
+                    break;
+                default:
+                    hotels = hotels.OrderBy(u => u.Name);
+                    break;
             }
 
             return _mapper.Map<IEnumerable<Hotel>, IEnumerable<HotelDTO>>(hotels.ToList());
@@ -101,18 +127,39 @@ namespace ApplicationCore.Managers
         {
             HotelConv hotelConv = _context.HotelConvs.Include(hc => hc.AdditionalConv)
                                                .FirstOrDefault(hc => hc.Id == Id);
+
             return _mapper.Map<HotelConv, HotelConvDTO>(hotelConv);
         }
 
-        public IEnumerable<HotelConvDTO> GetHotelConvs()
+        public IEnumerable<HotelConvDTO> GetHotelConvs(string sortOrder=null)
         {
             List<HotelConv> hotelConvs = _context.HotelConvs.ToList();
             List<AdditionalConv> addConvs = _context.AdditionalConvs.ToList();
+
             var query = hotelConvs.Join(addConvs,
                 hc => hc.AdditionalConvId,
                 ac => ac.Id,
                 (hc, ac) => new HotelConvDTO { Id = hc.Id, Name = ac.Name, HotelId = hc.HotelId, Price = hc.Price }
                 );
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    query = query.OrderByDescending(u => u.Name);
+                    break;
+                case "price":
+                    query = query.OrderBy(u => u.Price)
+                        .ThenBy(u => u.Name);
+                    break;
+                case "price_desc":
+                    query = query.OrderByDescending(u => u.Price)
+                        .ThenByDescending(u => u.Name);
+                    break;
+                default:
+                    query = query.OrderBy(u => u.Name);
+                    break;
+            }
+
             return query;
         }
 
@@ -172,7 +219,7 @@ namespace ApplicationCore.Managers
                                                     .FirstOrDefault(hr => hr.Id == Id);
             return _mapper.Map<HotelRoom, HotelRoomDTO>(hotelRoom);
         }
-        public IEnumerable<HotelRoomDTO> GetHotelRooms()
+        public IEnumerable<HotelRoomDTO> GetHotelRooms(string sortOrder = null)
         {
             List<HotelRoom> hotelRooms = _context.HotelRooms.ToList();
             List<Room> rooms = _context.Rooms.ToList();
@@ -181,6 +228,33 @@ namespace ApplicationCore.Managers
                 r => r.Id,
                 (hr, r) => new HotelRoomDTO { Id = hr.Id, HotelId = hr.HotelId, Price = hr.Price, RoomId = r.Id, Type = r.RoomType, Number = hr.Number }
                 );
+
+            switch (sortOrder)
+            {
+                case "number_desc":
+                    query = query.OrderByDescending(u => u.Number);
+                    break;
+                case "price":
+                    query = query.OrderBy(u => u.Price)
+                        .ThenBy(u => u.Number);
+                    break;
+                case "price_desc":
+                    query = query.OrderByDescending(u => u.Price)
+                        .ThenByDescending(u => u.Number);
+                    break;
+                case "type":
+                    query = query.OrderBy(u => u.Type)
+                        .ThenBy(u => u.Number);
+                    break;
+                case "type_desc":
+                    query = query.OrderByDescending(u => u.Type)
+                        .ThenByDescending(u => u.Number);
+                    break;
+                default:
+                    query = query.OrderBy(u => u.Number);
+                    break;
+            }
+
             return query;
         }
 
@@ -233,15 +307,34 @@ namespace ApplicationCore.Managers
         }
         #endregion
         #region HotelRoomConvs
-        public IEnumerable<HotelRoomConvDTO> GetHotelRoomConvs(int Id)
+        public IEnumerable<HotelRoomConvDTO> GetHotelRoomConvs(int Id, string sortOrder = null)
         {
             IEnumerable<RoomConv> roomConvs = _context.RoomConvs.ToList().Where(rc => rc.HotelRoomId == Id);
             List<AdditionalConv> convs = _context.AdditionalConvs.ToList();
+
             var query = roomConvs.Join(convs,
                 rc => rc.AdditionalConvId,
                 c => c.Id,
                 (rc, c) => new HotelRoomConvDTO { Id = rc.Id, Price = rc.Price, HotelRoomId = rc.HotelRoomId, ConvName = c.Name }
                 );
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    query = query.OrderByDescending(u => u.ConvName);
+                    break;
+                case "price":
+                    query = query.OrderBy(u => u.Price)
+                        .ThenBy(u => u.ConvName);
+                    break;
+                case "price_desc":
+                    query = query.OrderByDescending(u => u.Price)
+                        .ThenByDescending(u => u.ConvName);
+                    break;
+                default:
+                    query = query.OrderBy(u => u.ConvName);
+                    break;
+            }
             return query;
         }
 

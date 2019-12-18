@@ -10,7 +10,11 @@
                 <table class="table table-striped table-dark">
                     <thead>
                         <tr><th>List of conveniences</th><th></th><th></th></tr>
-                        <tr><th data-breakpoints="mobile">Name</th><th data-breakpoints="mobile tablet">Price</th><th data-breakpoints="mobile tablet">Actions</th></tr>
+                        <tr>
+                        <th data-breakpoints="mobile"><a asp-action="HotelConvs" asp-route-sortOrder="@ViewData["NameSortParm"]">Name</a></th>
+                        <th data-breakpoints="mobile tablet"><a asp-action="HotelConvs" asp-route-sortOrder="@ViewData["PriceSortParm"]">Price</a></th>
+                        <th data-breakpoints="mobile tablet">Actions</th>
+                        </tr>
                     </thead>
                     <tbody>
                         @if (!Model.Any())

@@ -35,7 +35,7 @@ namespace ApplicationCore.Managers
             _additionalConvManager = additionalConvManager;
         }
         #region Users
-        public List<AdminUserDTO> GetUsers(string sortOrder)
+        public List<AdminUserDTO> GetUsers(string sortOrder = null)
         {
             List<AdminUserDTO> users = _mapper.Map<List<AppUser>, List<AdminUserDTO>>(_userManager.Users.ToList());
             switch (sortOrder)
@@ -115,58 +115,28 @@ namespace ApplicationCore.Managers
         #endregion
 
         #region Hotels
-        public async Task<HotelDTO> GetHotelById(int Id)
-        {
-            HotelDTO hotel = await _hotelManager.GetHotelById(Id);
-            return hotel;
-        }
-        public IEnumerable<HotelDTO> GetHotels()
-        {
-            IEnumerable<HotelDTO> hotels =_hotelManager.GetHotels(new FilterHotelDto() );
-            return hotels;
-        }
+        public async Task<HotelDTO> GetHotelById(int Id) => await _hotelManager.GetHotelById(Id);
+        public IEnumerable<HotelDTO> GetHotels(string sortOrder = null) => _hotelManager.GetHotels(new FilterHotelDto(), sortOrder);
+        public async Task<OperationDetails> CreateHotel(HotelDTO hotelDTO) => await _hotelManager.Create(hotelDTO);
+        public async Task<OperationDetails> EditHotel(HotelDTO hotelDTO) => await _hotelManager.Update(hotelDTO);
+        public async Task DeleteHotel(int Id) => await _hotelManager.Delete(Id);
 
-        public async Task<OperationDetails> CreateHotel(HotelDTO hotelDTO)
-        {
-            return await _hotelManager.Create(hotelDTO);
-        }
-        public async Task<OperationDetails> EditHotel(HotelDTO hotelDTO)
-        {
-            return await _hotelManager.Update(hotelDTO);
-        }
-        public async Task DeleteHotel(int Id)
-        {
-            await _hotelManager.Delete(Id);
-        }
-        public IEnumerable<HotelConvDTO> GetHotelConvs() => _hotelManager.GetHotelConvs();
 
+        public IEnumerable<HotelConvDTO> GetHotelConvs(string sortOrder = null) => _hotelManager.GetHotelConvs(sortOrder);
         public Task<OperationDetails> CreateHotelConv(HotelConvDTO hotelConvDTO) => _hotelManager.CreateHotelConv(hotelConvDTO);
+        public async Task DeleteHotelConv(int Id) => await _hotelManager.DeleteHotelConv(Id);
+        public HotelConvDTO GetHotelConvById(int Id) => _hotelManager.GetHotelConvById(Id);
+        public async Task<OperationDetails> EditHotelConv(HotelConvDTO hotelConvDTO) => await _hotelManager.UpdateHotelConv(hotelConvDTO);
 
-        public async Task DeleteHotelConv(int Id)
-        {
-            await _hotelManager.DeleteHotelConv(Id);
-        }
-
-        public HotelConvDTO GetHotelConvById(int Id)
-        {
-            return _hotelManager.GetHotelConvById(Id);
-        }
-
-        public async Task<OperationDetails> EditHotelConv(HotelConvDTO hotelConvDTO)
-        {
-            return await _hotelManager.UpdateHotelConv(hotelConvDTO);
-        }
 
         public HotelRoomDTO GetHotelRoomById(int Id) => _hotelManager.GetHotelRoomById(Id);
-        public IEnumerable<HotelRoomConvDTO> GetRoomConvs(int Id) => _hotelManager.GetHotelRoomConvs(Id);
-
+        public IEnumerable<HotelRoomDTO> GetHotelRooms(string sortOrder = null) => _hotelManager.GetHotelRooms(sortOrder);
         public async Task<OperationDetails> CreateHotelRoom(HotelRoomDTO hotelRoomDTO) => await _hotelManager.CreateHotelRoom(hotelRoomDTO);
-
         public async Task<OperationDetails> EditHotelRoom(HotelRoomDTO hotelRoomDTO) => await _hotelManager.UpdateHotelRoom(hotelRoomDTO);
-
         public async Task DeleteHotelRoom(int Id) => await _hotelManager.DeleteHotelRoom(Id);
 
-        public IEnumerable<HotelRoomDTO> GetHotelRooms() => _hotelManager.GetHotelRooms();
+        
+        public IEnumerable<HotelRoomConvDTO> GetRoomConvs(int Id, string sortOrder=null) => _hotelManager.GetHotelRoomConvs(Id, sortOrder);
         public async Task<OperationDetails> CreateRoomConv(HotelRoomConvDTO roomConv) => await _hotelManager.CreateHotelRoomConv(roomConv);
         public async Task DeleteHotelRoomConv(int Id) => await _hotelManager.DeleteHotelRoomConv(Id);
         #endregion
