@@ -57,10 +57,8 @@ namespace ApplicationCore.Managers
             }
 
             if(filterHotelDto.HotelConvs.Any())
-            {
-                var hotconvid = hotels.Select(h => h.HotelConvs.Select(hc => hc.Id)).ToList();
-                hotels = hotels.Where(h => h.HotelConvs.Select(hc => hc.Id).Intersect(filterHotelDto.HotelConvs).Any());              
-
+            {          
+                hotels = hotels.Where(h => filterHotelDto.HotelConvs.All(x => h.HotelConvs.Select(hc => hc.Id).Contains(x)));              
             }
 
             return _mapper.Map<IEnumerable<Hotel>, IEnumerable<HotelDTO>>(hotels.ToList());
