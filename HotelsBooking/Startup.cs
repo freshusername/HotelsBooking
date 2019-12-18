@@ -46,8 +46,8 @@ namespace HotelsBooking
 
             services.AddAuthentication().AddGoogle(googleOptions =>
             {
-                googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
-                googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+                googleOptions.ClientId = Configuration["GoogleAuth:ClientId"];
+                googleOptions.ClientSecret = Configuration["GoogleAuth:ClientSecret"];
             });
 
             services.Configure<CookiePolicyOptions>(options =>

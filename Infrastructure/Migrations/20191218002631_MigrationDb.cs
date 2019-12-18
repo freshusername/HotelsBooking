@@ -302,6 +302,7 @@ namespace Infrastructure.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     TotalPrice = table.Column<decimal>(nullable: false),
+                    Qty = table.Column<int>(nullable: false),
                     HotelRoomId = table.Column<int>(nullable: false),
                     OrderId = table.Column<int>(nullable: false)
                 },

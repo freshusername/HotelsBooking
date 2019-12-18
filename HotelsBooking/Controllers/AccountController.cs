@@ -51,7 +51,7 @@ namespace HotelsBooking.Controllers
 
             var user = _mapper.Map<RegisterViewModel, UserDTO>(model);
             var result = await _authenticationManager.Register(user);
-            if (result.Succedeed)
+            if (result.Succeeded)
             {
                 var confrirmaParam = await _authenticationManager.GetEmailConfirmationToken(user.Email);
                 var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = confrirmaParam.UserId, code = confrirmaParam.Code }, protocol: HttpContext.Request.Scheme);
@@ -86,7 +86,7 @@ namespace HotelsBooking.Controllers
             var loginModel = _mapper.Map<LoginViewModel, UserDTO>(model);
             var identity = await _authenticationManager.Login(loginModel);
 
-            if (!identity.Succedeed)
+            if (!identity.Succeeded)
             {
                 ModelState.AddModelError(identity.Property, identity.Message);
                 return View(model);
@@ -189,7 +189,7 @@ namespace HotelsBooking.Controllers
 
 
         [AllowAnonymous]
-        public IActionResult SingInGoogle()
+        public IActionResult SignInGoogle()
         {
             string redirectUrl = Url.Action("GoogleResponse", "Account");
             var properties = SignInManager.ConfigureExternalAuthenticationProperties("Google", redirectUrl);

@@ -77,7 +77,7 @@ namespace ApplicationCore.Services
             var item  = _mapper.Map<HotelRoomDTO, HotelRoom>(room);
 
           var  orderItem =  await _context.OrderItems
-                            .SingleOrDefaultAsync(s => s.HotelRoom.Id == item.Id && s.OrderId == Id);
+                 .SingleOrDefaultAsync(s => s.HotelRoom.Id == item.Id && s.OrderId == Id);
 
             if (orderItem == null)
             {

@@ -106,15 +106,32 @@ namespace ApplicationCore.Managers
             await SignInManager.SignOutAsync();
         }
 
-        public async Task<IdentityResult> GoogleAuthentication()
+        public async Task<OperationDetails> GoogleAuthentication()
         {
            
-            ExternalLoginInfo info = await SignInManager.GetExternalLoginInfoAsync();
-              if (info == null) return (null);
+           ExternalLoginInfo info = await SignInManager.GetExternalLoginInfoAsync();
+             if (info == null) return (null);
 
-            string fullName = info.Principal.FindFirst(ClaimTypes.Name).Value;
-               var names = fullName.Split(' ');
+           var user = await UserManager.FindByEmailAsync(info.Principal.FindFirst(ClaimTypes.Email).Value);
+             if (user != null)
+             {
+                await SignInManager.SignInAsync(user, false);
+                return new OperationDetails(true , "" , "");
+             }
 
+           var userIdentity = await CreateGoogleUser(info);
+             IdentityResult identResult = await UserManager.AddLoginAsync(userIdentity, info);
+
+            if (identResult.Succeeded)                
+             await SignInManager.SignInAsync(userIdentity, false);
+
+            return new OperationDetails(identResult.Succeeded, "", "");
+        
+        }
+
+         private async Task<AppUser> CreateGoogleUser(ExternalLoginInfo info)
+         {
+            var names = info.Principal.FindFirst(ClaimTypes.Name).Value.Split(' ');
             var userIdentity = new AppUser
             {
                 Email = info.Principal.FindFirst(ClaimTypes.Email).Value,
@@ -123,20 +140,13 @@ namespace ApplicationCore.Managers
                 LastName = names[1]
             };
 
-            IdentityResult identResult = await UserManager.CreateAsync(userIdentity);
-              if (identResult.Succeeded)
-              {
-                  identResult = await UserManager.AddLoginAsync(userIdentity, info);
-                    if(identResult.Succeeded)
-                    {   
-                       await SignInManager.SignInAsync(userIdentity, false);              
-                       return identResult;
-                    }
-              }
-           
-            return identResult;
-                                                       
-        }
+             IdentityResult identResult = await UserManager.CreateAsync(userIdentity);
+
+             if (identResult.Succeeded)
+              await UserManager.AddToRoleAsync(userIdentity, "User");     
+            
+             return userIdentity ;
+         }
    
     }
 }

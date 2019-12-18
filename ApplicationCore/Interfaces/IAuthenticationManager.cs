@@ -15,6 +15,6 @@ namespace ApplicationCore.Interfaces
         Task<ConfirmDTO> GetPasswordConfirmationToken(string userName);
         Task<ConfirmDTO> GetEmailConfirmationToken(string userName);
         Task Logout();
-        Task<IdentityResult> GoogleAuthentication();
+        Task<OperationDetails> GoogleAuthentication();
     }
 }
