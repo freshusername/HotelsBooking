@@ -11,8 +11,9 @@ namespace ApplicationCore.Interfaces
     public interface IHotelManager : IDisposable
     {
         Task<HotelDTO> GetHotelById(int Id);
-        IEnumerable<HotelDTO> GetHotels(HotelFilterDto HotelFilterDto);
-        IEnumerable<HotelDTO> GetHotelsAdmin(string sortOrder, string searchString);
+        Task<HotelDTO> GetHotelDetails(FilterHotelDetailDTO filterHotelDetailDTO);
+        IEnumerable<HotelDTO> GetHotels(HotelFilterDto filterHotelDto);
+        IEnumerable<HotelDTO> GetHotelsAdmin(string sortOrder);
         Task<OperationDetails> Create(HotelDTO hotelDTO);
         Task<OperationDetails> Update(HotelDTO hotelDTO);
         Task Delete(int Id);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using static Infrastructure.Enums;
 
 namespace ApplicationCore.DTOs
 {
@@ -27,5 +28,11 @@ namespace ApplicationCore.DTOs
         {
             return this.MemberwiseClone();
         }
+        public string Location { get; set; }
+        public DateTimeOffset FromDate { get; set; }
+        public DateTimeOffset ToDate { get; set; }
+        public int? MaxAdults { get; set; }
+        public int MaxChildren { get; set; }
+        public Season? Season { get; set; }
     }
 }
