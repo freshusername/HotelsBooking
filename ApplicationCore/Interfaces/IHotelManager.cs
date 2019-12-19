@@ -29,7 +29,7 @@ namespace ApplicationCore.Interfaces
         Task<OperationDetails> UpdateHotelRoom(HotelRoomDTO hotelRoomDTO);
         Task DeleteHotelRoom(int Id);
 
-        IEnumerable<HotelRoomConvDTO> GetHotelRoomConvs(int Id, string sortOrder, string searchString);
+        IEnumerable<HotelRoomConvDTO> GetHotelRoomConvs(int Id, AdminPaginationDTO paginationDTO, string sortOrder);
         Task<OperationDetails> CreateHotelRoomConv(HotelRoomConvDTO conv);
         Task DeleteHotelRoomConv(int Id);
     }
