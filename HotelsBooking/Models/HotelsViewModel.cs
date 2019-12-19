@@ -9,6 +9,6 @@ namespace HotelsBooking.Models
     public class HotelsViewModel
     {
         public IEnumerable<CreateOrEditHotelViewModel> hotels { get; set; }
-        public HotelFilterDto HotelFilterDto { get; set; }
+        public AdminPaginationDTO PaginationDTO { get; set; }
     }
 }

@@ -76,9 +76,8 @@ namespace ApplicationCore.Managers
 
         }
 
-        public IEnumerable<HotelDTO> GetHotelsAdmin(HotelFilterDto hotelFilterDto, string sortOrder = null)
+        public IEnumerable<HotelDTO> GetHotelsAdmin(AdminPaginationDTO paginationDTO , string sortOrder = null)
         {
-            hotelFilterDto.PageSize = 10;
             var hotels = _context.Hotels.Include(h => h.HotelRooms)
                                             .ThenInclude(hr => hr.Room)
                                         .Include(h => h.HotelRooms)
@@ -86,11 +85,11 @@ namespace ApplicationCore.Managers
                                         .Include(h => h.HotelPhotos)
                                     .Select(h => h);
 
-            if (!String.IsNullOrEmpty(hotelFilterDto.KeyWord))
-                hotels = hotels.Where(u => u.Name.Contains(hotelFilterDto.KeyWord)
-                                    || u.Location.Contains(hotelFilterDto.KeyWord)
+            if (!String.IsNullOrEmpty(paginationDTO.KeyWord))
+                hotels = hotels.Where(u => u.Name.Contains(paginationDTO.KeyWord)
+                                    || u.Location.Contains(paginationDTO.KeyWord)
                                     || u.Season.ToString().ToUpper()
-                                    .Contains(hotelFilterDto.KeyWord.ToUpper()));
+                                    .Contains(paginationDTO.KeyWord.ToUpper()));
 
             switch (sortOrder)
             {
@@ -118,8 +117,8 @@ namespace ApplicationCore.Managers
                     break;
             }
 
-            hotelFilterDto.HotelsAmount = hotels.Count();
-            hotels = hotels.Skip((hotelFilterDto.CurrentPage - 1) * hotelFilterDto.PageSize).Take(hotelFilterDto.PageSize);
+            paginationDTO.Amount = hotels.Count();
+            hotels = hotels.Skip((paginationDTO.CurrentPage - 1) * paginationDTO.PageSize).Take(paginationDTO.PageSize);
 
             return _mapper.Map<IEnumerable<Hotel>, IEnumerable<HotelDTO>>(hotels.ToList());
         }

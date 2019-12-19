@@ -123,7 +123,7 @@ namespace ApplicationCore.Managers
 
         #region Hotels
         public async Task<HotelDTO> GetHotelById(int Id) => await _hotelManager.GetHotelById(Id);
-        public IEnumerable<HotelDTO> GetHotels(HotelFilterDto hotelFilterDto ,string sortOrder = null) => _hotelManager.GetHotelsAdmin(hotelFilterDto,sortOrder);
+        public IEnumerable<HotelDTO> GetHotels(AdminPaginationDTO paginationDTO, string sortOrder = null) => _hotelManager.GetHotelsAdmin(paginationDTO, sortOrder);
         public async Task<OperationDetails> CreateHotel(HotelDTO hotelDTO) => await _hotelManager.Create(hotelDTO);
         public async Task<OperationDetails> EditHotel(HotelDTO hotelDTO) => await _hotelManager.Update(hotelDTO);
         public async Task DeleteHotel(int Id) => await _hotelManager.Delete(Id);
