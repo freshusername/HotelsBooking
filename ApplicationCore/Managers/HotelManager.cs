@@ -54,7 +54,7 @@ namespace ApplicationCore.Managers
             return hotelDTO;
         }
 
-        public IEnumerable<HotelDTO> GetHotels(FilterHotelDto filterHotelDto = null)
+        public IEnumerable<HotelDTO> GetHotels(HotelFilterDto HotelFilterDto = null)
         {
             var hotels = _context.Hotels.Include(h => h.HotelRooms)
                                             .ThenInclude(hr => hr.Room)
@@ -71,32 +71,32 @@ namespace ApplicationCore.Managers
                                     || h.Location.Contains(HotelFilterDto.KeyWord));
             }
 
-            if (!String.IsNullOrEmpty(filterHotelDto?.Location))
+            if (!String.IsNullOrEmpty(HotelFilterDto?.Location))
             {
-                hotels = hotels.Where(h => h.Location.Contains(filterHotelDto.Location));
+                hotels = hotels.Where(h => h.Location.Contains(HotelFilterDto.Location));
             }
 
-            if (filterHotelDto.Season.HasValue)
+            if (HotelFilterDto.Season.HasValue)
             {
-                hotels = hotels.Where(h => h.Season.Equals(Enum.Parse(typeof(Season), filterHotelDto.Season.ToString())));
+                hotels = hotels.Where(h => h.Season.Equals(Enum.Parse(typeof(Season), HotelFilterDto.Season.ToString())));
             }
 
-            if (filterHotelDto?.FromDate != null && filterHotelDto?.ToDate != null)
+            if (HotelFilterDto?.FromDate != null && HotelFilterDto?.ToDate != null)
             {
                 hotels = hotels.Where(h => h.HotelRooms
                                                 .Any(hr => hr.OrderDetails
-                                                            .Any(od => CheckIfAvailable(od.CheckInDate, od.CheckOutDate, filterHotelDto.FromDate, filterHotelDto.ToDate))
+                                                            .Any(od => CheckIfAvailable(od.CheckInDate, od.CheckOutDate, HotelFilterDto.FromDate, HotelFilterDto.ToDate))
                                                             || !hr.OrderDetails.Any()));
             }
 
-            if (filterHotelDto.MaxAdults.HasValue)
+            if (HotelFilterDto.MaxAdults.HasValue)
             {
                 hotels = hotels.Where(h => h.HotelRooms
-                                                .Any(hr => (filterHotelDto.MaxAdults <= hr.MaxAdults && filterHotelDto.MaxChildren <= hr.MaxChildren)
-                                                            || (filterHotelDto.MaxAdults + filterHotelDto.MaxChildren) <= hr.MaxAdults));
+                                                .Any(hr => (HotelFilterDto.MaxAdults <= hr.MaxAdults && HotelFilterDto.MaxChildren <= hr.MaxChildren)
+                                                            || (HotelFilterDto.MaxAdults + HotelFilterDto.MaxChildren) <= hr.MaxAdults));
             }
 
-            if (filterHotelDto?.MinPrice >= 0)
+            if (HotelFilterDto?.MinPrice >= 0)
             {
                 hotels = hotels.Where(h => h.HotelRooms.Any(p => p.Price >= HotelFilterDto.MinPrice));
             }
