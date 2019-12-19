@@ -112,6 +112,7 @@ namespace ApplicationCore.Services
             var orderItems = _context.OrderItems.ToList() ?? await _context.OrderItems
                 .Where(e => e.OrderId == Id)
                 .Include(e => e.HotelRoom)
+                 .ThenInclude(e => e.Room)
                 .ToListAsync();
 
 

@@ -12,9 +12,13 @@ namespace ApplicationCore.DTOs
         public string OrderId { get; set; }
 
         public int Qty { get; set; }
+               
+        public string Name { get; set; }
+        public string Description { get; set; }
 
         public int HotelRoomId { get; set; }
-        public virtual HotelRoom HotelRoom { get; set; }
+
+        public decimal Price { get; set; }
 
     }
 }

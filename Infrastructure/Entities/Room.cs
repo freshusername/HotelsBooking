@@ -11,6 +11,7 @@ namespace Infrastructure.Entities
 
         public int RoomTypeId { get; set; }
         public RoomType RoomType { get; set; }
+
         public ICollection<HotelRoom> HotelRooms { get; set; }
     }
 }
