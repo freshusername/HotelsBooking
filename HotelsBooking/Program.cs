@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Infrastructure.DbInitialize;
+using Infrastructure.EF;
 using Infrastructure.Entities;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
@@ -27,7 +28,8 @@ namespace HotelsBooking
                 {
                     var userManager = services.GetRequiredService<UserManager<AppUser>>();
                     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-                    DbInitializer.SeedData(userManager,roleManager);
+                    var db = services.GetRequiredService<ApplicationDbContext>();
+                    DbInitializer.SeedData(userManager,roleManager,db);
                 }
                 catch (Exception ex)
                 {

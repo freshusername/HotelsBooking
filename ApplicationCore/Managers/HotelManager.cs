@@ -44,12 +44,12 @@ namespace ApplicationCore.Managers
         {
             HotelDTO hotelDTO = await GetHotelById(filterHotelDetailDTO.HotelId);
 
-            if (filterHotelDetailDTO?.FromDate != null && filterHotelDetailDTO?.ToDate != null)
-            {
-                hotelDTO.HotelRooms = hotelDTO.HotelRooms.Where(hr => hr.OrderDetails
-                                                            .Any(od => CheckIfAvailable(od.CheckInDate, od.CheckOutDate, filterHotelDetailDTO.FromDate, filterHotelDetailDTO.ToDate))
-                                                            || !hr.OrderDetails.Any()).ToList();
-            }
+            //if (filterHotelDetailDTO?.FromDate != null && filterHotelDetailDTO?.ToDate != null)
+            //{
+            //    hotelDTO.HotelRooms = hotelDTO.HotelRooms.Where(hr => hr.OrderDetails
+            //                                                .Any(od => CheckIfAvailable(/*od.CheckInDate, od.CheckOutDate,*/ filterHotelDetailDTO.FromDate, filterHotelDetailDTO.ToDate))
+            //                                                || !hr.OrderDetails.Any()).ToList();
+            //}
 
             return hotelDTO;
         }
@@ -81,13 +81,13 @@ namespace ApplicationCore.Managers
                 hotels = hotels.Where(h => h.Season.Equals(Enum.Parse(typeof(Season), HotelFilterDto.Season.ToString())));
             }
 
-            if (HotelFilterDto?.FromDate != null && HotelFilterDto?.ToDate != null)
-            {
-                hotels = hotels.Where(h => h.HotelRooms
-                                                .Any(hr => hr.OrderDetails
-                                                            .Any(od => CheckIfAvailable(od.CheckInDate, od.CheckOutDate, HotelFilterDto.FromDate, HotelFilterDto.ToDate))
-                                                            || !hr.OrderDetails.Any()));
-            }
+            //if (HotelFilterDto?.FromDate != null && HotelFilterDto?.ToDate != null)
+            //{
+            //    hotels = hotels.Where(h => h.HotelRooms
+            //                                    .Any(hr => hr.OrderDetails
+            //                                                .Any(od => CheckIfAvailable(/*od.CheckInDate, od.CheckOutDate,*/ HotelFilterDto.FromDate, HotelFilterDto.ToDate))
+            //                                                || !hr.OrderDetails.Any()));
+            //}
 
             if (HotelFilterDto.MaxAdults.HasValue)
             {

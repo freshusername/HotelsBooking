@@ -1,17 +1,20 @@
-﻿using Infrastructure.Entities;
+﻿using Infrastructure.EF;
+using Infrastructure.Entities;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static Infrastructure.Enums;
 
 namespace Infrastructure.DbInitialize
 {
     public static class DbInitializer
     {
-        public static void SeedData(UserManager<AppUser> userManager , RoleManager<IdentityRole> roleManager)
+        public static void SeedData(UserManager<AppUser> userManager , RoleManager<IdentityRole> roleManager , ApplicationDbContext db)
         {
             SeedRoles(roleManager);
             SeedUsers(userManager);
+            SeedHotels(db);       
         }
 
         public static void SeedRoles(RoleManager<IdentityRole> roleManager)
@@ -90,6 +93,52 @@ namespace Infrastructure.DbInitialize
                 if (result.Succeeded)
                     userManager.AddToRoleAsync(user, "User").Wait();
             }
+        }
+
+        public static void SeedHotels(ApplicationDbContext db)
+        {
+            var Hotels = new List<Hotel>
+            {
+                new Hotel {Name = "Parize" , Location= "Parize , Holovna 15" , Description = "Recently, the US Federal government banned online casinos from operating in America by making it illegal to transfer money to them through any US bank or payment system. As a result of this law, most of the popular online casino networks such as Party Gaming and PlayTech left the United States. Overnight, online casino players found themselves being chased by the Federal government. But, after a fortnight, the online casino industry came up with" , Season = Season.Cold }
+
+            };
+            db.AddRange(Hotels);
+
+
+            var Room = new List<Room>
+            {
+               new Room { RoomType = RoomType.Double }
+
+            };
+            db.AddRange(Room);
+
+
+            var HotelRooms = new List<HotelRoom>
+            {
+                new HotelRoom { Price = 4500 , Number = 12 , MaxAdults = 9 , MaxChildren = 27 , RoomId = 1 , HotelId =1 }
+            };
+            db.AddRange(HotelRooms);
+
+            var AddConv = new List<AdditionalConv>
+            {
+                new AdditionalConv{Name="Lanch"}
+            };
+            db.AddRange(AddConv);
+
+            var RoomConv = new List<RoomConv>
+            {
+                new RoomConv {Price = 300, AdditionalConvId = 1 , HotelRoomId = 1 }
+            };
+            db.AddRange(RoomConv);
+
+            var HotelConv = new List<HotelConv>
+            {
+                new HotelConv {Price = 3000 , AdditionalConvId = 1 , HotelId = 1 } 
+            };
+            db.AddRange(HotelConv);
+
+            db.SaveChanges();
+
         }
     }
 }

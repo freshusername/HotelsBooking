@@ -20,9 +20,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ApplicationCore.Services;
-using HotelsBooking.Mapping.HotelsBooking.Mapping;
 using ApplicationCore.Infrastructure;
+using ApplicationCore.Managers;
 
 namespace HotelsBooking
 {
@@ -102,8 +101,7 @@ namespace HotelsBooking
             services.AddAutoMapper(typeof(AutoMapperProfile).GetTypeInfo().Assembly);
         
 
-            services.AddTransient<IAuthenticationManager, AuthenticationManager>();
-            services.AddTransient<IAdminManager, AdminManager>();
+            services.AddTransient<IAuthenticationManager, AuthenticationManager>();         
             services.AddTransient<IHotelManager, HotelManager>();
             services.AddTransient<IOrderManager, OrderManager>();
             services.AddTransient<IAdditionalConvManager, AdditionalConvManager>();
