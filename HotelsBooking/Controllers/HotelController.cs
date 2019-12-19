@@ -33,7 +33,6 @@ namespace HotelsBooking.Controllers
                 HotelFilterDto = HotelFilterDto
             };
 
-
             return View(model);
         }
 
