@@ -1,0 +1,57 @@
+﻿@model HotelsBooking.Models.AppProfile.AllProfilesViewModel
+
+
+<body>
+
+    <section id="content">
+        <div class="@*d-flex*@ justify-content-around align-items-start">
+
+            <div class="review_list">
+
+                @foreach (var profile in Model.ProfilesList)
+                {
+                    <a asp-controller="Profile" asp-action="Detail" asp-route-id="@profile.Id">
+                        <div class="review_item shadow-standart" style="padding: 20px;">
+                            <div class="media">
+                                <div class="d-flex">
+                                    <img src="img/product/single-product/review-3.png" alt="">
+                                </div>
+                                <div class="media-body" style="height: 80px">
+                                    <h4 style="margin-right: 40px; margin-top: 10px; margin-bottom: 10px">@profile.FirstName @profile.LastName</h4>
+                                    @foreach (var role in profile.Roles)
+                                    {
+                                        <a class="@(role.ToLower() + " role-button btn_2")" style="margin-left: 10px;">@role</a>
+                                    }
+
+                                </div>
+                            </div>
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                                sed do eiusmod tempor incididunt ut labore et dolore magna
+                                aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                                ullamco laboris nisi ut aliquip ex ea commodo
+                            </p>
+                        </div>
+                    </a>
+
+                }
+            </div>
+        </div>
+    </section>
+</body>
+
+@*<div class="single_product_item">
+        <img src="">
+        <div class="single_product_text">
+            <h4>
+                SLS Hotel
+            </h4>
+            <h3>
+                Beverly Hills
+            </h3>
+            <h3>
+                Hot
+            </h3>
+            <a href="/Hotel/HotelMain">Details</a>
+        </div>
+    </div>*@

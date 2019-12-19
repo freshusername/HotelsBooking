@@ -4,12 +4,12 @@ using System.Linq;
 using System.Net.Mime;
 using System.Reflection;
 using System.Threading.Tasks;
+using ApplicationCore.Interfaces;
+using ApplicationCore.Services;
 using AutoMapper;
 using HotelsBooking.Mapping;
 using Infrastructure.EF;
 using Infrastructure.Entities;
-using ApplicationCore.Interfaces;
-using ApplicationCore.Managers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -91,12 +91,10 @@ namespace HotelsBooking
                 options.SlidingExpiration = true;
             });
 
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
+            //var config = new AutoMapper.MapperConfiguration(c =>
+            //{
+            //    c.AddProfile(new ApplicationMappingProfile());
+            //});
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddMvc();
@@ -105,9 +103,26 @@ namespace HotelsBooking
         
 
             services.AddTransient<IAuthenticationManager, AuthenticationManager>();
+            services.AddTransient<IAdminManager, AdminManager>();
+            services.AddTransient<IHotelManager, HotelManager>();
+            services.AddTransient<IOrderManager, OrderManager>();
+            services.AddTransient<IAdditionalConvManager, AdditionalConvManager>();
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<IHotelManager, HotelManager>();
+            services.AddTransient<IProfileManager, ProfileManager>();
+            services.AddTransient<IProfileService, ProfileService>();
+            services.AddTransient<IPhotoManager, PhotoManager>();
+
+
+      //var mapper = config.CreateMapper();
+
+
             services.AddTransient<IOrderManager, OrderManager>();
             services.AddSingleton<IEmailSender, EmailSender>();
             services.AddTransient<IOrderService, OrderService>();
+      services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseMySql(
+                Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddMemoryCache();

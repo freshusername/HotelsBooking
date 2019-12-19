@@ -1,36 +1,78 @@
-using ApplicationCore.DTOs;
-using AutoMapper;
+﻿using ApplicationCore.DTOs;
+using ApplicationCore.DTOs.AppProfile;
 using HotelsBooking.Models;
+using HotelsBooking.Models.AppProfile;
 using Infrastructure.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using AutoMapper;
 
 namespace HotelsBooking.Mapping
 {
-
-    namespace HotelsBooking.Mapping
+    public class AutoMapperProfile : Profile
     {
-
-        public class AutoMapperProfile : Profile
+        public AutoMapperProfile()
         {
+            CreateMap<AppUser,EditUserViewModel>();
+            CreateMap<AppUser, ChangePasswordViewModel>();
+            CreateMap<EditUserViewModel, UserDTO>().ForMember(au => au.UserName, map => map.MapFrom(vm => vm.Email)); ;
+            CreateMap<ChangePasswordViewModel, UserDTO>().ForMember(au => au.UserName, map => map.MapFrom(vm => vm.Email)); ;
 
-            public AutoMapperProfile()
-            {
+            CreateMap<AppUser, AdminUserDTO>();
+            CreateMap<AdminUserDTO, UsersViewModel>();
 
-                CreateMap<RegisterViewModel, UserDTO>().ForMember(au => au.UserName, map => map.MapFrom(vm => vm.Email));
-                CreateMap<UserDTO, AppUser>().ForMember(au => au.UserName, map => map.MapFrom(vm => vm.Email));
+            CreateMap<AdditionalConvDTO, AdditionalConv>().ReverseMap();
 
-                CreateMap<LoginViewModel, UserDTO>().ForMember(au => au.UserName, map => map.MapFrom(vm => vm.Email));
-                CreateMap<UserDTO, AppUser>().ForMember(au => au.UserName, map => map.MapFrom(vm => vm.Email));
+            CreateMap<HotelConvDTO,HotelConvsViewModel>();
 
-                CreateMap<OrderViewModel, OrderDTO>();
-                CreateMap<OrderDTO, Order>();
+            CreateMap<CreateOrEditHotelViewModel, HotelDTO>().ReverseMap();
+            CreateMap<HotelDTO, Hotel>().ReverseMap();
+            
+         
+            CreateMap<RegisterViewModel, UserDTO>()
+                .ForMember(au => au.UserName, map => map.MapFrom(vm => vm.Email));
+            
+            CreateMap<UserDTO, AppUser>()
+                .ForMember(au => au.UserName, map => map.MapFrom(vm => vm.Email)).ReverseMap();
 
-            }
+            CreateMap<LoginViewModel, UserDTO>()
+                .ForMember(au => au.UserName, map => map.MapFrom(vm => vm.Email));
 
+            CreateMap<OrderDetail, OrderDetailDTO>().ReverseMap();
+            CreateMap<Order, OrderDTO>().ReverseMap();
+
+
+#region Profile
+      CreateMap<AppUser, ProfileDto>().ReverseMap();
+
+            CreateMap<ProfileDto, AllProfilesViewModel>().ReverseMap();
+            CreateMap<ProfileDto, ProfileViewModel>().ReverseMap();
+
+            CreateMap<ProfileRoleDto, AppUser>().ReverseMap();
+
+      #endregion
+
+
+      CreateMap<OrderDTO, OrdersViewModel>();
+
+            CreateMap<OrderDetailDTO, OrderDetailsViewModel>();
+            CreateMap<OrderDTO, OrdersViewModel>();
+
+            CreateMap<CreateOrEditOrderViewModel, OrderDTO>();
+            CreateMap<OrderDTO, CreateOrEditOrderViewModel>();
+            CreateMap<CreateOrEditOrderDetailsViewModel, OrderDetailDTO>();
+
+            CreateMap<CreateAndEditHotelConvViewModel, HotelConvDTO>().ReverseMap();
+            CreateMap<CreateOrEditHotelConvViewModel, HotelConvDTO>().ReverseMap();
+
+            CreateMap<HotelConv, HotelConvDTO>()
+                .ForMember(hcd => hcd.Name, map =>map.MapFrom(hc => hc.AdditionalConv.Name)).ReverseMap();
+            CreateMap<AdditionalConv, AdditionalConvDTO>().ReverseMap();
+
+            CreateMap<HotelRoomDTO, HotelRoomsViewModel>().ReverseMap();
+            CreateMap<CreateOrEditHotelRoomViewModel, HotelRoomDTO>().ReverseMap();
+            CreateMap<HotelRoom, HotelRoomDTO>().ForMember(hrd => hrd.Type, map=>map.MapFrom(hr => hr.Room.RoomType)).ReverseMap();
+
+            CreateMap<HotelRoomConvDTO, HotelRoomConvsViewModel>();
         }
-
     }
 }
+

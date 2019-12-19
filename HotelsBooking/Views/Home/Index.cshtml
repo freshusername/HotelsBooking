@@ -1,99 +1,110 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Hotel Template">
+    <meta name="keywords" content="Hotel, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Europa Hotel & Spa | Template</title>
 
-@if (User.IsInRole("User"))
-{
-    <p>asfffffffffffffffffffffffffffffffffffffffffffffffffff
-    asfffffffffffffffffffffffffffff</p>
-}
-<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
-    <ol class="carousel-indicators">
-        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-        <li data-target="#myCarousel" data-slide-to="1"></li>
-        <li data-target="#myCarousel" data-slide-to="2"></li>
-    </ol>
-    <div class="carousel-inner" role="listbox">
-        <div class="item active">
-            <img src="~/images/banner1.svg" alt="ASP.NET" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    Learn how to build ASP.NET apps that can run anywhere.
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525028&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
-        </div>
-        <div class="item">
-            <img src="~/images/banner2.svg" alt="Visual Studio" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    There are powerful new features in Visual Studio for building modern web apps.
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525030&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
-        </div>
-        <div class="item">
-            <img src="~/images/banner3.svg" alt="Microsoft Azure" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    Learn how Microsoft's Azure cloud platform allows you to build, deploy, and scale web apps.
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525027&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
-        </div>
-    </div>
-    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-    </a>
-    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-    </a>
-</div>
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat+Alternates:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
 
-<div class="row">
-    <div class="col-md-3">
-        <h2>Application uses</h2>
-        <ul>
-            <li>Sample pages using ASP.NET Core MVC</li>
-            <li>Theming using <a href="https://go.microsoft.com/fwlink/?LinkID=398939">Bootstrap</a></li>
-        </ul>
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="~/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="~/css/flaticon.css" type="text/css">
+    <link rel="stylesheet" href="~/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="~/css/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="~/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="~/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="~/css/style.css" type="text/css">
+</head>
+@using ApplicationCore.DTOs
+@model FilterHotelDto
+
+<!-- Search Filter Section Begin -->
+<section class="search-filter">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <form asp-controller="Hotel" asp-action="ShowHotels" method="get" class="check-form">
+                    <h4>Check Availability</h4>
+                    <div class="datepicker">
+                        <p>From</p>
+                        <input asp-for="@Model.FromDate" type="text" class="datepicker-1" placeholder="dd / mm / yyyy" autocomplete="off">
+                        <img src="img/calendar.png" alt="">
+                    </div>
+                    <div class="datepicker">
+                        <p>To</p>
+                        <input asp-for="@Model.ToDate" type="text" class="datepicker-2" placeholder="dd / mm / yyyy" autocomplete="off">
+                        <img src="img/calendar.png" alt="">
+                    </div>
+                    <div class="room-quantity">
+                        <div class="single-quantity">
+                            <p>Adults</p>
+                            <div class="pro-qty">
+                                <input asp-for="@Model.MaxAdults" type="text" value="0">
+                            </div>
+                        </div>
+                        <div class="single-quantity last">
+                            <p>Children</p>
+                            <div class="pro-qty">
+                                <input asp-for="@Model.MaxChildren" type="text" value="0">
+                            </div>
+                        </div>
+                        @*<div class="single-quantity last">
+                            <p>Rooms</p>
+                            <div class="pro-qty"><input type="text" value="0"></div>
+                        </div>*@
+                    </div>
+                    <div class="room-selector">
+                        <p>Location</p>
+                        <select asp-for="@Model.Location" class="suit-select">
+                            <option value="@String.Empty">Enter location</option>
+                            @foreach (var location in ViewBag.Locations)
+                            {
+                                <option value="@location">@location</option>
+                            }
+                        </select>
+                    </div>
+                    <button value="Filter" type="submit">Go</button>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="col-md-3">
-        <h2>How to</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=398600">Add a Controller and View</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699315">Manage User Secrets using Secret Manager.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699316">Use logging to log a message.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699317">Add packages using NuGet.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699319">Target development, staging or production environment.</a></li>
-        </ul>
+</section>
+<!-- Search Filter Section End -->
+
+<section class="feature_part padding_top">
+    <div class="container">
+        <div class="row align-items-center justify-content-between">
+            <div class="col-lg-7 col-sm-6">
+                <div style="background: url('img/banner/hotels_index.jpeg'); background-size: cover; " class="single_feature_post_text">
+                    <p class="home-index-text">hotels list</p>
+                    <h3 class="home-index-text">Hotels</h3>
+                    <a asp-controller="Hotel" asp-action="ShowHotels" class="feature_btn home-index-text">EXPLORE NOW<i class="fas fa-play"></i></a>
+
+                </div>
+            </div>
+            <div class="col-lg-5 col-sm-6">
+                <div class="col-lg-7 col-sm-6">
+                    <div style="background: url('img/banner/profile.jpeg'); background-size: cover; " class="single_feature_post_text">
+                        <p class="home-index-text">profiles list</p>
+                        <h3 class="home-index-text">Profiles</h3>
+                        <a asp-controller="Profile" asp-action="Index" class="feature_btn home-index-text">EXPLORE NOW<i class="fas fa-play"></i></a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="col-md-3">
-        <h2>Overview</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=518008">Conceptual overview of what is ASP.NET Core</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699320">Fundamentals of ASP.NET Core such as Startup and middleware.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=398602">Working with Data</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=398603">Security</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699321">Client side development</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699322">Develop on different platforms</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699323">Read more on the documentation site</a></li>
-        </ul>
-    </div>
-    <div class="col-md-3">
-        <h2>Run &amp; Deploy</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=517851">Run your app</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=517853">Run tools such as EF migrations and more</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=398609">Publish to Microsoft Azure Web Apps</a></li>
-        </ul>
-    </div>
-</div>
+</section>
+
+<script src="~/js/jquery-3.3.1.min.js"></script>
+<script src="~/js/bootstrap.min.js"></script>
+<script src="~/js/jquery.magnific-popup.min.js"></script>
+<script src="~/js/jquery-ui.min.js"></script>
+<script src="~/js/jquery.nice-select.min.js"></script>
+<script src="~/js/jquery.slicknav.js"></script>
+<script src="~/js/owl.carousel.min.js"></script>
+<script src="~/js/main.js"></script>
