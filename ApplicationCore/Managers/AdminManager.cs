@@ -35,14 +35,14 @@ namespace ApplicationCore.Managers
             _additionalConvManager = additionalConvManager;
         }
         #region Users
-        public IEnumerable<AdminUserDTO> GetUsers(string sortOrder = null, string searchString = null)
+        public IEnumerable<AdminUserDTO> GetUsers(AdminPaginationDTO paginationDTO, string sortOrder = null)
         {
             IEnumerable<AdminUserDTO> users = _mapper.Map<List<AppUser>, List<AdminUserDTO>>(_userManager.Users.ToList());
             
-            if (!String.IsNullOrEmpty(searchString))
-                users = users.Where(u => u.Email.Contains(searchString)
-                                    || u.FirstName.Contains(searchString)
-                                    || u.LastName.Contains(searchString));
+            if (!String.IsNullOrEmpty(paginationDTO.KeyWord))
+                users = users.Where(u => u.Email.Contains(paginationDTO.KeyWord)
+                                    || u.FirstName.Contains(paginationDTO.KeyWord)
+                                    || u.LastName.Contains(paginationDTO.KeyWord));
             
 
             switch (sortOrder)
@@ -66,6 +66,10 @@ namespace ApplicationCore.Managers
                     users = users.OrderBy(u => u.Email).ToList();
                     break;
             }
+
+            paginationDTO.Amount = users.Count();
+            users = users.Skip((paginationDTO.CurrentPage - 1) * paginationDTO.PageSize).Take(paginationDTO.PageSize);
+
             return users;
         }
         public async Task<OperationDetails> CreateUser(UserDTO userDTO)

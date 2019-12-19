@@ -31,16 +31,22 @@ namespace HotelsBooking.Controllers
         #region Users
 
         [HttpGet]
-        public IActionResult Users(string sortOrder, string searchString)
+        public IActionResult Users(AdminPaginationDTO paginationDTO, string sortOrder)
         {
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["FirstNameSortParm"] = sortOrder == "first" ? "first_desc" : "first";
             ViewData["SecondNameSortParm"] = sortOrder == "second" ? "second_desc" : "second";
-            ViewData["CurrentFilter"] = searchString;
+            ViewData["CurrentFilter"] = paginationDTO.KeyWord;
 
-            IEnumerable<UsersViewModel> users = _mapper.Map<IEnumerable<AdminUserDTO>, IEnumerable<UsersViewModel>>(_adminManager.GetUsers(sortOrder,searchString));
-            
-            return View(users);
+            IEnumerable<UsersViewModel> users = _mapper.Map<IEnumerable<AdminUserDTO>, IEnumerable<UsersViewModel>>(_adminManager.GetUsers(paginationDTO, sortOrder));
+
+            IEnumerableUsersViewModel model = new IEnumerableUsersViewModel
+            {
+                users = users,
+                PaginationDTO = paginationDTO
+            };
+
+            return View(model);
         }
 
         [HttpGet]
