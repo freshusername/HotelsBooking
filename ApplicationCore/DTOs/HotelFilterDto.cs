@@ -21,6 +21,6 @@ namespace ApplicationCore.DTOs
         public decimal MinAvailRoomPrice { get; set; }
 
         public bool HasPrevious => CurrentPage > 1;
-        public bool HasNext => CurrentPage < PagesCount - 1;
+        public bool HasNext => CurrentPage <= PagesCount - 1;
     }
 }

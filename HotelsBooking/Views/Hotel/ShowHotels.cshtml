@@ -181,33 +181,24 @@
                                                 <h3>Room price Filter</h3>
                                             </div>
                                             <div class="price-slider col-xl-12">
-                                                <input class="rounded" value="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" step="10" type="range" />
-                                                <input class="rounded" value="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" step="10" type="range" />
+                                                <div class="slider-margin">
+                                                    <input asp-for="HotelFilterDto.MinSearchPrice" class="rounded" value="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" step="10" type="range" />
+                                                    <input asp-for="HotelFilterDto.MaxSearchPrice" class="rounded" value="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" step="10" type="range" />
 
-                                                <div class="row">
-                                                    <div class="col-xl-6">
-                                                        max:
-                                                        <input class="form-control rounded" type="number" value="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" />
-                                                    </div>
-                                                    <div class="col-xl-6">
-                                                        min:
-                                                        <input class="form-control rounded" type="number" value="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" />
-                                                    </div>
                                                 </div>
+                                                    <div class="row">
+                                                        <div class="col-xl-6">
+                                                            max:
+                                                            <input class="form-control rounded" type="number" value="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" />
+                                                        </div>
+                                                        <div class="col-xl-6">
+                                                            min:
+                                                            <input class="form-control rounded" type="number" value="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" />
+                                                        </div>
+                                                    </div>
+                                                
                                             </div>
-
-                                            @*<div class="d-flex">
-                                                <div class="price_text">
-                                                    <p>min:</p>
-                                                </div>
-                                                <div class="price_value d-flex justify-content-center">
-                                                    @Html.EditorFor(x => Model.HotelFilterDto.MinSearchPrice, new { htmlAttributes = new { min = @Model.HotelFilterDto.MinAvailRoomPrice, max = @Model.HotelFilterDto.MaxAvailRoomPrice, id = "amount", @class = "form-control rounded js-input-to", @placeholder = "min price" } })
-                                                    @Html.ValidationMessageFor(x => Model.HotelFilterDto.MinSearchPrice)
-                                                    <span>max:</span>
-                                                    @Html.EditorFor(x => Model.HotelFilterDto.MaxSearchPrice, new { htmlAttributes = new { min = @Model.HotelFilterDto.MinAvailRoomPrice, max = @Model.HotelFilterDto.MaxAvailRoomPrice, id = "amount", @class = "form-control rounded js-input-to", @placeholder = "max price" } })
-                                                </div>*@
                                         </div>
-
 
                                         <div class="form-group">
                                             <label>Amount on page</label>
@@ -272,10 +263,8 @@
                                             </ul>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
-
                         </div>
 
                         <div class="row align-items-center latest_product_inner">
