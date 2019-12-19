@@ -25,7 +25,7 @@ namespace ApplicationCore.Interfaces
         Task<OperationDetails> EditHotel(HotelDTO hotelDTO);
         Task DeleteHotel(int Id);
 
-        IEnumerable<HotelConvDTO> GetHotelConvs(string sortOrder,string searchString);
+        IEnumerable<HotelConvDTO> GetHotelConvs(AdminPaginationDTO paginationDTO, string sortOrder);
         Task<OperationDetails> CreateHotelConv(HotelConvDTO hotelConvDTO);
         Task DeleteHotelConv(int Id);
         HotelConvDTO GetHotelConvById(int Id);

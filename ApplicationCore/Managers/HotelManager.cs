@@ -169,7 +169,7 @@ namespace ApplicationCore.Managers
             return _mapper.Map<HotelConv, HotelConvDTO>(hotelConv);
         }
 
-        public IEnumerable<HotelConvDTO> GetHotelConvs(string sortOrder=null, string searchString=null)
+        public IEnumerable<HotelConvDTO> GetHotelConvs(AdminPaginationDTO paginationDTO, string sortOrder = null)
         {
             List<HotelConv> hotelConvs = _context.HotelConvs.ToList();
             List<AdditionalConv> addConvs = _context.AdditionalConvs.ToList();
@@ -180,10 +180,10 @@ namespace ApplicationCore.Managers
                 (hc, ac) => new HotelConvDTO { Id = hc.Id, Name = ac.Name, HotelId = hc.HotelId, Price = hc.Price }
                 );
 
-            if (!String.IsNullOrEmpty(searchString))
-                query = query.Where(u => u.Name.Contains(searchString)
+            if (!String.IsNullOrEmpty(paginationDTO.KeyWord))
+                query = query.Where(u => u.Name.Contains(paginationDTO.KeyWord)
                                     || Convert.ToString(Math.Round(u.Price,0))
-                                    .Equals(searchString));
+                                    .Equals(paginationDTO.KeyWord));
 
             switch (sortOrder)
             {
@@ -202,6 +202,9 @@ namespace ApplicationCore.Managers
                     query = query.OrderBy(u => u.Name);
                     break;
             }
+
+            paginationDTO.Amount = query.Count();
+            query = query.Skip((paginationDTO.CurrentPage - 1) * paginationDTO.PageSize).Take(paginationDTO.PageSize);
 
             return query;
         }

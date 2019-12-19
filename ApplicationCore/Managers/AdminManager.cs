@@ -133,7 +133,7 @@ namespace ApplicationCore.Managers
         public async Task DeleteHotel(int Id) => await _hotelManager.Delete(Id);
 
 
-        public IEnumerable<HotelConvDTO> GetHotelConvs(string sortOrder = null, string searchString=null) => _hotelManager.GetHotelConvs(sortOrder,searchString);
+        public IEnumerable<HotelConvDTO> GetHotelConvs(AdminPaginationDTO paginationDTO, string sortOrder = null) => _hotelManager.GetHotelConvs(paginationDTO ,sortOrder);
         public Task<OperationDetails> CreateHotelConv(HotelConvDTO hotelConvDTO) => _hotelManager.CreateHotelConv(hotelConvDTO);
         public async Task DeleteHotelConv(int Id) => await _hotelManager.DeleteHotelConv(Id);
         public HotelConvDTO GetHotelConvById(int Id) => _hotelManager.GetHotelConvById(Id);

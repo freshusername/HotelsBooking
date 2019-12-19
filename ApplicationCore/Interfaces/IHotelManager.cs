@@ -12,12 +12,12 @@ namespace ApplicationCore.Interfaces
     {
         Task<HotelDTO> GetHotelById(int Id);
         IEnumerable<HotelDTO> GetHotels(HotelFilterDto HotelFilterDto);
-        IEnumerable<HotelDTO> GetHotelsAdmin(AdminPaginationDTO paginationDTO,string sortOrder);
+        IEnumerable<HotelDTO> GetHotelsAdmin(AdminPaginationDTO paginationDTO, string sortOrder);
         Task<OperationDetails> Create(HotelDTO hotelDTO);
         Task<OperationDetails> Update(HotelDTO hotelDTO);
         Task Delete(int Id);
 
-        IEnumerable<HotelConvDTO> GetHotelConvs(string sortOrder, string searchString);
+        IEnumerable<HotelConvDTO> GetHotelConvs(AdminPaginationDTO paginationDTO, string sortOrder);
         Task<OperationDetails> CreateHotelConv(HotelConvDTO hotelConvDTO);
         Task DeleteHotelConv(int Id);
         HotelConvDTO GetHotelConvById(int Id);
