@@ -45,31 +45,40 @@ namespace ApplicationCore.Managers
                                                 .ThenInclude(hr => hr.RoomConvs)
                                         .Include(h => h.HotelPhotos)
                                     .Select(h => h);
+
+            var hotelRooms = _context.HotelRooms.Select(hr => hr);
+
             if (!String.IsNullOrEmpty(HotelFilterDto?.KeyWord))
             {
                 hotels = hotels.Where(h => h.Name.Contains(HotelFilterDto.KeyWord)
-                                    || h.Description.Contains(HotelFilterDto.KeyWord)
                                     || h.Location.Contains(HotelFilterDto.KeyWord));
             }
-
-            if (HotelFilterDto?.MinPrice >= 0)
+            
+            if (HotelFilterDto?.MinSearchPrice >= 0)
             {
-                hotels = hotels.Where(h => h.HotelRooms.Any(p => p.Price >= HotelFilterDto.MinPrice));
+                hotels = hotels.Where(h => h.HotelRooms.Any(p => p.Price >= HotelFilterDto.MinSearchPrice));
             }
 
-            if (HotelFilterDto?.MaxPrice > 0)
+            if (HotelFilterDto?.MaxSearchPrice > 0)
             {
-                hotels = hotels.Where(h => h.HotelRooms.Any(p => p.Price <= HotelFilterDto.MaxPrice));
+                hotels = hotels.Where(h => h.HotelRooms.Any(p => p.Price <= HotelFilterDto.MaxSearchPrice));
             }
-            //TODO: Count, Skip, Take
+            
+
+            var roomPrices = hotelRooms.OrderByDescending(p => p.Price);
+            HotelFilterDto.MaxAvailRoomPrice = roomPrices.First().Price;
+            HotelFilterDto.MinAvailRoomPrice = roomPrices.Last().Price;
+
             HotelFilterDto.HotelsAmount = hotels.Count();
             hotels = hotels.Skip((HotelFilterDto.CurrentPage - 1) * HotelFilterDto.PageSize).Take(HotelFilterDto.PageSize);
 
             return _mapper.Map<IEnumerable<Hotel>, IEnumerable<HotelDTO>>(hotels.ToList());
+
         }
 
-        public IEnumerable<HotelDTO> GetHotelsAdmin(string sortOrder = null, string searchString=null)
+        public IEnumerable<HotelDTO> GetHotelsAdmin(HotelFilterDto hotelFilterDto, string sortOrder = null)
         {
+            hotelFilterDto.PageSize = 10;
             var hotels = _context.Hotels.Include(h => h.HotelRooms)
                                             .ThenInclude(hr => hr.Room)
                                         .Include(h => h.HotelRooms)
@@ -77,11 +86,11 @@ namespace ApplicationCore.Managers
                                         .Include(h => h.HotelPhotos)
                                     .Select(h => h);
 
-            if (!String.IsNullOrEmpty(searchString))
-                hotels = hotels.Where(u => u.Name.Contains(searchString)
-                                    || u.Location.Contains(searchString)
+            if (!String.IsNullOrEmpty(hotelFilterDto.KeyWord))
+                hotels = hotels.Where(u => u.Name.Contains(hotelFilterDto.KeyWord)
+                                    || u.Location.Contains(hotelFilterDto.KeyWord)
                                     || u.Season.ToString().ToUpper()
-                                    .Contains(searchString.ToUpper()));
+                                    .Contains(hotelFilterDto.KeyWord.ToUpper()));
 
             switch (sortOrder)
             {
@@ -108,6 +117,9 @@ namespace ApplicationCore.Managers
                     hotels = hotels.OrderBy(u => u.Name);
                     break;
             }
+
+            hotelFilterDto.HotelsAmount = hotels.Count();
+            hotels = hotels.Skip((hotelFilterDto.CurrentPage - 1) * hotelFilterDto.PageSize).Take(hotelFilterDto.PageSize);
 
             return _mapper.Map<IEnumerable<Hotel>, IEnumerable<HotelDTO>>(hotels.ToList());
         }

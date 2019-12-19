@@ -12,7 +12,7 @@ namespace ApplicationCore.Interfaces
     {
         Task<HotelDTO> GetHotelById(int Id);
         IEnumerable<HotelDTO> GetHotels(HotelFilterDto HotelFilterDto);
-        IEnumerable<HotelDTO> GetHotelsAdmin(string sortOrder, string searchString);
+        IEnumerable<HotelDTO> GetHotelsAdmin(HotelFilterDto hotelFilterDto,string sortOrder);
         Task<OperationDetails> Create(HotelDTO hotelDTO);
         Task<OperationDetails> Update(HotelDTO hotelDTO);
         Task Delete(int Id);
