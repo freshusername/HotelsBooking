@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastructure.Migrations
 {
-    public partial class TestMigration : Migration
+    public partial class FullCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -71,7 +71,7 @@ namespace Infrastructure.Migrations
                     Name = table.Column<string>(nullable: true),
                     Location = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
-                    Season = table.Column<int>(nullable: false)
+                    Season = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -250,7 +250,7 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    image = table.Column<byte[]>(nullable: true),
+                    Image = table.Column<byte[]>(nullable: true),
                     HotelId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -328,8 +328,7 @@ namespace Infrastructure.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Price = table.Column<decimal>(nullable: false),
-                    AditionalConvId = table.Column<int>(nullable: false),
-                    AdditionalConvId = table.Column<int>(nullable: true),
+                    AdditionalConvId = table.Column<int>(nullable: false),
                     HotelRoomId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -340,7 +339,7 @@ namespace Infrastructure.Migrations
                         column: x => x.AdditionalConvId,
                         principalTable: "AdditionalConvs",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_RoomConvs_HotelRooms_HotelRoomId",
                         column: x => x.HotelRoomId,

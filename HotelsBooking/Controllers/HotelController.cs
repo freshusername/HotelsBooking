@@ -30,7 +30,7 @@ namespace HotelsBooking.Controllers
                 Hotels = hotels,
                 FilterHotelDto = filterHotelDto,
                 HotelConvs = _hotelManager.GetHotelConvs().Distinct(),
-                RoomConvs = _hotelManager.GetRoomConvs().Distinct()
+                RoomConvs = _hotelManager.GetRoomConvs()
         };
             return View(model);
         }

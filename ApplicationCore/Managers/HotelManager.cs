@@ -63,7 +63,7 @@ namespace ApplicationCore.Managers
 
             if (filterHotelDto.RoomConvs.Any())
             {
-                hotels = hotels.Where(h => h.HotelRooms.Where(r => filterHotelDto.RoomConvs.All(x => r.RoomConvs.Select(rc => rc.Id).Contains(x))).Any());
+                hotels = hotels.Where(h => h.HotelRooms.Where(r => filterHotelDto.RoomConvs.All(x => r.RoomConvs.Select(rc => rc.AdditionalConvId).Contains(x))).Any());
             }
 
             return _mapper.Map<IEnumerable<Hotel>, IEnumerable<HotelDTO>>(hotels.ToList());
@@ -117,16 +117,22 @@ namespace ApplicationCore.Managers
                 );
             return query;
         }
-        public IEnumerable<RoomConvDTO> GetRoomConvs()
+        public IEnumerable<AdditionalConvDTO> GetRoomConvs()
         {
-            List<RoomConv> roomConvs = _context.RoomConvs.ToList();
-            List<AdditionalConv> addConvs = _context.AdditionalConvs.ToList();
-            var query = roomConvs.Join(addConvs,
-                hc => hc.AdditionalConvId,
-                ac => ac.Id,
-                (hc, ac) => new RoomConvDTO { Id = hc.Id, Name = ac.Name, HotelRoomId = hc.HotelRoomId, Price = hc.Price }
-                );
-            return query;
+            //var roomconvs = _context.RoomConvs.Select(rc => rc.AdditionalConv).Distinct().Include(ac =>ac.RoomConvs).Select(ac =>ac.RoomConvs);
+            //var roomconvs = _context.AdditionalConvs.Where(ac => ac.RoomConvs.Any());
+            var add_roomconvs = _context.RoomConvs.Select(rc => rc.AdditionalConv).Distinct().ToList();
+            //var roomConvs = _context.AdditionalConvs.Where(ac => ac.RoomConvs.Any());
+            //List<RoomConv> roomConvs = _context.RoomConvs.ToList();
+            //List<AdditionalConv> addConvs = _context.AdditionalConvs.ToList();
+            //var query = roomConvs.Join(addConvs,
+            //    hc => hc.AdditionalConvId,
+            //    ac => ac.Id,
+            //    (hc, ac) => new RoomConvDTO { Id = hc.Id, Name = ac.Name, HotelRoomId = hc.HotelRoomId, Price = hc.Price }
+            //    );
+
+            //return query;
+            return _mapper.Map<IEnumerable<AdditionalConv>, IEnumerable<AdditionalConvDTO>>(add_roomconvs);
         }
 
         public async Task<OperationDetails> CreateHotelConv(HotelConvDTO hotelConvDTO)
