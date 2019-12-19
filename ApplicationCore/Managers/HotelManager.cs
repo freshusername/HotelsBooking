@@ -41,7 +41,7 @@ namespace ApplicationCore.Managers
             return _mapper.Map<Hotel, HotelDTO>(hotel);
         }
 
-        public async Task<HotelDTO> GetHotelDetails(FilterHotelDetailDTO filterHotelDetailDTO)
+        public async Task<HotelDTO> GetHotelDetails(FilterHotelDetailDTO filterHotelDetailDTO);
         public IEnumerable<HotelDTO> GetHotels(HotelFilterDto filterHotelDto = null)
         {
             HotelDTO hotelDTO = await GetHotelById(filterHotelDetailDTO.HotelId);

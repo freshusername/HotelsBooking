@@ -127,11 +127,7 @@ namespace ApplicationCore.Managers
         public async Task<OperationDetails> CreateHotel(HotelDTO hotelDTO) => await _hotelManager.Create(hotelDTO);
         public async Task<OperationDetails> EditHotel(HotelDTO hotelDTO) => await _hotelManager.Update(hotelDTO);
         public async Task DeleteHotel(int Id) => await _hotelManager.Delete(Id);
-        public async Task<HotelDTO> GetHotelById(int Id)
-        {
-            HotelDTO hotel = await _hotelManager.GetHotelById(Id);
-            return hotel;
-        }
+
         public IEnumerable<HotelDTO> Hotels()
         {
             IEnumerable<HotelDTO> hotels =_hotelManager.GetHotels(new HotelFilterDto() );
