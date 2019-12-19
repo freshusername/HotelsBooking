@@ -111,6 +111,12 @@ namespace ApplicationCore.Managers
 
             return _mapper.Map<IEnumerable<Hotel>, IEnumerable<HotelDTO>>(hotels.ToList());
         }
+        private bool CheckIfAvailable(DateTimeOffset CheckInDate, DateTimeOffset CheckOutDate, DateTimeOffset FromDate, DateTimeOffset ToDate)
+        {
+            if ((FromDate < CheckInDate && ToDate <= CheckInDate) || (FromDate >= CheckOutDate && ToDate > CheckOutDate))
+                return true;
+            return false;
+        }
 
         public IEnumerable<HotelDTO> GetHotelsAdmin(string sortOrder = null)
         {
