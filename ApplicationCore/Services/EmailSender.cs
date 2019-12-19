@@ -1,5 +1,6 @@
 ﻿using ApplicationCore.Infrastructure;
 using MailKit.Net.Smtp;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using System;
@@ -11,34 +12,41 @@ namespace ApplicationCore.Services
 {
     public class EmailSender : IEmailSender
     {
-        private readonly IOptions<EmailOptions> _senderOptions;
-        public EmailSender(IOptions<EmailOptions> options)
+        private readonly EmailOptions _emailOptions;
+       
+        public EmailSender(IOptions<EmailOptions> emailOptions)
         {
-            _senderOptions = options;
+            _emailOptions = emailOptions.Value;
         }
-        public EmailSender()
-        {
-
-        }
+   
         public async Task SendEmailAsync(string email, string subject, string message)
         {
-            var emailMessage = new MimeMessage();
-
-            emailMessage.From.Add(new MailboxAddress("Support", "admin@admin.com"));
-            emailMessage.To.Add(new MailboxAddress("", email));
-            emailMessage.Subject = subject;
-            emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+            try
             {
-                Text = message
-            };
+                var emailMessage = new MimeMessage();
 
-            using (var client = new SmtpClient())
+                emailMessage.From.Add(new MailboxAddress("Support", "admin@admin.com"));
+                emailMessage.To.Add(new MailboxAddress("", email));
+                emailMessage.Subject = subject;
+                emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+                {
+                    Text = message
+                };
+
+                using (var client = new SmtpClient())
+                {
+
+                    await client.ConnectAsync(_emailOptions.Host, _emailOptions.Port, _emailOptions.EnableSsl);
+                    await client.AuthenticateAsync(_emailOptions.Account, _emailOptions.Password);
+                    await client.SendAsync(emailMessage);
+
+                    await client.DisconnectAsync(true);
+                }
+
+            }
+            catch (Exception ex)
             {
-                await client.ConnectAsync(_senderOptions.Value.Host, _senderOptions.Value.Port, _senderOptions.Value.EnableSsl);
-                await client.AuthenticateAsync(_senderOptions.Value.Account, _senderOptions.Value.Password);
-                await client.SendAsync(emailMessage);
-
-                await client.DisconnectAsync(true);
+                throw new InvalidOperationException(ex.Message);
             }
         }
     }

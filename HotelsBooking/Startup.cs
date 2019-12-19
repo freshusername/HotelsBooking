@@ -22,6 +22,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ApplicationCore.Services;
 using HotelsBooking.Mapping.HotelsBooking.Mapping;
+using ApplicationCore.Infrastructure;
 
 namespace HotelsBooking
 {
@@ -50,6 +51,8 @@ namespace HotelsBooking
                 googleOptions.ClientSecret = Configuration["GoogleAuth:ClientSecret"];
             });
 
+            services.Configure<EmailOptions>(Configuration.GetSection("EmailOptions"));
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -57,7 +60,7 @@ namespace HotelsBooking
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -94,11 +97,16 @@ namespace HotelsBooking
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddMvc();
-            services.AddAutoMapper(typeof(AutoMapperProfile).GetTypeInfo().Assembly);  
+
+            services.AddAutoMapper(typeof(AutoMapperProfile).GetTypeInfo().Assembly);
+        
+
             services.AddTransient<IAuthenticationManager, AuthenticationManager>();
             services.AddTransient<IOrderManager, OrderManager>();
-            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddSingleton<IEmailSender, EmailSender>();
             services.AddTransient<IOrderService, OrderService>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
