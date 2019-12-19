@@ -9,6 +9,7 @@ using HotelsBooking.Models.AppProfile;
 using Microsoft.AspNetCore.Mvc;
 using ApplicationCore.Interfaces;
 using Infrastructure.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HotelsBooking.Controllers
@@ -56,7 +57,6 @@ namespace HotelsBooking.Controllers
 
 			result.Orders = orders.Select(o => new ProfileOrderDto
 			{
-
 				HotelName = o.OrderDetails.FirstOrDefault().HotelName,
 				CheckInDate = o.OrderDetails.FirstOrDefault().CheckInDate,
 				CheckOutDate = o.OrderDetails.FirstOrDefault().CheckOutDate,
@@ -98,6 +98,7 @@ namespace HotelsBooking.Controllers
 			return View(model);
 		}
 		
+		[Authorize]
 		public async Task<IActionResult> Edit(string id)
 		{
 			var profile = await _profileService.GetByIdAsync(id);
@@ -110,6 +111,7 @@ namespace HotelsBooking.Controllers
 			});
 		}
 
+		[Authorize]
 		[HttpPost]
 		public async Task<IActionResult> UpdateProfile(ProfileUpdateDTO model)
 		{
@@ -119,7 +121,5 @@ namespace HotelsBooking.Controllers
 			await _profileService.UpdateProfile(profile);
 			return RedirectToAction("Detail", "Profile", new { id = profile.Id });
 		}
-
-
 	}
 }
