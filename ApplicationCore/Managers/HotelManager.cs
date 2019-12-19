@@ -61,6 +61,11 @@ namespace ApplicationCore.Managers
                 hotels = hotels.Where(h => filterHotelDto.HotelConvs.All(x => h.HotelConvs.Select(hc => hc.Id).Contains(x)));              
             }
 
+            if (filterHotelDto.RoomConvs.Any())
+            {
+                hotels = hotels.Where(h => h.HotelRooms.Where(r => filterHotelDto.RoomConvs.All(x => r.RoomConvs.Select(rc => rc.Id).Contains(x))).Any());
+            }
+
             return _mapper.Map<IEnumerable<Hotel>, IEnumerable<HotelDTO>>(hotels.ToList());
         }
 
