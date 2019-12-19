@@ -181,28 +181,26 @@
                                                 <h3>Room price Filter</h3>
                                             </div>
                                             <div class="price-slider col-xl-12">
-                                                <div class="slider-margin">
-                                                    <input asp-for="HotelFilterDto.MinSearchPrice" class="rounded" value="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" step="10" type="range" />
-                                                    <input asp-for="HotelFilterDto.MaxSearchPrice" class="rounded" value="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" step="10" type="range" />
 
-                                                </div>
-                                                    <div class="row">
-                                                        <div class="col-xl-6">
-                                                            max:
-                                                            <input class="form-control rounded" type="number" value="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" />
-                                                        </div>
-                                                        <div class="col-xl-6">
-                                                            min:
-                                                            <input class="form-control rounded" type="number" value="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" />
-                                                        </div>
+                                                <input asp-for="HotelFilterDto.MinSearchPrice" class="rounded" value="@Convert.ToInt32(Model.HotelFilterDto.MinSearchPrice)" min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" step="10" type="range" />
+                                                <input asp-for="HotelFilterDto.MaxSearchPrice" class="rounded" value="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" step="10" type="range" />
+
+                                                <div class="row">
+                                                    <div class="col-xl-6" style="margin-bottom: 20px;">
+                                                        min:
+                                                        <input class="form-control rounded" type="number" value="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" />
                                                     </div>
-                                                
+                                                    <div class="col-xl-6" style="margin-bottom: 20px;">
+                                                        max:
+                                                        <input class="form-control rounded" type="number" value="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" />
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label>Amount on page</label>
-                                            @Html.EditorFor(x => Model.HotelFilterDto.PageSize, new { htmlAttributes = new { min = "1", max = @Model.HotelFilterDto?.HotelsAmount, @class = "form-control rounded", @placeholder = "amount on page" } })
+                                            <label>Hotels on page: </label>
+                                            @Html.EditorFor(x => Model.HotelFilterDto.PageSize, new { htmlAttributes = new { min = 1, max = 1000, @class = "form-control rounded", @placeholder = "pages" } })
                                         </div>
 
                                         <div class="form-group">
@@ -312,58 +310,38 @@
                                     @if (Model.HotelFilterDto.HasPrevious)
                                     {
                                         <li class="page-item">
-                                            @Html.ActionLink("prev", "ShowHotels", "Hotel", null, null, null,
-                                                      new
-                                                      {
-                                                          KeyWord = Model.HotelFilterDto.KeyWord,
-                                                          MaxSearchPrice = Model.HotelFilterDto.MaxSearchPrice,
-                                                          MinSearchPrice = Model.HotelFilterDto.MinSearchPrice,
-                                                          CurrentPage = Model.HotelFilterDto.CurrentPage - 1,
-                                                          HotelsAmount = Model.HotelFilterDto.HotelsAmount,
-                                                          PageSize = Model.HotelFilterDto.PageSize,
-                                                          HasPrevious = Model.HotelFilterDto.HasPrevious,
-                                                          HasNext = Model.HotelFilterDto.HasNext
+                                            @{
+                                                var prev = (HotelFilterDto)Model.HotelFilterDto.Clone();
+                                                prev.CurrentPage = Model.HotelFilterDto.CurrentPage - 1;
+                                            }
 
-                                                      },
+                                            @Html.ActionLink("prev", "ShowHotels", "Hotel", null, null, null,
+                                                      prev,
                                                       null)
                                         </li>
                                     }
 
                                     @for (var i = 1; i <= Model.HotelFilterDto.PagesCount; i++)
                                     {
+                                        var page_i = (HotelFilterDto)Model.HotelFilterDto.Clone();
+                                        page_i.CurrentPage = i;
+
                                         <li class="page-item @( i == Model.HotelFilterDto.CurrentPage ? "active" : "")">
                                             @Html.ActionLink(i.ToString(), "ShowHotels", "Hotel", null, null, null,
-                                                new
-                                                {
-                                                    KeyWord = Model.HotelFilterDto.KeyWord,
-                                                    MaxSearchPrice = Model.HotelFilterDto.MaxSearchPrice,
-                                                    MinSearchPrice = Model.HotelFilterDto.MinSearchPrice,
-                                                    CurrentPage = i,
-                                                    HotelsAmount = Model.HotelFilterDto.HotelsAmount,
-                                                    PageSize = Model.HotelFilterDto.PageSize,
-                                                    HasPrevious = Model.HotelFilterDto.HasPrevious,
-                                                    HasNext = Model.HotelFilterDto.HasNext
-
-                                                },
+                                                page_i,
                                                 null)
                                         </li>
                                     }
                                     @if (Model.HotelFilterDto.HasNext)
                                     {
                                         <li class="page-item">
-                                            @Html.ActionLink("next", "ShowHotels", "Hotel", null, null, null,
-                                                      new
-                                                      {
-                                                          KeyWord = Model.HotelFilterDto.KeyWord,
-                                                          MaxSearchPrice = Model.HotelFilterDto.MaxSearchPrice,
-                                                          MinSearchPrice = Model.HotelFilterDto.MinSearchPrice,
-                                                          CurrentPage = Model.HotelFilterDto.CurrentPage + 1,
-                                                          HotelsAmount = Model.HotelFilterDto.HotelsAmount,
-                                                          PageSize = Model.HotelFilterDto.PageSize,
-                                                          HasPrevious = Model.HotelFilterDto.HasPrevious,
-                                                          HasNext = Model.HotelFilterDto.HasNext
+                                            @{
+                                                var prev = (HotelFilterDto)Model.HotelFilterDto.Clone();
+                                                prev.CurrentPage = Model.HotelFilterDto.CurrentPage - 1;
+                                            }
 
-                                                      },
+                                            @Html.ActionLink("prev", "ShowHotels", "Hotel", null, null, null,
+                                                      prev,
                                                       null)
                                         </li>
                                     }

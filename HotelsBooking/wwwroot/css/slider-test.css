@@ -8,7 +8,7 @@
     margin: auto;
     text-align: center;
     position: relative;
-    height: 4em;
+    height: 5em;
 }
 
     .price-slider svg,
@@ -136,6 +136,6 @@ input[type=range] {
     }
 
 .slider-margin {
-    margin-bottom: 100px !important;
-    margin-top: 100px !important;
+    margin-bottom: 10px !important;
+    margin-top: 10px !important;
 }

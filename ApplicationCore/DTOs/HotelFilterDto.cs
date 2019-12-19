@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ApplicationCore.DTOs
 {
-    public class HotelFilterDto
+    public class HotelFilterDto : ICloneable
     {
         public string KeyWord { get; set; }
 
@@ -22,5 +22,10 @@ namespace ApplicationCore.DTOs
 
         public bool HasPrevious => CurrentPage > 1;
         public bool HasNext => CurrentPage <= PagesCount - 1;
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
     }
 }
