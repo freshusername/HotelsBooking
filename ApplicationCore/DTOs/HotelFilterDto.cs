@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ApplicationCore.DTOs
 {
-    public class FilterHotelDto
+    public class HotelFilterDto
     {
         public string KeyWord { get; set; }
         [BindProperty]

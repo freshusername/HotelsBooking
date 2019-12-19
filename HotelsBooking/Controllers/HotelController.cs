@@ -22,7 +22,7 @@ namespace HotelsBooking.Controllers
         }
 
         [HttpGet]
-        public IActionResult ShowHotels(FilterHotelDto filterHotelDto)
+        public IActionResult ShowHotels(HotelFilterDto filterHotelDto)
         {
             var hotels = _hotelManager.GetHotels(filterHotelDto);
             var model = new FilteredHotelsViewModel

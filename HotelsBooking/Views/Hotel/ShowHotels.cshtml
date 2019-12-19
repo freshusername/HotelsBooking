@@ -361,7 +361,11 @@
                                                 @Html.DisplayFor(modelItem => item.Season)
                                             </h3>
                                             <h3>
-                                                @Html.DisplayFor(modelItem => item.HotelConvs)
+                                                @foreach(var hotelconv in item.HotelConvs)
+                                                {
+                                                    <p>@hotelconv.AdditionalConv.Name</p>
+                                                }
+                                                @*@Html.DisplayFor(modelItem => item.HotelConvs)*@
                                             </h3>
                                             @if (!User.IsInRole("BlockedUser"))
                                             {

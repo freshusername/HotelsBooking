@@ -35,7 +35,7 @@ namespace ApplicationCore.Managers
                                         .FirstOrDefault(h => h.Id == Id);
             return _mapper.Map<Hotel, HotelDTO>(hotel);
         }
-        public IEnumerable<HotelDTO> GetHotels(FilterHotelDto filterHotelDto = null)
+        public IEnumerable<HotelDTO> GetHotels(HotelFilterDto filterHotelDto = null)
         {
             var hotels = _context.Hotels.Include(h => h.HotelRooms)
                                             .ThenInclude(hr => hr.Room)
