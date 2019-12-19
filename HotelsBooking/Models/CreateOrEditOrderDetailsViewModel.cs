@@ -25,8 +25,8 @@ namespace HotelsBooking.Models
         {
             if (CheckInDate > CheckOutDate)
             {
-                yield return new ValidationResult("Check-in date must be greater than Check-out date",
-                                                    new[] { "CheckInDate" });
+                yield return new ValidationResult("Check-out date must be greater than Check-in date",
+                                                    new[] { "CheckOutDate" });
             }
         }
     }

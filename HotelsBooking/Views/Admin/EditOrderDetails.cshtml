@@ -22,22 +22,22 @@
                 
                 <div class="form-group">
                     <label class="control-label">Check-in date:</label>
-                    <input type="date" asp-for="CheckInDate" class="form-control" value="@string.Format("{0:yyyy-MM-dd}", Model.CheckInDate)" />
+                    <input type="date" asp-for="CheckInDate" class="form-control" value="@string.Format("{0:yyyy-MM-dd}", Model.CheckInDate)" required/>
                 </div>
 
                 <div class="form-group">
                     <label class="control-label">Check-out date:</label>
-                    <input type="date" asp-for="CheckOutDate" class="form-control" value="@string.Format("{0:yyyy-MM-dd}", Model.CheckOutDate)" />
+                    <input type="date" asp-for="CheckOutDate" class="form-control" value="@string.Format("{0:yyyy-MM-dd}", Model.CheckOutDate)" required/>
                 </div>
 
                 <div class="form-group">
                     <label class="control-label">Hotel:</label>
-                    <input type="text" asp-for="HotelName" class="form-control" value="@Model.HotelName" />
+                    <input type="text" asp-for="HotelName" class="form-control" value="@Model.HotelName"  placeholder="Enter hotel name" required/>
                 </div>
 
                 <div class="form-group">
                     <label class="control-label">Room:</label>
-                    <input type="number" asp-for="RoomId" class="form-control" value="@Model.RoomId" />
+                    <input type="number" asp-for="RoomId" class="form-control" value="@Model.RoomId" placeholder="Enter room number" required/>
                 </div>
 
                 <div class="form-group text-center">

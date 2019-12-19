@@ -347,6 +347,17 @@ namespace HotelsBooking.Controllers
                 return View(model);
             }
             AdminOrderDetailDTO orderDTO = _mapper.Map<CreateOrEditOrderDetailsViewModel, AdminOrderDetailDTO>(model);
+            if (!_adminManager.IsHotelExists(model.HotelName))
+            {
+                ModelState.AddModelError("HotelName", "The hotel is not exist");
+                return View(model);
+            }
+
+            if (!_adminManager.IsRoomExists(model.RoomId))
+            {
+                ModelState.AddModelError("RoomID", "The room is not exist");
+                return View(model);
+            }
             var res = await _adminManager.EditOrderDetails(orderDTO);
             if (res.Succedeed)
             {

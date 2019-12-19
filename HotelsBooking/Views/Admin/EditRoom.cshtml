@@ -16,15 +16,24 @@
                 <div class="form-group">
                     <input type="hidden" asp-for="Id" value="@Model.Id" />
                 </div>
-                <div class="form-group">
-                    <label class="control-label">Room type:</label><br />
-                    <select asp-for="RoomType" required asp-items="@new SelectList(Enum.GetNames(typeof(Infrastructure.Enums.RoomType)))" ></select><br />
-                </div>
-
-
-                <div class="form-group text-center">
-                    <input type="submit" value="Save" class="btn btn-success text-center" style="width:20%" />
-                </div>
+                <table class="text-center">
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label class="control-label">Room type:</label><br />
+                                <select asp-for="RoomType" required asp-items="@new SelectList(Enum.GetNames(typeof(Infrastructure.Enums.RoomType)))"></select><br />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <br />
+                                <input type="submit" value="Save" class="btn btn-success text-center" />
+                            </div>
+                        </td>
+                    </tr>
+                </table> 
             </form>
         </div>
     </div>

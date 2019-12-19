@@ -113,8 +113,6 @@ namespace ApplicationCore.Managers
         {
             Order order = AdminOrderDTOtoOrder(orderDTO);
             order.IsActive = false;
-            
-
             await _context.Orders.AddAsync(order);
             await _context.SaveChangesAsync();
             return new OperationDetails(true, "Order is successfully added", "Id");
@@ -249,9 +247,8 @@ namespace ApplicationCore.Managers
         public async Task<OperationDetails> EditOrderDetails(AdminOrderDetailDTO orderDetailDTO)
         {
             OrderDetail orderDetailCheck = _context.OrderDetails.FirstOrDefault(x => x.Id == orderDetailDTO.Id);
-            orderDetailCheck.OrderDate = DateTimeOffset.Now;
-            orderDetailCheck.CheckInDate = orderDetailDTO.CheckInDate;
-            orderDetailCheck.CheckOutDate = orderDetailDTO.CheckOutDate;
+            orderDetailCheck.CheckInDate = orderDetailDTO.CheckInDate.ToUniversalTime().AddDays(1);
+            orderDetailCheck.CheckOutDate = orderDetailDTO.CheckOutDate.ToUniversalTime().AddDays(1);
             Hotel hotel = _context.Hotels.Include(p => p.HotelRooms)
                                             .ThenInclude(p => p.Room)
                                             .Include(p => p.HotelRooms)
