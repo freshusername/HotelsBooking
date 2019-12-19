@@ -280,7 +280,7 @@
                                             </h3>
                                             @if (!User.IsInRole("BlockedUser"))
                                             {
-                                                @Html.ActionLink("Details", "Details", "HotelDetails", new FilterHotelDetailDTO { HotelId = item.Id, FromDate = Model.FilterHotelDto.FromDate, ToDate = Model.FilterHotelDto.ToDate } );
+                                                @Html.ActionLink("Details", "Details", "HotelDetails", new FilterHotelDetailDTO { HotelId = item.Id, FromDate = Model.HotelFilterDto.FromDate, ToDate = Model.HotelFilterDto.ToDate } );
                                                 @*<a asp-controller="HotelDetails" asp-action="Details" asp-route-HotelId="@item.Id" asp-route-FromDate="@Model.FilterHotelDto.FromDate" asp-route-ToDate="@Model.FilterHotelDto.ToDate">Details</a>*@
                                             }
                                         </div>
