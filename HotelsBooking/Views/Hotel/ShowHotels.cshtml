@@ -337,12 +337,12 @@
                                     {
                                         <li class="page-item">
                                             @{
-                                                var prev = (HotelFilterDto)Model.HotelFilterDto.Clone();
-                                                prev.CurrentPage = Model.HotelFilterDto.CurrentPage - 1;
+                                                var next = (HotelFilterDto)Model.HotelFilterDto.Clone();
+                                                next.CurrentPage = Model.HotelFilterDto.CurrentPage + 1;
                                             }
 
-                                            @Html.ActionLink("prev", "ShowHotels", "Hotel", null, null, null,
-                                                      prev,
+                                            @Html.ActionLink("next", "ShowHotels", "Hotel", null, null, null,
+                                                      next,
                                                       null)
                                         </li>
                                     }
