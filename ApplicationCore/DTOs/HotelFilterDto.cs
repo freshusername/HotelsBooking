@@ -16,7 +16,10 @@ namespace ApplicationCore.DTOs
         public int PageSize { get; set; } = 3;
         public int HotelsAmount { get; set; }
         public int PagesCount => (int)Math.Ceiling(decimal.Divide(HotelsAmount, PageSize));
-
+        [BindProperty]
+        public List<int> HotelConvs { get; set; } = new List<int>();
+        [BindProperty]
+        public List<int> RoomConvs { get; set; } = new List<int>();
         public string Location { get; set; }
         public DateTimeOffset FromDate { get; set; }
         public DateTimeOffset ToDate { get; set; }

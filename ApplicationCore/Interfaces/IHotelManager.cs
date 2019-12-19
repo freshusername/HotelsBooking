@@ -17,6 +17,8 @@ namespace ApplicationCore.Interfaces
         Task<OperationDetails> Create(HotelDTO hotelDTO);
         Task<OperationDetails> Update(HotelDTO hotelDTO);
         Task Delete(int Id);
+        IEnumerable<HotelConvDTO> GetHotelConvs();
+        IEnumerable<AdditionalConvDTO> GetRoomConvs();
 
         IEnumerable<HotelConvDTO> GetHotelConvs(string sortOrder, string searchString);
         Task<OperationDetails> CreateHotelConv(HotelConvDTO hotelConvDTO);

@@ -6,6 +6,7 @@ using Infrastructure.EF;
 using Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -41,6 +42,7 @@ namespace ApplicationCore.Managers
         }
 
         public async Task<HotelDTO> GetHotelDetails(FilterHotelDetailDTO filterHotelDetailDTO)
+        public IEnumerable<HotelDTO> GetHotels(HotelFilterDto filterHotelDto = null)
         {
             HotelDTO hotelDTO = await GetHotelById(filterHotelDetailDTO.HotelId);
 
@@ -63,6 +65,7 @@ namespace ApplicationCore.Managers
                                         .Include(h => h.HotelRooms)
                                             .ThenInclude(hr => hr.OrderDetails)
                                         .Include(h => h.HotelPhotos)
+                                        .Include(h => h.HotelConvs)
                                     .Select(h => h);
             if (!String.IsNullOrEmpty(HotelFilterDto?.KeyWord))
             {
@@ -159,6 +162,16 @@ namespace ApplicationCore.Managers
                     break;
             }
 
+            if(filterHotelDto.HotelConvs.Any())
+            {          
+                hotels = hotels.Where(h => filterHotelDto.HotelConvs.All(x => h.HotelConvs.Select(hc => hc.Id).Contains(x)));              
+            }
+
+            if (filterHotelDto.RoomConvs.Any())
+            {
+                hotels = hotels.Where(h => h.HotelRooms.Where(r => filterHotelDto.RoomConvs.All(x => r.RoomConvs.Select(rc => rc.AdditionalConvId).Contains(x))).Any());
+            }
+
             return _mapper.Map<IEnumerable<Hotel>, IEnumerable<HotelDTO>>(hotels.ToList());
         }
 
@@ -243,6 +256,23 @@ namespace ApplicationCore.Managers
             }
 
             return query;
+        }
+        public IEnumerable<AdditionalConvDTO> GetRoomConvs()
+        {
+            //var roomconvs = _context.RoomConvs.Select(rc => rc.AdditionalConv).Distinct().Include(ac =>ac.RoomConvs).Select(ac =>ac.RoomConvs);
+            //var roomconvs = _context.AdditionalConvs.Where(ac => ac.RoomConvs.Any());
+            var add_roomconvs = _context.RoomConvs.Select(rc => rc.AdditionalConv).Distinct().ToList();
+            //var roomConvs = _context.AdditionalConvs.Where(ac => ac.RoomConvs.Any());
+            //List<RoomConv> roomConvs = _context.RoomConvs.ToList();
+            //List<AdditionalConv> addConvs = _context.AdditionalConvs.ToList();
+            //var query = roomConvs.Join(addConvs,
+            //    hc => hc.AdditionalConvId,
+            //    ac => ac.Id,
+            //    (hc, ac) => new RoomConvDTO { Id = hc.Id, Name = ac.Name, HotelRoomId = hc.HotelRoomId, Price = hc.Price }
+            //    );
+
+            //return query;
+            return _mapper.Map<IEnumerable<AdditionalConv>, IEnumerable<AdditionalConvDTO>>(add_roomconvs);
         }
 
         public async Task<OperationDetails> CreateHotelConv(HotelConvDTO hotelConvDTO)
