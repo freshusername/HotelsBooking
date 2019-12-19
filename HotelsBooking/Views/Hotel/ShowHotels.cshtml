@@ -280,7 +280,8 @@
                                             </h3>
                                             @if (!User.IsInRole("BlockedUser"))
                                             {
-                                                @Html.ActionLink("Details", "HotelMain", item.Id)
+                                                @Html.ActionLink("Details", "Details", "HotelDetails", new FilterHotelDetailDTO { HotelId = item.Id, FromDate = Model.HotelFilterDto.FromDate, ToDate = Model.HotelFilterDto.ToDate } );
+                                                @*<a asp-controller="HotelDetails" asp-action="Details" asp-route-HotelId="@item.Id" asp-route-FromDate="@Model.FilterHotelDto.FromDate" asp-route-ToDate="@Model.FilterHotelDto.ToDate">Details</a>*@
                                             }
                                         </div>
                                     </div>
@@ -311,9 +312,15 @@
                                                     MinPrice = Model.HotelFilterDto.MinPrice,
                                                     CurrentPage = i,
                                                     HotelsAmount = Model.HotelFilterDto.HotelsAmount,
-                                                    PageSize = Model.HotelFilterDto.PageSize
+                                                    PageSize = Model.HotelFilterDto.PageSize,
+                                                    FromDate = Model.HotelFilterDto.FromDate,
+                                                    ToDate = Model.HotelFilterDto.ToDate,
+                                                    MaxAdults = Model.HotelFilterDto.MaxAdults,
+                                                    MaxChildren = Model.HotelFilterDto.MaxChildren,
+                                                    Location = Model.HotelFilterDto.Location,
+                                                    Season = Model.HotelFilterDto.Season
                                                 },
-                                                null)
+                                                null);
                                         </li>
                                     }
                                 }

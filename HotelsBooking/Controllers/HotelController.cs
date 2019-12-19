@@ -23,8 +23,6 @@ namespace HotelsBooking.Controllers
 
         [HttpGet]
         public IActionResult ShowHotels(HotelFilterDto HotelFilterDto)
-        
-        
         {
             var hotels = _hotelManager.GetHotels(HotelFilterDto);
             var model = new FilteredHotelsViewModel
@@ -32,7 +30,6 @@ namespace HotelsBooking.Controllers
                 Hotels = hotels,
                 HotelFilterDto = HotelFilterDto
             };
-
 
             return View(model);
         }

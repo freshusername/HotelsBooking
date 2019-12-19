@@ -33,16 +33,35 @@ namespace ApplicationCore.Managers
                                         .Include(h => h.HotelRooms)
                                                 .ThenInclude(hr => hr.RoomConvs)
                                                 .ThenInclude(rc => rc.AdditionalConv)
+                                        .Include(h => h.HotelRooms)
+                                                .ThenInclude(hr => hr.OrderDetails)
                                         .Include(h => h.HotelPhotos)
                                         .FirstOrDefault(h => h.Id == Id);
             return _mapper.Map<Hotel, HotelDTO>(hotel);
         }
-        public IEnumerable<HotelDTO> GetHotels(HotelFilterDto HotelFilterDto)
+
+        public async Task<HotelDTO> GetHotelDetails(FilterHotelDetailDTO filterHotelDetailDTO)
+        {
+            HotelDTO hotelDTO = await GetHotelById(filterHotelDetailDTO.HotelId);
+
+            if (filterHotelDetailDTO?.FromDate != null && filterHotelDetailDTO?.ToDate != null)
+            {
+                hotelDTO.HotelRooms = hotelDTO.HotelRooms.Where(hr => hr.OrderDetails
+                                                            .Any(od => CheckIfAvailable(od.CheckInDate, od.CheckOutDate, filterHotelDetailDTO.FromDate, filterHotelDetailDTO.ToDate))
+                                                            || !hr.OrderDetails.Any()).ToList();
+            }
+
+            return hotelDTO;
+        }
+
+        public IEnumerable<HotelDTO> GetHotels(HotelFilterDto HotelFilterDto = null)
         {
             var hotels = _context.Hotels.Include(h => h.HotelRooms)
                                             .ThenInclude(hr => hr.Room)
                                         .Include(h => h.HotelRooms)
-                                                .ThenInclude(hr => hr.RoomConvs)
+                                            .ThenInclude(hr => hr.RoomConvs)
+                                        .Include(h => h.HotelRooms)
+                                            .ThenInclude(hr => hr.OrderDetails)
                                         .Include(h => h.HotelPhotos)
                                     .Select(h => h);
             if (!String.IsNullOrEmpty(HotelFilterDto?.KeyWord))
@@ -50,6 +69,31 @@ namespace ApplicationCore.Managers
                 hotels = hotels.Where(h => h.Name.Contains(HotelFilterDto.KeyWord)
                                     || h.Description.Contains(HotelFilterDto.KeyWord)
                                     || h.Location.Contains(HotelFilterDto.KeyWord));
+            }
+
+            if (!String.IsNullOrEmpty(HotelFilterDto?.Location))
+            {
+                hotels = hotels.Where(h => h.Location.Contains(HotelFilterDto.Location));
+            }
+
+            if (HotelFilterDto.Season.HasValue)
+            {
+                hotels = hotels.Where(h => h.Season.Equals(Enum.Parse(typeof(Season), HotelFilterDto.Season.ToString())));
+            }
+
+            if (HotelFilterDto?.FromDate != null && HotelFilterDto?.ToDate != null)
+            {
+                hotels = hotels.Where(h => h.HotelRooms
+                                                .Any(hr => hr.OrderDetails
+                                                            .Any(od => CheckIfAvailable(od.CheckInDate, od.CheckOutDate, HotelFilterDto.FromDate, HotelFilterDto.ToDate))
+                                                            || !hr.OrderDetails.Any()));
+            }
+
+            if (HotelFilterDto.MaxAdults.HasValue)
+            {
+                hotels = hotels.Where(h => h.HotelRooms
+                                                .Any(hr => (HotelFilterDto.MaxAdults <= hr.MaxAdults && HotelFilterDto.MaxChildren <= hr.MaxChildren)
+                                                            || (HotelFilterDto.MaxAdults + HotelFilterDto.MaxChildren) <= hr.MaxAdults));
             }
 
             if (HotelFilterDto?.MinPrice >= 0)
@@ -66,6 +110,12 @@ namespace ApplicationCore.Managers
             hotels = hotels.Skip((HotelFilterDto.CurrentPage - 1) * HotelFilterDto.PageSize).Take(HotelFilterDto.PageSize);
 
             return _mapper.Map<IEnumerable<Hotel>, IEnumerable<HotelDTO>>(hotels.ToList());
+        }
+        private bool CheckIfAvailable(DateTimeOffset CheckInDate, DateTimeOffset CheckOutDate, DateTimeOffset FromDate, DateTimeOffset ToDate)
+        {
+            if ((FromDate < CheckInDate && ToDate <= CheckInDate) || (FromDate >= CheckOutDate && ToDate > CheckOutDate))
+                return true;
+            return false;
         }
 
         public IEnumerable<HotelDTO> GetHotelsAdmin(string sortOrder = null, string searchString=null)

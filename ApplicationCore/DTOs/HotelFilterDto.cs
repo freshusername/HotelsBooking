@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using static Infrastructure.Enums;
 
 namespace ApplicationCore.DTOs
 {
@@ -16,6 +17,11 @@ namespace ApplicationCore.DTOs
         public int HotelsAmount { get; set; }
         public int PagesCount => (int)Math.Ceiling(decimal.Divide(HotelsAmount, PageSize));
 
-        // public PagingDto PagingDto { get; set; }
+        public string Location { get; set; }
+        public DateTimeOffset FromDate { get; set; }
+        public DateTimeOffset ToDate { get; set; }
+        public int? MaxAdults { get; set; }
+        public int MaxChildren { get; set; }
+        public Season? Season { get; set; }
     }
 }
