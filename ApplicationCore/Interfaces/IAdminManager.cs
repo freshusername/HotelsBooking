@@ -32,7 +32,7 @@ namespace ApplicationCore.Interfaces
         Task<OperationDetails> EditHotelConv(HotelConvDTO hotelConvDTO);
 
         HotelRoomDTO GetHotelRoomById(int Id);
-        IEnumerable<HotelRoomDTO> GetHotelRooms(string sortOrder, string searchString);
+        IEnumerable<HotelRoomDTO> GetHotelRooms(AdminPaginationDTO paginationDTO, string sortOrder);
         Task<OperationDetails> CreateHotelRoom(HotelRoomDTO hotelRoomDTO);
         Task<OperationDetails> EditHotelRoom(HotelRoomDTO hotelRoomDTO);
         Task DeleteHotelRoom(int Id);

@@ -265,7 +265,7 @@ namespace ApplicationCore.Managers
                                                     .FirstOrDefault(hr => hr.Id == Id);
             return _mapper.Map<HotelRoom, HotelRoomDTO>(hotelRoom);
         }
-        public IEnumerable<HotelRoomDTO> GetHotelRooms(string sortOrder = null, string searchString = null)
+        public IEnumerable<HotelRoomDTO> GetHotelRooms(AdminPaginationDTO paginationDTO, string sortOrder = null)
         {
             List<HotelRoom> hotelRooms = _context.HotelRooms.ToList();
             List<Room> rooms = _context.Rooms.ToList();
@@ -274,12 +274,13 @@ namespace ApplicationCore.Managers
                 r => r.Id,
                 (hr, r) => new HotelRoomDTO { Id = hr.Id, HotelId = hr.HotelId, Price = hr.Price, RoomId = r.Id, Type = r.RoomType, Number = hr.Number }
                 );
-            if (!String.IsNullOrEmpty(searchString))
-                query = query.Where(u => Convert.ToString(u.Number).Contains(searchString)
+
+            if (!String.IsNullOrEmpty(paginationDTO.KeyWord))
+                query = query.Where(u => Convert.ToString(u.Number).Contains(paginationDTO.KeyWord)
                                     || Convert.ToString(Math.Round(u.Price, 0))
-                                    .Equals(searchString)
+                                    .Equals(paginationDTO.KeyWord)
                                     || u.Type.ToString().ToUpper()
-                                    .Contains(searchString.ToUpper()));
+                                    .Contains(paginationDTO.KeyWord.ToUpper()));
             switch (sortOrder)
             {
                 case "number_desc":
@@ -305,6 +306,9 @@ namespace ApplicationCore.Managers
                     query = query.OrderBy(u => u.Number);
                     break;
             }
+
+            paginationDTO.Amount = query.Count();
+            query = query.Skip((paginationDTO.CurrentPage - 1) * paginationDTO.PageSize).Take(paginationDTO.PageSize);
 
             return query;
         }
