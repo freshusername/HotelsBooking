@@ -155,8 +155,8 @@
                     <div class="col-lg-8">
                         <div class="breadcrumb_iner">
                             <div class="breadcrumb_iner_item">
-                                <h2>Shop Category</h2>
-                                <p>Home <span>-</span> Shop Category</p>
+                                <h3>Welcome home!</h3>
+                                <p> Discover available hotels</p>
                             </div>
                         </div>
                     </div>
@@ -178,12 +178,12 @@
 
                                         <div class="form-group">
                                             <div class="l_w_title">
-                                                <h3>Room price Filter</h3>
+                                                <h4>Room price Filter</h4>
                                             </div>
                                             <div class="price-slider col-xl-12">
 
-                                                <input asp-for="HotelFilterDto.MinSearchPrice" class="rounded" value="@Convert.ToInt32(Model.HotelFilterDto.MinSearchPrice)" min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" step="10" type="range" />
-                                                <input asp-for="HotelFilterDto.MaxSearchPrice" class="rounded" value="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" step="10" type="range" />
+                                                <input asp-for="HotelFilterDto.MinSearchPrice" class="rounded" value="@Convert.ToInt32(Model.HotelFilterDto.MinSearchPrice) " min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" step="10" type="range" />
+                                                <input asp-for="HotelFilterDto.MaxSearchPrice" class="rounded" value="@Convert.ToInt32(Model.HotelFilterDto.MaxSearchPrice)" min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" step="10" type="range" />
 
                                                 <div class="row">
                                                     <div class="col-xl-6" style="margin-bottom: 20px;">
@@ -295,7 +295,7 @@
                                             </h3>
                                             @if (!User.IsInRole("BlockedUser"))
                                             {
-                                                @Html.ActionLink("Details", "Details", "HotelDetails", new FilterHotelDetailDTO { HotelId = item.Id, FromDate = Model.HotelFilterDto.FromDate, ToDate = Model.HotelFilterDto.ToDate } );
+                                                @Html.ActionLink("Details", "Details", "HotelDetails", new FilterHotelDetailDTO { HotelId = item.Id, FromDate = Model.HotelFilterDto.FromDate, ToDate = Model.HotelFilterDto.ToDate });
                                                 @*<a asp-controller="HotelDetails" asp-action="Details" asp-route-HotelId="@item.Id" asp-route-FromDate="@Model.FilterHotelDto.FromDate" asp-route-ToDate="@Model.FilterHotelDto.ToDate">Details</a>*@
                                             }
                                         </div>
