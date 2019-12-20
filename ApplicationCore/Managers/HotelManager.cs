@@ -108,10 +108,23 @@ namespace ApplicationCore.Managers
                 hotels = hotels.Where(h => h.HotelRooms.Any(p => p.Price <= HotelFilterDto.MaxSearchPrice));
             }
 
+            if (HotelFilterDto.HotelConvs.Any())
+            {
+                hotels = hotels.Where(h => HotelFilterDto.HotelConvs.All(x => h.HotelConvs.Select(hc => hc.Id).Contains(x)));
+            }
+
+            if (HotelFilterDto.RoomConvs.Any())
+            {
+                hotels = hotels.Where(h => h.HotelRooms.Where(r => HotelFilterDto.RoomConvs.All(x => r.RoomConvs.Select(rc => rc.AdditionalConvId).Contains(x))).Any());
+            }
+            //TODO: Count, Skip, Take
+
 
             var roomPrices = hotelRooms.OrderByDescending(p => p.Price);
             HotelFilterDto.MaxAvailRoomPrice = roomPrices.First().Price;
             HotelFilterDto.MinAvailRoomPrice = roomPrices.Last().Price;
+            HotelFilterDto.MaxSearchPrice = (HotelFilterDto.MaxSearchPrice == 0)  ? HotelFilterDto.MaxAvailRoomPrice : HotelFilterDto.MaxSearchPrice;
+            HotelFilterDto.MinSearchPrice = (HotelFilterDto.MinSearchPrice == 0)  ? HotelFilterDto.MinAvailRoomPrice : HotelFilterDto.MinSearchPrice;
 
             HotelFilterDto.HotelsAmount = hotels.Count();
             hotels = hotels.Skip((HotelFilterDto.CurrentPage - 1) * HotelFilterDto.PageSize).Take(HotelFilterDto.PageSize);
@@ -217,6 +230,23 @@ namespace ApplicationCore.Managers
                                                .FirstOrDefault(hc => hc.Id == Id);
 
             return _mapper.Map<HotelConv, HotelConvDTO>(hotelConv);
+        }
+
+        public IEnumerable<HotelConvDTO> GetHotelConvs()
+        {
+            List<HotelConv> hotelConvs = _context.HotelConvs.ToList();
+            List<AdditionalConv> addConvs = _context.AdditionalConvs.ToList();
+            var query = hotelConvs.Join(addConvs,
+                hc => hc.AdditionalConvId,
+                ac => ac.Id,
+                (hc, ac) => new HotelConvDTO { Id = hc.Id, Name = ac.Name, HotelId = hc.HotelId, Price = hc.Price }
+                );
+            return query;
+        }
+        public IEnumerable<AdditionalConvDTO> GetRoomConvs()
+        {
+            var add_roomconvs = _context.RoomConvs.Select(rc => rc.AdditionalConv).Distinct().ToList();
+            return _mapper.Map<IEnumerable<AdditionalConv>, IEnumerable<AdditionalConvDTO>>(add_roomconvs);
         }
 
         public IEnumerable<HotelConvDTO> GetHotelConvs(AdminPaginationDTO paginationDTO, string sortOrder = null)
