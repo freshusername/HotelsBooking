@@ -1,6 +1,6 @@
-﻿﻿@using ApplicationCore.DTOs
+﻿@model FilteredHotelsViewModel
+﻿@using ApplicationCore.DTOs
 @using HotelsBooking.Models.Hotel
-@model FilteredHotelsViewModel
 @{
     <html lang="zxx">
     <head>
@@ -178,24 +178,20 @@
                                             </div>
                                             <div class="price-slider col-xl-12">
 
-                                                <input 
-                                                    asp-for="HotelFilterDto.MinSearchPrice" 
-                                                    class="rounded" 
-                                                    value="@Convert.ToInt32(Model.HotelFilterDto.MinSearchPrice)" 
-                                                    min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" 
-                                                    max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" 
-                                                    step="10" 
-                                                    type="range" 
-                                                />
-                                                <input 
-                                                    asp-for="HotelFilterDto.MaxSearchPrice" 
-                                                    class="rounded" 
-                                                    value="@Convert.ToInt32(Model.HotelFilterDto.MaxSearchPrice)" 
-                                                    min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" 
-                                                    max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" 
-                                                    step="10" 
-                                                    type="range" 
-                                                />
+                                                <input asp-for="HotelFilterDto.MinSearchPrice"
+                                                       class="rounded"
+                                                       value="@Convert.ToInt32(Model.HotelFilterDto.MinSearchPrice)"
+                                                       min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)"
+                                                       max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)"
+                                                       step="10"
+                                                       type="range" />
+                                                <input asp-for="HotelFilterDto.MaxSearchPrice"
+                                                       class="rounded"
+                                                       value="@Convert.ToInt32(Model.HotelFilterDto.MaxSearchPrice)"
+                                                       min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)"
+                                                       max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)"
+                                                       step="10"
+                                                       type="range" />
 
                                                 <div class="row">
                                                     <div class="col-xl-6" style="margin-bottom: 20px;">
@@ -327,35 +323,35 @@
                                                 <img src="@img" alt="img30" />
                                             </figure>
                                         }
-                                    <div class="single_product_text">
-                                        <h4>
-                                            @Html.DisplayFor(modelItem => item.Name)
-                                        </h4>
-                                        <h3>
-                                            @Html.DisplayFor(modelItem => item.Location)
-                                        </h3>
-                                        <h3>
-                                            @Html.DisplayFor(modelItem => item.Season)
-                                        </h3>
-                                        <h3>
-                                            @foreach (var hotelconv in item.HotelConvs)
+                                        <div class="single_product_text">
+                                            <h4>
+                                                @Html.DisplayFor(modelItem => item.Name)
+                                            </h4>
+                                            <h3>
+                                                @Html.DisplayFor(modelItem => item.Location)
+                                            </h3>
+                                            <h3>
+                                                @Html.DisplayFor(modelItem => item.Season)
+                                            </h3>
+                                            <h3>
+                                                @foreach (var hotelconv in item.HotelConvs)
+                                                {
+                                                    <p>@hotelconv.AdditionalConv.Name</p>
+                                                }
+                                            </h3>
+                                            @if (!User.IsInRole("BlockedUser"))
                                             {
-                                                <p>@hotelconv.AdditionalConv.Name</p>
+                                                @Html.ActionLink("Details", "Details", "HotelDetails", new FilterHotelDetailDTO { HotelId = item.Id, FromDate = Model.HotelFilterDto.FromDate, ToDate = Model.HotelFilterDto.ToDate });
+                                                @*<a asp-controller="HotelDetails" asp-action="Details" asp-route-HotelId="@item.Id" asp-route-FromDate="@Model.FilterHotelDto.FromDate" asp-route-ToDate="@Model.FilterHotelDto.ToDate">Details</a>*@
                                             }
-                                        </h3>
-                                        @if (!User.IsInRole("BlockedUser"))
-                                        {
-                                            @Html.ActionLink("Details", "Details", "HotelDetails", new FilterHotelDetailDTO { HotelId = item.Id, FromDate = Model.HotelFilterDto.FromDate, ToDate = Model.HotelFilterDto.ToDate });
-                                            @*<a asp-controller="HotelDetails" asp-action="Details" asp-route-HotelId="@item.Id" asp-route-FromDate="@Model.FilterHotelDto.FromDate" asp-route-ToDate="@Model.FilterHotelDto.ToDate">Details</a>*@
-                                        }
-                                    </div>
+                                        </div>
                                     </div>
                                 </div>
-}
-</div>
-<nav aria-label="Page navigation example">
-    <ul class="pagination justify-content-center">
-@if (Model.HotelFilterDto != null)
+                            }
+                        </div>
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                                @if (Model.HotelFilterDto != null)
                                 {
                                     @if (Model.HotelFilterDto.HasPrevious)
                                     {
@@ -369,7 +365,7 @@
                                                       prev,
                                                       null)
                                         </li>
-}
+                                    }
 
                                     @for (var i = 1; i <= Model.HotelFilterDto.PagesCount; i++)
                                     {
