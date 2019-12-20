@@ -169,22 +169,22 @@
                                         <div class="form-group">
                                             <h3>Room price filter</h3>
                                             <label>min price: </label>
-                                            @Html.EditorFor(x => Model.HotelFilterDto.MinPrice, new { htmlAttributes = new { @class = "form-control rounded", @placeholder = "min price" }})
+                                            @Html.EditorFor(x => Model.HotelFilterDto.MinPrice, new { htmlAttributes = new { @class = "form-control rounded", @placeholder = "min price" } })
                                             <br />
                                             <label>max price: </label>
-                                            @Html.EditorFor(x => Model.HotelFilterDto.MaxPrice, new { htmlAttributes = new { @class = "form-control rounded", @placeholder = "max price" }})
+                                            @Html.EditorFor(x => Model.HotelFilterDto.MaxPrice, new { htmlAttributes = new { @class = "form-control rounded", @placeholder = "max price" } })
                                         </div>
 
                                         <div class="form-group">
                                             <label>Amount on page</label>
-                                            @Html.EditorFor(x => Model.HotelFilterDto.PageSize, new { htmlAttributes = new { @class = "form-control rounded", @placeholder = "amount on page" }})
+                                            @Html.EditorFor(x => Model.HotelFilterDto.PageSize, new { htmlAttributes = new { @class = "form-control rounded", @placeholder = "amount on page" } })
                                         </div>
 
-                                        <input type="text" class="form-control"/>
+                                        <input type="text" class="form-control" />
 
                                         <div class="form-group">
                                             <label>Search for hotels/locations</label>
-                                            @Html.EditorFor(x => Model.HotelFilterDto.KeyWord, new { htmlAttributes = new { @class = "form-control rounded", @placeholder = "keyword" }})
+                                            @Html.EditorFor(x => Model.HotelFilterDto.KeyWord, new { htmlAttributes = new { @class = "form-control rounded", @placeholder = "keyword" } })
                                         </div>
 
                                         <input type="submit" value="Filter" class="btn btn-success" />
@@ -193,21 +193,53 @@
                             </aside>
 
                             <aside class="left_widgets p_filter_widgets">
-                                <div class="l_w_title">
-                                    <h3>Hotel Conveniences</h3>
-                                </div>
-                                <div class="widgets_inner">
-                                    <ul class="list">
-                                        <li>
-                                            <div class="pretty p-svg p-curve">
-                                                <input type="checkbox" />
-                                                <div class="state p-success">
-                                                    <label>Parking</label>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
+                                <form asp-action="ShowHotels" method="get">
+                                    <div class="l_w_title">
+                                        <h3>Hotel Conveniences</h3>
+                                    </div>
+                                    <div class="widgets_inner">
+                                        <ul class="list">
+                                            @foreach (var h_conv in Model.HotelConvs)
+                                            {
+                                                <li>
+                                                    <div class="pretty p-svg p-curve">
+                                                        <input name="HotelConvs" type="checkbox" checked="@Model.HotelFilterDto.HotelConvs.Contains(h_conv.Id)" value="@h_conv.Id" />
+                                                        <div class="state p-success">
+                                                            <svg class="svg svg-icon" viewBox="0 0 20 20">
+                                                                <path d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z" style="stroke: white;fill:white;"></path>
+                                                            </svg>
+                                                            @Html.Label(h_conv.Name)
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                    <div class="l_w_title">
+                                        <h3>Room Conveniences</h3>
+                                    </div>
+                                    <div class="widgets_inner">
+                                        <ul class="list">
+                                            @foreach (var r_conv in Model.RoomConvs)
+                                            {
+                                                <li>
+                                                    <div class="pretty p-svg p-curve">
+                                                        <input name="RoomConvs" type="checkbox" checked="@Model.HotelFilterDto.RoomConvs.Contains(r_conv.Id)" value="@r_conv.Id" />
+                                                        <div class="state p-success">
+                                                            <svg class="svg svg-icon" viewBox="0 0 20 20">
+                                                                <path d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z" style="stroke: white;fill:white;"></path>
+                                                            </svg>
+                                                            @Html.Label(r_conv.Name)
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                    <div class="widgets_inner">
+                                        <input type="submit" value="Filter" class="btn btn-success btn-lg" />
+                                    </div>
+                                </form>
                             </aside>
 
                         </div>
@@ -268,22 +300,28 @@
                                             string s = String.Format("data:image;base64,{0}", base64);
                                             <img src="@s)">
                                         }
-                                        <div class="single_product_text">
-                                            <h4>
-                                                @Html.DisplayFor(modelItem => item.Name)
-                                            </h4>
-                                            <h3>
-                                                @Html.DisplayFor(modelItem => item.Location)
-                                            </h3>
-                                            <h3>
-                                                @Html.DisplayFor(modelItem => item.Season)
-                                            </h3>
-                                            @if (!User.IsInRole("BlockedUser"))
+                                    <div class="single_product_text">
+                                        <h4>
+                                            @Html.DisplayFor(modelItem => item.Name)
+                                        </h4>
+                                        <h3>
+                                            @Html.DisplayFor(modelItem => item.Location)
+                                        </h3>
+                                        <h3>
+                                            @Html.DisplayFor(modelItem => item.Season)
+                                        </h3>
+                                        <h3>
+                                            @foreach (var hotelconv in item.HotelConvs)
                                             {
-                                                @Html.ActionLink("Details", "Details", "HotelDetails", new FilterHotelDetailDTO { HotelId = item.Id, FromDate = Model.HotelFilterDto.FromDate, ToDate = Model.HotelFilterDto.ToDate } );
-                                                @*<a asp-controller="HotelDetails" asp-action="Details" asp-route-HotelId="@item.Id" asp-route-FromDate="@Model.FilterHotelDto.FromDate" asp-route-ToDate="@Model.FilterHotelDto.ToDate">Details</a>*@
+                                                <p>@hotelconv.AdditionalConv.Name</p>
                                             }
-                                        </div>
+                                        </h3>
+                                        @if (!User.IsInRole("BlockedUser"))
+                                        {
+                                            @Html.ActionLink("Details", "Details", "HotelDetails", new FilterHotelDetailDTO { HotelId = item.Id, FromDate = Model.HotelFilterDto.FromDate, ToDate = Model.HotelFilterDto.ToDate });
+                                            @*<a asp-controller="HotelDetails" asp-action="Details" asp-route-HotelId="@item.Id" asp-route-FromDate="@Model.FilterHotelDto.FromDate" asp-route-ToDate="@Model.FilterHotelDto.ToDate">Details</a>*@
+                                        }
+                                    </div>
                                     </div>
                                 </div>
                             }

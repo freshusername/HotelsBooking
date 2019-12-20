@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using static Infrastructure.Enums;
@@ -23,5 +24,10 @@ namespace ApplicationCore.DTOs
         public int? MaxAdults { get; set; }
         public int MaxChildren { get; set; }
         public Season? Season { get; set; }
+
+        [BindProperty]
+        public List<int> HotelConvs { get; set; } = new List<int>();
+        [BindProperty]
+        public List<int> RoomConvs { get; set; } = new List<int>();
     }
 }
