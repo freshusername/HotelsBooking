@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.DTOs;
+using ApplicationCore.DTOs.AppProfile;
 using HotelsBooking.Models;
 using HotelsBooking.Models.AppProfile;
 using Infrastructure.Entities;
@@ -38,9 +39,17 @@ namespace HotelsBooking.Mapping
             CreateMap<OrderDetail, AdminOrderDetailDTO>().ReverseMap();
             CreateMap<Order, AdminOrderDTO>().ReverseMap();
 
-            CreateMap<AppUser, ProfileDTO>().ReverseMap();
-            CreateMap<ProfileDTO, AllProfilesViewModel>().ReverseMap();
-            CreateMap<ProfileDTO, ProfileViewModel>().ReverseMap();
+
+#region Profile
+      CreateMap<AppUser, ProfileDto>().ReverseMap();
+
+            CreateMap<ProfileDto, AllProfilesViewModel>().ReverseMap();
+            CreateMap<ProfileDto, ProfileViewModel>().ReverseMap();
+
+            CreateMap<ProfileRoleDto, AppUser>().ReverseMap();
+
+      #endregion
+
 
             CreateMap<AdminOrderDTO, OrdersViewModel>();
             CreateMap<AdminOrderDetailDTO, OrderDetailsViewModel>();
@@ -51,6 +60,18 @@ namespace HotelsBooking.Mapping
             CreateMap<AdditionalConv, AdditionalConvDTO>().ReverseMap();
             CreateMap<ConvsViewModel, AdditionalConvDTO>().ReverseMap();
 
+            CreateMap<CreateAndEditHotelConvViewModel, HotelConvDTO>().ReverseMap();
+            CreateMap<CreateOrEditHotelConvViewModel, HotelConvDTO>().ReverseMap();
+
+            CreateMap<HotelConv, HotelConvDTO>()
+                .ForMember(hcd => hcd.Name, map =>map.MapFrom(hc => hc.AdditionalConv.Name)).ReverseMap();
+            CreateMap<AdditionalConv, AdditionalConvDTO>().ReverseMap();
+
+            CreateMap<HotelRoomDTO, HotelRoomsViewModel>().ReverseMap();
+            CreateMap<CreateOrEditHotelRoomViewModel, HotelRoomDTO>().ReverseMap();
+            CreateMap<HotelRoom, HotelRoomDTO>().ForMember(hrd => hrd.Type, map=>map.MapFrom(hr => hr.Room.RoomType)).ReverseMap();
+
+            CreateMap<HotelRoomConvDTO, HotelRoomConvsViewModel>();
             CreateMap<Room, AdminRoomDTO>().ReverseMap();
             CreateMap<AdminRoomsViewModel, AdminRoomDTO>().ReverseMap();
         }

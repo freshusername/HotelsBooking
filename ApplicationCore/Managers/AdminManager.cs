@@ -39,9 +39,41 @@ namespace ApplicationCore.Managers
             _roomManager = roomManager;
         }
         #region Users
-        public List<AdminUserDTO> Users()
+        public IEnumerable<AdminUserDTO> GetUsers(AdminPaginationDTO paginationDTO, string sortOrder = null)
         {
-            List<AdminUserDTO> users = _mapper.Map<List<AppUser>, List<AdminUserDTO>>(_userManager.Users.ToList());
+            IEnumerable<AdminUserDTO> users = _mapper.Map<List<AppUser>, List<AdminUserDTO>>(_userManager.Users.ToList());
+            
+            if (!String.IsNullOrEmpty(paginationDTO.KeyWord))
+                users = users.Where(u => u.Email.Contains(paginationDTO.KeyWord)
+                                    || u.FirstName.Contains(paginationDTO.KeyWord)
+                                    || u.LastName.Contains(paginationDTO.KeyWord));
+            
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    users = users.OrderByDescending(u => u.Email).ToList();
+                    break;
+                case "first":
+                    users = users.OrderBy(u => u.FirstName).ToList();
+                    break;
+                case "first_desc":
+                    users = users.OrderByDescending(u => u.FirstName).ToList();
+                    break;
+                case "second":
+                    users = users.OrderBy(u => u.LastName).ToList();
+                    break;
+                case "second_desc":
+                    users = users.OrderByDescending(u => u.LastName).ToList();
+                    break;
+                default:
+                    users = users.OrderBy(u => u.Email).ToList();
+                    break;
+            }
+
+            paginationDTO.Amount = users.Count();
+            users = users.Skip((paginationDTO.CurrentPage - 1) * paginationDTO.PageSize).Take(paginationDTO.PageSize);
+
             return users;
         }
         public async Task<OperationDetails> CreateUser(UserDTO userDTO)
@@ -98,39 +130,33 @@ namespace ApplicationCore.Managers
         #endregion
 
         #region Hotels
-        public async Task<HotelDTO> GetHotelById(int Id)
-        {
-            HotelDTO hotel = await _hotelManager.GetHotelById(Id);
-            return hotel;
-        }
-        public IEnumerable<HotelDTO> Hotels()
-        {
-            IEnumerable<HotelDTO> hotels =_hotelManager.GetHotels(new FilterHotelDto() );
-            return hotels;
-        }
+        public async Task<HotelDTO> GetHotelById(int Id) => await _hotelManager.GetHotelById(Id);
+        public IEnumerable<HotelDTO> GetHotels(AdminPaginationDTO paginationDTO, string sortOrder = null) => _hotelManager.GetHotelsAdmin(paginationDTO, sortOrder);
+        public async Task<OperationDetails> CreateHotel(HotelDTO hotelDTO) => await _hotelManager.Create(hotelDTO);
+        public async Task<OperationDetails> EditHotel(HotelDTO hotelDTO) => await _hotelManager.Update(hotelDTO);
+        public async Task DeleteHotel(int Id) => await _hotelManager.Delete(Id);
 
-        public async Task<OperationDetails> CreateHotel(HotelDTO hotelDTO)
-        {
-            return await _hotelManager.Create(hotelDTO);
-        }
-        public async Task<OperationDetails> EditHotel(HotelDTO hotelDTO)
-        {
-            return await _hotelManager.Update(hotelDTO);
-        }
-        public async Task DeleteHotel(int Id)
-        {
-            await _hotelManager.Delete(Id);
-        }
-        public IEnumerable<HotelConvDTO> HotelConvs() => _hotelManager.GetHotelConvs();
 
+        public IEnumerable<HotelConvDTO> GetHotelConvs(AdminPaginationDTO paginationDTO, string sortOrder = null) => _hotelManager.GetHotelConvs(paginationDTO ,sortOrder);
         public Task<OperationDetails> CreateHotelConv(HotelConvDTO hotelConvDTO) => _hotelManager.CreateHotelConv(hotelConvDTO);
+        public async Task DeleteHotelConv(int Id) => await _hotelManager.DeleteHotelConv(Id);
+        public HotelConvDTO GetHotelConvById(int Id) => _hotelManager.GetHotelConvById(Id);
+        public async Task<OperationDetails> EditHotelConv(HotelConvDTO hotelConvDTO) => await _hotelManager.UpdateHotelConv(hotelConvDTO);
 
-        public async Task DeleteHotelConv(int Id)
-        {
-            await _hotelManager.DeleteHotelConv(Id);
-        }
+
+        public HotelRoomDTO GetHotelRoomById(int Id) => _hotelManager.GetHotelRoomById(Id);
+        public IEnumerable<HotelRoomDTO> GetHotelRooms(AdminPaginationDTO paginationDTO , string sortOrder = null) => _hotelManager.GetHotelRooms(paginationDTO, sortOrder);
+        public async Task<OperationDetails> CreateHotelRoom(HotelRoomDTO hotelRoomDTO) => await _hotelManager.CreateHotelRoom(hotelRoomDTO);
+        public async Task<OperationDetails> EditHotelRoom(HotelRoomDTO hotelRoomDTO) => await _hotelManager.UpdateHotelRoom(hotelRoomDTO);
+        public async Task DeleteHotelRoom(int Id) => await _hotelManager.DeleteHotelRoom(Id);
+
+        
+        public IEnumerable<HotelRoomConvDTO> GetRoomConvs(int Id, AdminPaginationDTO paginationDTO, string sortOrder=null) => _hotelManager.GetHotelRoomConvs(Id, paginationDTO, sortOrder);
+        public async Task<OperationDetails> CreateRoomConv(HotelRoomConvDTO roomConv) => await _hotelManager.CreateHotelRoomConv(roomConv);
+        public async Task DeleteHotelRoomConv(int Id) => await _hotelManager.DeleteHotelRoomConv(Id);
         #endregion
         #region AddConvs
+        public IEnumerable<AdditionalConvDTO> GetAdditionalConvs() => _additionalConvManager.GetConvs();
         public Task<OperationDetails> CreateAdditionalConv(AdditionalConvDTO additionalConvDTO) => _additionalConvManager.Create(additionalConvDTO);
         #endregion
 

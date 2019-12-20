@@ -64,6 +64,8 @@ namespace Infrastructure.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
+                    b.Property<byte[]>("ProfileImage");
+
                     b.Property<string>("SecurityStamp");
 
                     b.Property<bool>("TwoFactorEnabled");
@@ -145,6 +147,12 @@ namespace Infrastructure.Migrations
 
                     b.Property<int>("HotelId");
 
+                    b.Property<int>("MaxAdults");
+
+                    b.Property<int>("MaxChildren");
+
+                    b.Property<int>("Number");
+
                     b.Property<decimal>("Price");
 
                     b.Property<int>("RoomId");
@@ -205,7 +213,8 @@ namespace Infrastructure.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("RoomType");
+                    b.Property<string>("RoomType")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -383,7 +392,7 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Infrastructure.Entities.OrderDetail", b =>
                 {
                     b.HasOne("Infrastructure.Entities.HotelRoom", "HotelRoom")
-                        .WithMany()
+                        .WithMany("OrderDetails")
                         .HasForeignKey("HotelRoomId")
                         .OnDelete(DeleteBehavior.Cascade);
 

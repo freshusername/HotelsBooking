@@ -4,8 +4,8 @@
 }
 
 <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
-<link  href="~/css/nice-select.css" rel="stylesheet"/>
-<body>
+<link href="~/css/nice-select.css" rel="stylesheet" />
+<body class="no-padding-top">
 
     <div class="row">
 
@@ -44,4 +44,8 @@
             </form>
         </div>
     </div>
+    <script src="~/js/jquery.nice-select.min.js"></script>
 </body>
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

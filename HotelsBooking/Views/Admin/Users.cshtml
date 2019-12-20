@@ -1,26 +1,44 @@
-﻿@model IEnumerable<HotelsBooking.Models.UsersViewModel>
+﻿@using ApplicationCore.DTOs
+@model HotelsBooking.Models.IEnumerableUsersViewModel
 <link href="~/css/Admin.css" rel="stylesheet" />
 <link href="~/css/ForTable.css" rel="stylesheet" />
 <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
 
-<body>
+<body class="no-padding-top">
     <div id="viewport">
         @await Html.PartialAsync("_AdminPartial")
         <div id="content" class="no-margin-top">
             <div class="row">
+                <div class="col-lg-8 col-lg-offset-2">
+                    <form asp-action="Users" method="get" style="margin-top:15px">
+                        <div class="form-actions no-color form-group">
+                            <p>
+                                <span style="font-weight:bold">Find by any option: </span>
+                                @Html.EditorFor(x => Model.PaginationDTO.KeyWord) | <input type="submit" value="Search" class="btn btn-success" /> |
+                                <a asp-action="Users" style="font-weight:500">Back to Full List</a>
+
+                            </p>
+                        </div>
+                    </form>
+                </div>
                 <table class="table table-striped table-dark">
                     <thead>
                         <tr><th>List of Users</th><th></th><th></th><th></th></tr>
-                        <tr><th data-breakpoints="mobile">Email</th><th data-breakpoints="mobile tablet">First Name</th><th data-breakpoints="mobile tablet">Last Name</th><th data-breakpoints="mobile tablet">Actions</th></tr>
+                        <tr>
+                            <th data-breakpoints="mobile"><a asp-action="Users" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-PaginationDTO.KeyWord="@ViewData["CurrentFilter"]">Email</a></th>
+                            <th data-breakpoints="mobile tablet"><a asp-action="Users" asp-route-sortOrder="@ViewData["FirstNameSortParm"]" asp-route-PaginationDTO.KeyWord="@ViewData["CurrentFilter"]">Firts Name</a></th>
+                            <th data-breakpoints="mobile tablet"><a asp-action="Users" asp-route-sortOrder="@ViewData["SecondNameSortParm"]" asp-route-PaginationDTO.KeyWord="@ViewData["CurrentFilter"]">Last Name</a></th>
+                            <th data-breakpoints="mobile tablet">Actions</th>
+                        </tr>
                     </thead>
                     <tbody>
-                        @if (!Model.Any())
+                        @if (!Model.users.Any())
                         {
                             <tr><td colspan="4">No Users</td></tr>
                         }
                         else
                         {
-                            @foreach (var user in Model)
+                            @foreach (var user in Model.users)
                             {
                                 <tr>
                                     <td data-label="Email">@user.Email</td>
@@ -28,9 +46,9 @@
                                     <td data-label="Last Name">@user.LastName</td>
                                     <td data-label="Actions">
                                         <form asp-action="DeleteUser" asp-controller="Admin" asp-route-id="@user.Id">
-                                            <a class="btn btn-sm btn-warning" asp-action="EditUser" asp-route-id="@user.Id">Edit</a>
-                                            <a class="btn btn-sm btn-primary" asp-action="ChangePassword" asp-route-id="@user.Id">Change password</a>
-                                            <button type="submit" class="btn btn-sm btn-danger" asp-action="DeleteUser" asp-route-id="@user.Id">Delete</button>
+                                            <a class="btn btn-sm btn-outline-warning" asp-action="EditUser" asp-route-id="@user.Id">Edit</a>
+                                            <a class="btn btn-sm btn-outline-primary" asp-action="ChangePassword" asp-route-id="@user.Id">Change password</a>
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" asp-action="DeleteUser" asp-route-id="@user.Id">Delete</button>
                                         </form>
                                     </td>
                                 </tr>
@@ -38,9 +56,57 @@
                         }
                     </tbody>
                 </table>
-                <div class="button-center">
-                    <a asp-action="CreateUser" class="btn btn-success">Add new user</a>
+                <div class="col-lg-12 center" style="padding-left:0">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            @if (Model.PaginationDTO != null)
+                            {
+                                @if (Model.PaginationDTO.HasPrevious)
+                                {
+                                    <li class="page-item">
+                                        @{
+                                            var prev = (AdminPaginationDTO)Model.PaginationDTO.Clone();
+                                            prev.CurrentPage = Model.PaginationDTO.CurrentPage - 1;
+                                            prev.KeyWord = @Convert.ToString(ViewData["currentFilter"]);
+                                        }
+                                        @Html.ActionLink("prev", "Users", "Admin", null, null, null,
+                                                  prev,
+                                                  null)
+                                    </li>
+                                }
+
+                                @for (var i = 1; i <= Model.PaginationDTO.PagesCount; i++)
+                                {
+                                    var page_i = (AdminPaginationDTO)Model.PaginationDTO.Clone();
+                                    page_i.CurrentPage = i;
+                                    page_i.KeyWord = @Convert.ToString(ViewData["currentFilter"]);
+
+                                    <li class="page-item @( i == Model.PaginationDTO.CurrentPage ? "active" : "")">
+                                        @Html.ActionLink(i.ToString(), "Users", "Admin", null, null, null,
+                                            page_i,
+                                            null)
+                                    </li>
+                                }
+                                @if (Model.PaginationDTO.HasNext)
+                                {
+                                    <li class="page-item">
+                                        @{
+                                            var next = (AdminPaginationDTO)Model.PaginationDTO.Clone();
+                                            next.CurrentPage = Model.PaginationDTO.CurrentPage + 1;
+                                            next.KeyWord = @Convert.ToString(ViewData["currentFilter"]);
+                                        }
+                                        @Html.ActionLink("next", "Users", "Admin", null, null, null,
+                                                  next,
+                                                  null)
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </nav>
                 </div>
+            </div>
+            <div class="center col-lg-12">
+                <a asp-action="CreateUser" class="btn btn-success">Add new user</a>
             </div>
         </div>
     </div>

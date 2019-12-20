@@ -55,7 +55,8 @@ namespace Infrastructure.Migrations
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
                     FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true)
+                    LastName = table.Column<string>(nullable: true),
+                    ProfileImage = table.Column<byte[]>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -84,7 +85,7 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    RoomType = table.Column<int>(nullable: false)
+                    RoomType = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -271,6 +272,9 @@ namespace Infrastructure.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Price = table.Column<decimal>(nullable: false),
+                    Number = table.Column<int>(nullable: false),
+                    MaxAdults = table.Column<int>(nullable: false),
+                    MaxChildren = table.Column<int>(nullable: false),
                     RoomId = table.Column<int>(nullable: false),
                     HotelId = table.Column<int>(nullable: false)
                 },

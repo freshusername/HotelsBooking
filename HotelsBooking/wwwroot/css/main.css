@@ -52,7 +52,7 @@
     display: flex;
     padding-left: 29px;
     float: left;
-    align-items: center;
+    flex-flow: column;
 }
 
     .profile-role_block span {
@@ -114,7 +114,15 @@
         margin-top :0 !important;
     }
 
+.no-padding-top {
+    padding-top: 0 !important;
+}
+
 .button-center {
     display: table;
     margin: 0 auto 0 auto;
+}
+
+.shadow-standart {
+    box-shadow: -2px 5px 20px 5px rgba(0, 0, 0, 0.18);
 }
