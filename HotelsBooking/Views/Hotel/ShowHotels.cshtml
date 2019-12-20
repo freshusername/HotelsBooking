@@ -177,22 +177,38 @@
                                     <form asp-action="ShowHotels" method="get">
 
                                         <div class="form-group">
-                                            <div class="l_w_title">
+                                            <div class="">
                                                 <h4>Room price Filter</h4>
                                             </div>
                                             <div class="price-slider col-xl-12">
 
-                                                <input asp-for="HotelFilterDto.MinSearchPrice" class="rounded" value="@Convert.ToInt32(Model.HotelFilterDto.MinSearchPrice) " min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" step="10" type="range" />
-                                                <input asp-for="HotelFilterDto.MaxSearchPrice" class="rounded" value="@Convert.ToInt32(Model.HotelFilterDto.MaxSearchPrice)" min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" step="10" type="range" />
+                                                <input 
+                                                    asp-for="HotelFilterDto.MinSearchPrice" 
+                                                    class="rounded" 
+                                                    value="@Convert.ToInt32(Model.HotelFilterDto.MinSearchPrice)" 
+                                                    min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" 
+                                                    max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" 
+                                                    step="10" 
+                                                    type="range" 
+                                                />
+                                                <input 
+                                                    asp-for="HotelFilterDto.MaxSearchPrice" 
+                                                    class="rounded" 
+                                                    value="@Convert.ToInt32(Model.HotelFilterDto.MaxSearchPrice)" 
+                                                    min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" 
+                                                    max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" 
+                                                    step="10" 
+                                                    type="range" 
+                                                />
 
                                                 <div class="row">
                                                     <div class="col-xl-6" style="margin-bottom: 20px;">
                                                         min:
-                                                        <input class="form-control rounded" type="number" value="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" />
+                                                        <input class="form-control rounded" type="number" value="@Convert.ToInt32(Model.HotelFilterDto.MinSearchPrice)" min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" />
                                                     </div>
                                                     <div class="col-xl-6" style="margin-bottom: 20px;">
                                                         max:
-                                                        <input class="form-control rounded" type="number" value="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" />
+                                                        <input class="form-control rounded" type="number" value="@Convert.ToInt32(Model.HotelFilterDto.MaxSearchPrice)" min="@Convert.ToInt32(Model.HotelFilterDto.MinAvailRoomPrice)" max="@Convert.ToInt32(Model.HotelFilterDto.MaxAvailRoomPrice)" />
                                                     </div>
                                                 </div>
                                             </div>
